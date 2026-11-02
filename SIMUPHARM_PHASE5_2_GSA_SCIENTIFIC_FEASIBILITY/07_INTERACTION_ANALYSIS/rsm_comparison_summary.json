@@ -1,0 +1,11 @@
+{
+  "DoE_Sample_Size": 200,
+  "Independent_Test_Size": 1000,
+  "Linear_Model_R2": 0.9717642792854483,
+  "Linear_Model_RMSE": 0.07669260087312706,
+  "Quadratic_RSM_Train_R2": 0.9971629925742742,
+  "Quadratic_RSM_Train_RMSE": 0.02430996109037589,
+  "Quadratic_RSM_Test_R2": 0.9965740996162773,
+  "Quadratic_RSM_Test_RMSE": 0.026478211070233976,
+  "RSM_Captures_99_Pct_Variance": true
+}

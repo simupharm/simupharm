@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HPLC — SimuPharma</title>
+    <meta name="description"
+        content="Learn the principles of High-Performance Liquid Chromatography (HPLC), explore interactive diagrams, and launch the full simulation.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="subpage.css">
+    <link rel="stylesheet" href="diagram_style.css">
+</head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="sp-header">
+        <div class="header-inner container">
+            <a href="index.html" class="logo" aria-label="SimuPharma Home">
+                <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="17" stroke="url(#hLogoG)" stroke-width="2" />
+                    <path d="M14 12V28M26 12V28M14 20H26" stroke="url(#hLogoG)" stroke-width="2.5"
+                        stroke-linecap="round" />
+                    <defs>
+                        <linearGradient id="hLogoG" x1="0" y1="0" x2="40" y2="40">
+                            <stop stop-color="#2563EB" />
+                            <stop offset="1" stop-color="#7C3AED" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text">SimuPharma</span>
+            </a>
+
+            <nav>
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="instruments.html" class="nav-link active">Instruments</a></li>
+                    <li><a href="quiz.html" class="nav-link">Quiz</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+
+            <a href="instruments.html" class="btn btn-primary btn-sm header-cta">
+                All Instruments <i class="fas fa-arrow-right"></i>
+            </a>
+
+            <button class="mobile-toggle" id="sp-mobile-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== MOBILE MENU ===== -->
+    <div id="sp-mobile-menu" class="sp-mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-bg"></div>
+        <nav class="mobile-menu-inner">
+            <ul class="mobile-nav-list">
+                <li style="--i:0"><a href="index.html">Home</a></li>
+                <li style="--i:1"><a href="about.html">About</a></li>
+                <li style="--i:2"><a href="instruments.html">Instruments</a></li>
+                <li style="--i:3"><a href="quiz.html">Quiz</a></li>
+                <li style="--i:4"><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- ===== PAGE HERO ===== -->
+    <section class="page-hero">
+        <div class="hero-particles">
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+        </div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+
+        <div class="container hero-content">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <i class="fas fa-chevron-right sep"></i>
+                <a href="instruments.html">Instruments</a>
+                <i class="fas fa-chevron-right sep"></i>
+                <span>HPLC</span>
+            </div>
+            <div class="hero-badge">
+                <i class="fas fa-vial"></i>
+                <span>Liquid Chromatography</span>
+            </div>
+            <h1>High-Performance <span class="text-gradient">Liquid Chromatography</span></h1>
+            <p class="hero-subtitle">
+                Master the principles and operation of HPLC — the gold standard for pharmaceutical separation and
+                quantitative analysis.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main>
+        <section class="sp-section" style="background: var(--white);">
+            <div class="container">
+                <div class="theory-layout">
+
+                    <!-- Main Content -->
+                    <div class="theory-main">
+                        <div class="sp-card fade-in-up">
+                            <h3><i class="fas fa-lightbulb" style="color: var(--blue-500); margin-right: 8px;"></i>
+                                Principle</h3>
+                            <p>
+                                HPLC operates on the principle of differential partitioning. A sample mixture is pumped
+                                in a liquid mobile phase at high pressure through a column packed with a solid
+                                stationary phase. Each component in the sample interacts differently with the stationary
+                                phase, causing them to travel through the column at different speeds and thus separate.
+                            </p>
+
+                            <h3><i class="fas fa-cogs" style="color: var(--purple-500); margin-right: 8px;"></i> Key
+                                Components & Working</h3>
+
+                            <!-- Interactive Diagram -->
+                            <div id="instrument-diagram-container" style="margin: 16px 0;">
+                                <div id="diagram-tooltip"></div>
+                                <svg id="instrument-diagram-svg" viewBox="0 0 800 400">
+                                    <defs>
+                                        <path id="flow-path-definition" class="diagram-flow-path"
+                                            d="M 90 120 V 250 H 210 V 200 H 330 V 250 H 450 V 200 H 570 V 250 H 690" />
+                                    </defs>
+
+                                    <use href="#flow-path-definition" />
+                                    <circle id="flow-sparkle">
+                                        <animateMotion dur="15s" repeatCount="indefinite">
+                                            <mpath href="#flow-path-definition" />
+                                        </animateMotion>
+                                    </circle>
+
+                                    <g class="diagram-component" transform="translate(50, 50)"
+                                        data-title="Solvent Reservoir"
+                                        data-desc="Holds the mobile phase (the liquid solvent) that carries the sample through the system.">
+                                        <path class="component-base"
+                                            d="M10,0 H70 C75,0 80,5 80,10 V70 H0 V10 C0,5 5,0 10,0 Z" />
+                                        <rect class="component-detail" x="10" y="30" width="60" height="40"
+                                            fill="#aed6f1" />
+                                        <rect class="component-accent" x="35" y="5" width="10" height="15" rx="2" />
+                                    </g>
+
+                                    <g class="diagram-component" transform="translate(50, 220)" data-title="Pump"
+                                        data-desc="Pushes the mobile phase through the system at a high, constant pressure and a precise flow rate.">
+                                        <rect class="component-base" width="80" height="60" rx="5" />
+                                        <circle class="component-detail" cx="25" cy="30" r="15" />
+                                        <circle class="component-detail" cx="55" cy="30" r="15" />
+                                        <rect class="component-accent" x="20" y="25" width="10" height="10" />
+                                        <rect class="component-accent" x="50" y="25" width="10" height="10" />
+                                    </g>
+
+                                    <g class="diagram-component" transform="translate(180, 170)" data-title="Injector"
+                                        data-desc="Introduces a small, precise volume of the sample into the high-pressure mobile phase stream.">
+                                        <rect class="component-base" width="60" height="60" rx="5" />
+                                        <circle class="component-accent" cx="30" cy="30" r="20" fill="none"
+                                            stroke-width="4" />
+                                        <path class="component-detail" d="M30 15 V 45 M 15 30 H 45" stroke-width="4" />
+                                    </g>
+
+                                    <g class="diagram-component" transform="translate(300, 220)" data-title="Column"
+                                        data-desc="The heart of the HPLC, where the separation of the sample components occurs on the stationary phase.">
+                                        <rect class="component-base" width="60" height="120" rx="8" />
+                                        <rect class="component-accent" x="10" y="10" width="40" height="100" rx="5" />
+                                    </g>
+
+                                    <g class="diagram-component" transform="translate(420, 170)" data-title="Detector"
+                                        data-desc="Sees and measures the separated components as they exit the column, converting the chemical signal to an electrical one.">
+                                        <rect class="component-base" width="60" height="60" rx="5" />
+                                        <path class="component-accent" d="M10 30 H 50 L 30 15 Z" />
+                                    </g>
+
+                                    <g class="diagram-component" transform="translate(540, 220)"
+                                        data-title="Data System"
+                                        data-desc="A computer that processes the signal from the detector to generate the final chromatogram.">
+                                        <rect class="component-base" width="80" height="70" rx="5" />
+                                        <rect class="component-detail" x="10" y="10" width="60" height="40" rx="3"
+                                            fill="#2c3e50" />
+                                        <path class="component-accent" d="M20 40 Q 30 20, 40 30 T 60 25"
+                                            stroke-width="2" fill="none" />
+                                    </g>
+
+                                    <g class="diagram-component" transform="translate(680, 220)" data-title="Waste"
+                                        data-desc="Collects the mobile phase and separated sample components after they have passed through the detector.">
+                                        <path class="component-base"
+                                            d="M0 0 H 60 V 50 Q 50 60, 30 60 Q 10 60, 0 50 Z" />
+                                        <circle class="component-detail" cx="30" cy="30" r="10" />
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <h3><i class="fas fa-pills" style="color: var(--green-500); margin-right: 8px;"></i>
+                                Applications in Pharmacy</h3>
+                            <ul>
+                                <li><strong>Drug Purity and Assay:</strong> Quantifying the amount of active
+                                    pharmaceutical ingredient (API).</li>
+                                <li><strong>Impurity Profiling:</strong> Identifying and quantifying unknown impurities
+                                    in drug substances.</li>
+                                <li><strong>Stability Studies:</strong> Monitoring drug degradation over time under
+                                    various conditions.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="theory-sidebar fade-in-up stagger-2">
+                        <div class="sidebar-card">
+                            <h3><i class="fas fa-play-circle" style="color: var(--blue-500); margin-right: 6px;"></i>
+                                Watch Demo</h3>
+                            <iframe src="https://www.youtube.com/embed/eCj0cRtJvJg" title="HPLC Demo" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen></iframe>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h3><i class="fas fa-rocket" style="color: var(--purple-500); margin-right: 6px;"></i>
+                                Launch Simulator</h3>
+                            <a href="hplc_simulator.html" class="btn btn-primary btn-lg" style="margin-bottom: 10px;">
+                                <i class="fas fa-flask"></i> Full Simulator
+                            </a>
+                            <a href="hplc_tutorial.html" class="btn btn-ghost btn-lg">
+                                <i class="fas fa-graduation-cap"></i> Guided Tutorial
+                            </a>
+                            <img src="hplc-sim.png" alt="HPLC Simulator Preview" style="margin-top: 16px;">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="sp-footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <svg viewBox="0 0 40 40" fill="none">
+                            <circle cx="20" cy="20" r="17" stroke="rgba(255,255,255,0.35)" stroke-width="2" />
+                            <path d="M14 12V28M26 12V28M14 20H26" stroke="#fff" stroke-width="2.5"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span>SimuPharma</span>
+                    </a>
+                    <p>Transforming pharmaceutical education through innovative virtual simulations.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links-wrap">
+                    <div class="footer-col">
+                        <h4>Platform</h4>
+                        <ul>
+                            <li><a href="instruments.html">Instruments</a></li>
+                            <li><a href="quiz.html">Assessments</a></li>
+                            <li><a href="about.html">About</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="hplc.html">HPLC Guide</a></li>
+                            <li><a href="ftir.html">FTIR Guide</a></li>
+                            <li><a href="gc.html">GC Guide</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="contact.html">Contact Us</a></li>
+                            <li><a href="mailto:contact@simupharma.com">Email</a></li>
+                            <li><a href="#">Collaborate</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SimuPharma. All rights reserved.</p>
+                <p>Built with <i class="fas fa-heart"></i> for pharmaceutical education.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="subpage.js"></script>
+
+    <!-- Feature Modules -->
+    <link rel="stylesheet" href="assistant.css">
+    <link rel="stylesheet" href="a11y.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="api_client.js"></script>
+    <script src="assistant.js"></script>
+    <script src="a11y.js"></script>
+    <script src="i18n.js"></script>
+    <script src="certificate.js"></script>
+    <script src="viewer3d.js"></script>
+    <script src="diagram_script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+{
+  "agent": "Agent 8 \u2014 Journal Discovery & APC Auditor",
+  "role": "Senior Scientific Publishing Strategist",
+  "top_target_journals": [
+    {
+      "name": "Journal of Chemical Education",
+      "publisher": "American Chemical Society (ACS)",
+      "scope": "Chemical and analytical education, computational simulators, virtual laboratories, interactive teaching tools",
+      "indexing": "SCIE, Scopus, PubMed",
+      "if": 3.0,
+      "citescore": 5.4,
+      "quartile": "Q1 (Education, Scientific Disciplines)",
+      "apc_model": "Hybrid (Traditional Subscription Route = $0 / Free)",
+      "desk_reject_risk": "Low (Direct Scope Fit)",
+      "priority": "TOP TARGET (Primary Recommended Journal)"
+    },
+    {
+      "name": "Computer Applications in Engineering Education",
+      "publisher": "Wiley",
+      "scope": "Digital simulations, interactive engineering/science software, virtual laboratory learning",
+      "indexing": "SCIE, Scopus",
+      "if": 2.2,
+      "citescore": 4.8,
+      "quartile": "Q2 (Engineering / Education)",
+      "apc_model": "Hybrid (Traditional Subscription Route = $0 / Free)",
+      "desk_reject_risk": "Low",
+      "priority": "STRONG BACKUP / CO-PRIMARY"
+    },
+    {
+      "name": "Journal of Chromatography A",
+      "publisher": "Elsevier",
+      "scope": "Theory and practice of chromatography, mathematical modeling of separation, retention prediction",
+      "indexing": "SCIE, Scopus, PubMed",
+      "if": 4.1,
+      "citescore": 7.9,
+      "quartile": "Q1 (Analytical Chemistry)",
+      "apc_model": "Hybrid (Traditional Subscription Route = $0 / Free)",
+      "desk_reject_risk": "Medium (Requires Experimental Chromatographic Validation)",
+      "priority": "AMBITIOUS TARGET (For HPLC Specific Paper)"
+    },
+    {
+      "name": "Chemometrics and Intelligent Laboratory Systems",
+      "publisher": "Elsevier",
+      "scope": "Computational analytical chemistry, mathematical simulation, chemometrics algorithms",
+      "indexing": "SCIE, Scopus",
+      "if": 3.7,
+      "citescore": 6.8,
+      "quartile": "Q1 (Computer Science / Analytical Chemistry)",
+      "apc_model": "Hybrid (Traditional Subscription Route = $0 / Free)",
+      "desk_reject_risk": "Medium (Requires Algorithmic Benchmarks)",
+      "priority": "STRONG ALTERNATIVE"
+    },
+    {
+      "name": "Pharmacy Education",
+      "publisher": "International Pharmaceutical Federation (FIP)",
+      "scope": "Pharmaceutical education, practical lab skills, simulation training in pharmacy curricula",
+      "indexing": "Scopus, ESCI",
+      "if": 0.8,
+      "citescore": 1.2,
+      "quartile": "Q3 (Pharmacy Education)",
+      "apc_model": "Diamond Open Access / Zero Mandatory Author Fee",
+      "desk_reject_risk": "Very Low (Requires Educational Pre/Post Student Data)",
+      "priority": "SAFEST PUBLISHABLE TARGET"
+    }
+  ]
+}

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard — SimuPharma</title>
+    <meta name="description"
+        content="See how you rank against peers in the SimuPharma virtual lab. Track XP, badges, and streaks.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ---- Animated BG particles ---- */
+        .bg-particles {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-particles span {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            animation: float-up linear infinite;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* ---- Nav ---- */
+        .lb-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+            padding: 14px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .lb-nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #818cf8;
+            text-decoration: none;
+        }
+
+        .lb-nav-brand i {
+            font-size: 1.3rem;
+        }
+
+        .lb-nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .lb-nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .lb-nav-links a:hover,
+        .lb-nav-links a.active {
+            color: #818cf8;
+        }
+
+        /* ---- Main Container ---- */
+        .lb-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ---- Hero ---- */
+        .lb-hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .lb-hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .lb-hero p {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+
+        /* ---- Stats Cards ---- */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(99, 102, 241, 0.35);
+        }
+
+        .stat-card .stat-icon {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #f1f5f9;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* ---- Top 3 Podium ---- */
+        .podium {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .podium-spot {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            border-radius: 20px;
+            padding: 24px 20px 20px;
+            text-align: center;
+            width: 200px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .podium-spot:hover {
+            transform: translateY(-5px);
+        }
+
+        .podium-spot.first {
+            background: linear-gradient(180deg, rgba(250, 204, 21, 0.08), rgba(30, 41, 59, 0.6));
+            border-color: rgba(250, 204, 21, 0.25);
+            box-shadow: 0 8px 40px rgba(250, 204, 21, 0.1);
+            padding-bottom: 28px;
+        }
+
+        .podium-spot.second {
+            background: linear-gradient(180deg, rgba(148, 163, 184, 0.08), rgba(30, 41, 59, 0.6));
+            border-color: rgba(148, 163, 184, 0.2);
+        }
+
+        .podium-spot.third {
+            background: linear-gradient(180deg, rgba(180, 83, 9, 0.08), rgba(30, 41, 59, 0.6));
+            border-color: rgba(180, 83, 9, 0.2);
+        }
+
+        .podium-rank {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .first .podium-rank {
+            background: linear-gradient(135deg, #facc15, #f59e0b);
+            color: #1e1b4b;
+        }
+
+        .second .podium-rank {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            color: #1e1b4b;
+        }
+
+        .third .podium-rank {
+            background: linear-gradient(135deg, #b45309, #92400e);
+            color: white;
+        }
+
+        .podium-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .podium-spot.is-you .podium-avatar {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .podium-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+        }
+
+        .podium-xp {
+            font-size: 0.8rem;
+            color: #818cf8;
+            font-weight: 600;
+        }
+
+        .podium-badges {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* ---- Full Table ---- */
+        .lb-table-section h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .lb-table {
+            width: 100%;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .lb-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 120px 100px 100px;
+            align-items: center;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: background 0.2s;
+        }
+
+        .lb-row:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .lb-row:last-child {
+            border-bottom: none;
+        }
+
+        .lb-row.header {
+            background: rgba(0, 0, 0, 0.2);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+        }
+
+        .lb-row.you-row {
+            background: rgba(99, 102, 241, 0.08);
+            border-left: 3px solid #818cf8;
+        }
+
+        .lb-rank {
+            font-weight: 700;
+            color: #818cf8;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .lb-player {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lb-player-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .lb-row.you-row .lb-player-avatar {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .lb-player-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .lb-player-tag {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        .lb-xp {
+            font-weight: 700;
+            color: #818cf8;
+            font-size: 0.95rem;
+            text-align: right;
+        }
+
+        .lb-level {
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .lb-badges-col {
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        /* ---- Badges Showcase ---- */
+        .badges-section {
+            margin-top: 48px;
+        }
+
+        .badges-section h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+        }
+
+        .badge-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 14px;
+            padding: 20px 14px;
+            text-align: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .badge-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .badge-card.unlocked {
+            border-color: rgba(74, 222, 128, 0.3);
+            background: rgba(74, 222, 128, 0.05);
+        }
+
+        .badge-card.locked {
+            opacity: 0.45;
+        }
+
+        .badge-emoji {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .badge-card h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 3px;
+        }
+
+        .badge-card p {
+            font-size: 0.68rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .badge-xp {
+            font-size: 0.68rem;
+            color: #818cf8;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 768px) {
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .podium {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .podium-spot {
+                width: 90%;
+            }
+
+            .badges-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .lb-row {
+                grid-template-columns: 40px 1fr 80px;
+            }
+
+            .lb-level,
+            .lb-badges-col,
+            .lb-row.header .lb-level,
+            .lb-row.header .lb-badges-col {
+                display: none;
+            }
+
+            .lb-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-particles" id="particles"></div>
+
+    <!-- Nav -->
+    <nav class="lb-nav">
+        <a href="index.html" class="lb-nav-brand"><i class="fas fa-flask-vial"></i> SimuPharma</a>
+        <div class="lb-nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#instruments">Instruments</a>
+            <a href="curriculum.html">Curriculum</a>
+            <a href="leaderboard.html" class="active">Leaderboard</a>
+            <a href="quiz.html">Viva Quiz</a>
+            <a href="pricing.html">Pricing</a>
+        </div>
+    </nav>
+
+    <div class="lb-container">
+        <!-- Hero -->
+        <div class="lb-hero">
+            <h1>🏆 Leaderboard</h1>
+            <p>Compete, learn, and climb the ranks in SimuPharma's virtual lab</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-row" id="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-value" id="stat-xp">0</div>
+                <div class="stat-label">Total XP</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value" id="stat-level">1</div>
+                <div class="stat-label">Level</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value" id="stat-streak">0</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏅</div>
+                <div class="stat-value" id="stat-badges">0</div>
+                <div class="stat-label">Badges</div>
+            </div>
+        </div>
+
+        <!-- Podium -->
+        <div class="podium" id="podium"></div>
+
+        <!-- Full Table -->
+        <div class="lb-table-section">
+            <h2><i class="fas fa-list-ol" style="color:#818cf8;margin-right:8px;"></i>Full Rankings</h2>
+            <div class="lb-table" id="lb-table">
+                <div class="lb-row header">
+                    <div class="lb-rank">#</div>
+                    <div>Player</div>
+                    <div class="lb-xp">XP</div>
+                    <div class="lb-level">Level</div>
+                    <div class="lb-badges-col">Badges</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges Showcase -->
+        <div class="badges-section">
+            <h2><i class="fas fa-award" style="color:#818cf8;margin-right:8px;"></i>Badge Collection</h2>
+            <div class="badges-grid" id="badges-grid"></div>
+        </div>
+    </div>
+
+    <script src="edtech.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const profile = EdTech.getProfile();
+            const leaderboard = EdTech.getLeaderboard();
+            const allBadges = EdTech.getBadges();
+
+            // ---- Stats ----
+            const totalXP = profile.xp + (profile.level - 1) * 100;
+            document.getElementById('stat-xp').textContent = totalXP.toLocaleString();
+            document.getElementById('stat-level').textContent = profile.level;
+            document.getElementById('stat-streak').textContent = profile.streak;
+            document.getElementById('stat-badges').textContent = profile.badges.length;
+
+            // ---- Podium (top 3) ----
+            const podiumEl = document.getElementById('podium');
+            const top3 = leaderboard.slice(0, 3);
+            const podiumOrder = [1, 0, 2]; // second, first, third for visual layout
+            podiumOrder.forEach(i => {
+                if (!top3[i]) return;
+                const p = top3[i];
+                const rank = i + 1;
+                const cls = rank === 1 ? 'first' : rank === 2 ? 'second' : 'third';
+                const initials = p.name.split(' ').map(w => w[0]).join('').toUpperCase();
+                podiumEl.innerHTML += `
+                <div class="podium-spot ${cls} ${p.isUser ? 'is-you' : ''}">
+                    <div class="podium-rank">${rank === 1 ? '👑' : rank}</div>
+                    <div class="podium-avatar">${initials}</div>
+                    <div class="podium-name">${p.name}${p.isUser ? ' (You)' : ''}</div>
+                    <div class="podium-xp">${p.xp.toLocaleString()} XP</div>
+                    <div class="podium-badges">${p.badges} badge${p.badges !== 1 ? 's' : ''}</div>
+                </div>
+            `;
+            });
+
+            // ---- Full Table ----
+            const tableEl = document.getElementById('lb-table');
+            leaderboard.forEach((p, idx) => {
+                const initials = p.name.split(' ').map(w => w[0]).join('').toUpperCase();
+                tableEl.innerHTML += `
+                <div class="lb-row ${p.isUser ? 'you-row' : ''}">
+                    <div class="lb-rank">${idx + 1}</div>
+                    <div class="lb-player">
+                        <div class="lb-player-avatar">${initials}</div>
+                        <div>
+                            <div class="lb-player-name">${p.name}</div>
+                            <div class="lb-player-tag">${p.isUser ? '⭐ That\'s you!' : 'Peer'}</div>
+                        </div>
+                    </div>
+                    <div class="lb-xp">${p.xp.toLocaleString()}</div>
+                    <div class="lb-level">Lv. ${p.level}</div>
+                    <div class="lb-badges-col">${p.badges} 🏅</div>
+                </div>
+            `;
+            });
+
+            // ---- Badges Grid ----
+            const badgesGrid = document.getElementById('badges-grid');
+            allBadges.forEach(b => {
+                const unlocked = profile.badges.includes(b.id);
+                badgesGrid.innerHTML += `
+                <div class="badge-card ${unlocked ? 'unlocked' : 'locked'}">
+                    <div class="badge-emoji">${b.icon}</div>
+                    <h4>${b.name}</h4>
+                    <p>${b.desc}</p>
+                    <div class="badge-xp">${unlocked ? '✅ Unlocked' : `+${b.xp} XP`}</div>
+                </div>
+            `;
+            });
+
+            // ---- BG Particles ----
+            const particlesEl = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const span = document.createElement('span');
+                span.style.left = Math.random() * 100 + '%';
+                span.style.animationDuration = (6 + Math.random() * 8) + 's';
+                span.style.animationDelay = Math.random() * 5 + 's';
+                span.style.width = span.style.height = (2 + Math.random() * 4) + 'px';
+                particlesEl.appendChild(span);
+            }
+        });
+    </script>
+</body>
+
+</html>

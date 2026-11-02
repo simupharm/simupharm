@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard — SimuPharma</title>
+    <meta name="description" content="Track your learning progress, quiz scores, and instrument exploration.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563EB">
+    <link rel="stylesheet" href="subpage.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="site-header" id="site-header">
+        <div class="container header-container">
+            <a href="index.html" class="header-logo">
+                <img src="simupharma-logo.png" alt="SimuPharma" class="logo-img">
+                <span class="logo-text">SimuPharma</span>
+            </a>
+            <nav class="header-nav" id="main-nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="instruments.html">Instruments</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <div class="header-cta">
+                <a href="instruments.html" class="btn-get-started">Get Started <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="subpage-hero">
+            <div class="container">
+                <nav class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Dashboard</span></nav>
+                <div class="hero-badge-sub"><i class="fas fa-chart-line"></i> Your Progress</div>
+                <h1 class="subpage-title">Student <span class="gradient-text">Dashboard</span></h1>
+                <p class="subpage-desc">Track your learning journey across all SimuPharma instruments and assessments.
+                </p>
+            </div>
+            <div class="floating-particles" aria-hidden="true"></div>
+        </section>
+
+        <!-- Dashboard Content -->
+        <section class="dashboard-section">
+            <div class="container">
+
+                <!-- Stats Overview Cards -->
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="fas fa-flask"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-instruments">0</span>
+                            <span class="stat-label">Instruments Explored</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple"><i class="fas fa-trophy"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-quizzes">0</span>
+                            <span class="stat-label">Quizzes Completed</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="fas fa-percentage"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-avg-score">0%</span>
+                            <span class="stat-label">Average Score</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-time">0 min</span>
+                            <span class="stat-label">Total Study Time</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Two Column Layout -->
+                <div class="dash-grid">
+
+                    <!-- Left: Progress Chart -->
+                    <div class="dash-card">
+                        <h3><i class="fas fa-chart-area"></i> Learning Progress</h3>
+                        <canvas id="progress-chart" width="400" height="220"></canvas>
+                        <p class="chart-caption">Your instrument exploration over time</p>
+                    </div>
+
+                    <!-- Right: Recent Activity -->
+                    <div class="dash-card">
+                        <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                        <div class="activity-list" id="activity-list">
+                            <div class="activity-empty">
+                                <i class="fas fa-microscope"></i>
+                                <p>No activity yet. Start exploring instruments!</p>
+                                <a href="instruments.html" class="btn btn-primary btn-sm">Explore Instruments</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instrument Mastery Grid -->
+                <div class="dash-card full-width">
+                    <h3><i class="fas fa-graduation-cap"></i> Instrument Mastery</h3>
+                    <div class="mastery-grid" id="mastery-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <a href="quiz.html" class="action-card">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Take a Quiz</span>
+                    </a>
+                    <a href="instruments.html" class="action-card">
+                        <i class="fas fa-vial"></i>
+                        <span>Explore Instruments</span>
+                    </a>
+                    <button class="action-card" id="btn-export-report">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Export Report</span>
+                    </button>
+                    <button class="action-card" id="btn-reset-progress">
+                        <i class="fas fa-redo"></i>
+                        <span>Reset Progress</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-bottom" style="padding-top:0">
+                <p>&copy; 2025 SimuPharma. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="subpage.js"></script>
+    <script src="dashboard.js"></script>
+    <link rel="stylesheet" href="assistant.css">
+    <link rel="stylesheet" href="a11y.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="api_client.js"></script>
+    <script src="assistant.js"></script>
+    <script src="a11y.js"></script>
+    <script src="i18n.js"></script>
+    <script src="certificate.js"></script>
+    <script src="voice_engine.js"></script>
+    <script src="ai_teacher.js?v=100"></script>
+</body>
+
+</html>

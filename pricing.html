@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing — SimuPharma</title>
+    <meta name="description"
+        content="Choose the perfect plan for your pharmaceutical education. Free for students, Pro for advanced learners, and Institution plans for colleges.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563EB">
+    <link rel="apple-touch-icon" href="simupharma-logo.png">
+
+    <style>
+        :root {
+            --bg-primary: #030712;
+            --bg-secondary: #0f172a;
+            --bg-card: rgba(15, 23, 42, 0.8);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #2563eb;
+            --accent-purple: #7c3aed;
+            --accent-cyan: #06b6d4;
+            --accent-green: #22c55e;
+            --accent-orange: #f59e0b;
+            --border: rgba(148, 163, 184, 0.1);
+            --border-active: rgba(37, 99, 235, 0.5);
+            --glow: rgba(37, 99, 235, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Effects */
+        .bg-effects {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-effects::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(124, 58, 237, 0.06) 0%, transparent 50%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-3%, 2%);
+            }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 32px;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links .btn-login {
+            padding: 8px 20px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 140px 32px 60px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            color: #60a5fa;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #2563eb, #7c3aed, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 12px;
+        }
+
+        .hero-compare {
+            color: var(--accent-green);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Billing Toggle */
+        .billing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 40px auto 0;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .toggle-label.active {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: #334155;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+
+        .save-badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Pricing Grid */
+        .pricing-section {
+            padding: 60px 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* Pricing Card */
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-active);
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.1);
+        }
+
+        .pricing-card.featured {
+            border-color: rgba(124, 58, 237, 0.4);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(124, 58, 237, 0.08));
+        }
+
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 4px 16px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+
+        .card-free .card-icon {
+            background: rgba(6, 182, 212, 0.15);
+            color: #06b6d4;
+        }
+
+        .card-pro .card-icon {
+            background: rgba(124, 58, 237, 0.15);
+            color: #a78bfa;
+        }
+
+        .card-inst .card-icon {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        .card-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .card-price {
+            margin-bottom: 24px;
+        }
+
+        .price-amount {
+            font-size: 42px;
+            font-weight: 800;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .price-period {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .price-original {
+            color: var(--text-muted);
+            font-size: 14px;
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+
+        .price-save {
+            color: var(--accent-green);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-bottom: 28px;
+        }
+
+        .card-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 6px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .card-features li i.fa-check {
+            color: var(--accent-green);
+            margin-top: 3px;
+            font-size: 12px;
+        }
+
+        .card-features li i.fa-xmark {
+            color: #ef4444;
+            margin-top: 3px;
+            font-size: 12px;
+        }
+
+        .card-features li.disabled {
+            color: var(--text-muted);
+        }
+
+        .card-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-free {
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        .btn-free:hover {
+            background: rgba(6, 182, 212, 0.2);
+        }
+
+        .btn-pro {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-pro:hover {
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-inst {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-inst:hover {
+            background: rgba(245, 158, 11, 0.2);
+        }
+
+        /* Institution Section */
+        .institution-section {
+            padding: 60px 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .institution-section h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .institution-section .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 40px;
+        }
+
+        .inst-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .inst-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .inst-card:hover {
+            border-color: rgba(245, 158, 11, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .inst-card .plan-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .inst-card .plan-students {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .inst-card .plan-price {
+            font-size: 28px;
+            font-weight: 800;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin-bottom: 4px;
+        }
+
+        .inst-card .plan-per {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .inst-card .inst-btn {
+            display: inline-block;
+            padding: 10px 28px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .inst-card .inst-btn:hover {
+            background: rgba(245, 158, 11, 0.2);
+        }
+
+        /* Comparison Table */
+        .comparison-section {
+            padding: 60px 32px;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .comparison-section h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: rgba(15, 23, 42, 0.95);
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table .checkmark {
+            color: #22c55e;
+        }
+
+        .comparison-table .cross {
+            color: #64748b;
+        }
+
+        /* FAQ */
+        .faq-section {
+            padding: 60px 32px;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .faq-section h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover {
+            background: rgba(37, 99, 235, 0.03);
+        }
+
+        .faq-question i {
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+            padding: 0 20px;
+        }
+
+        .faq-answer p {
+            padding: 0 0 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* CTA Banner */
+        .cta-section {
+            padding: 80px 32px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-box {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 48px 40px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(124, 58, 237, 0.08));
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+
+        .cta-box h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .cta-box p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 14px 36px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s;
+        }
+
+        .cta-btn:hover {
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px 32px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .inst-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                padding: 12px 16px;
+            }
+
+            .hero {
+                padding: 120px 16px 40px;
+            }
+
+            .pricing-section,
+            .institution-section,
+            .comparison-section,
+            .faq-section {
+                padding: 40px 16px;
+            }
+        }
+
+        .coming-soon {
+            display: inline-block;
+            padding: 1px 8px;
+            border-radius: 8px;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-effects"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-brand">🔬 SimuPharma</a>
+        <div class="nav-links">
+            <a href="instruments.html">Instruments</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="pricing.html" style="color:var(--text-primary)">Pricing</a>
+            <button class="btn-login" id="nav-auth-btn" onclick="SimuPharmaAPI?.showAuthModal()">Sign In</button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge"><i class="fas fa-flask"></i> 7 Instruments, Unlimited Possibilities</div>
+        <h1>The Right Plan for Every <span>Learner</span></h1>
+        <p>Start free with 3 instruments. Upgrade to unlock all 7, AI-powered assistance, and ML compound
+            identification.</p>
+        <p class="hero-compare">💰 5× cheaper than Labster · 2× cheaper than PraxiLabs</p>
+
+        <!-- Billing Toggle -->
+        <div class="billing-toggle">
+            <span class="toggle-label active" data-period="monthly">Monthly</span>
+            <div class="toggle-switch" id="billing-toggle"></div>
+            <span class="toggle-label" data-period="annual">Annual</span>
+            <span class="save-badge">Save 46%</span>
+        </div>
+    </section>
+
+    <!-- Pricing Cards -->
+    <section class="pricing-section">
+        <div class="pricing-grid">
+
+            <!-- Free Tier -->
+            <div class="pricing-card card-free">
+                <div class="card-icon"><i class="fas fa-atom"></i></div>
+                <div class="card-name">Student Free</div>
+                <div class="card-desc">Perfect for getting started with instrument basics</div>
+                <div class="card-price">
+                    <span class="price-amount">₹0</span>
+                    <span class="price-period">/forever</span>
+                </div>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> UV-Vis Spectrophotometer</li>
+                    <li><i class="fas fa-check"></i> Polarimeter</li>
+                    <li><i class="fas fa-check"></i> Particle Size Analyzer</li>
+                    <li><i class="fas fa-check"></i> 5 simulations/day</li>
+                    <li><i class="fas fa-check"></i> 5 quiz attempts/month</li>
+                    <li><i class="fas fa-check"></i> Learning dashboard</li>
+                    <li class="disabled"><i class="fas fa-xmark"></i> HPLC, FTIR, GC, Mass Spec</li>
+                    <li class="disabled"><i class="fas fa-xmark"></i> AI Lab Agent</li>
+                    <li class="disabled"><i class="fas fa-xmark"></i> Spectral Matching Engine</li>
+                    <li class="disabled"><i class="fas fa-xmark"></i> Certificates</li>
+                </ul>
+                <a href="index.html" class="card-btn btn-free">Get Started Free</a>
+            </div>
+
+            <!-- Pro Tier (Featured) -->
+            <div class="pricing-card card-pro featured">
+                <div class="card-icon"><i class="fas fa-rocket"></i></div>
+                <div class="card-name">Student Pro</div>
+                <div class="card-desc">Full access to the entire virtual lab platform</div>
+                <div class="card-price" id="pro-price">
+                    <span class="price-amount" id="pro-price-amount">₹199</span>
+                    <span class="price-period" id="pro-price-period">/month</span>
+                </div>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> <strong>All 7 instruments</strong></li>
+                    <li><i class="fas fa-check"></i> Full parameter control</li>
+                    <li><i class="fas fa-check"></i> Unlimited simulations</li>
+                    <li><i class="fas fa-check"></i> <strong>AI Lab Agent</strong> (Gemini-powered)</li>
+                    <li><i class="fas fa-check"></i> <strong>Spectral Matching Engine</strong></li>
+                    <li><i class="fas fa-check"></i> Unlimited quizzes</li>
+                    <li><i class="fas fa-check"></i> PDF Certificates</li>
+                    <li><i class="fas fa-check"></i> Adaptive learning paths</li>
+                    <li><i class="fas fa-check"></i> Knowledge Graph</li>
+                    <li><i class="fas fa-check"></i> Priority support</li>
+                </ul>
+                <button class="card-btn btn-pro" id="pro-upgrade-btn" onclick="handleProUpgrade()">
+                    Upgrade to Pro
+                </button>
+            </div>
+
+            <!-- Institution Tier (Preview) -->
+            <div class="pricing-card card-inst">
+                <div class="card-icon"><i class="fas fa-university"></i></div>
+                <div class="card-name">Institution</div>
+                <div class="card-desc">For colleges, universities & training centers</div>
+                <div class="card-price">
+                    <span class="price-amount">₹50K</span>
+                    <span class="price-period">/year</span>
+                    <br><span class="price-save">Starting at ₹500/student</span>
+                </div>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> Everything in Pro</li>
+                    <li><i class="fas fa-check"></i> Faculty Admin Dashboard</li>
+                    <li><i class="fas fa-check"></i> Student progress tracking</li>
+                    <li><i class="fas fa-check"></i> Custom experiments</li>
+                    <li><i class="fas fa-check"></i> LMS Integration <span class="coming-soon">Coming Q2</span></li>
+                    <li><i class="fas fa-check"></i> Batch certificates <span class="coming-soon">Coming Q2</span></li>
+                    <li><i class="fas fa-check"></i> Usage analytics & reports</li>
+                    <li><i class="fas fa-check"></i> NAAC/NBA accreditation reports</li>
+                    <li><i class="fas fa-check"></i> Dedicated support</li>
+                </ul>
+                <a href="contact.html" class="card-btn btn-inst">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Institution Tiers -->
+    <section class="institution-section">
+        <h2>Institution Plans — Detailed</h2>
+        <p class="subtitle">Less than 1 month of AMC for a single HPLC machine</p>
+        <div class="inst-grid">
+            <div class="inst-card">
+                <div class="plan-name">Starter</div>
+                <div class="plan-students">Up to 100 students</div>
+                <div class="plan-price">₹50,000</div>
+                <div class="plan-per">₹500/student/year</div>
+                <a href="contact.html" class="inst-btn">Get Quote</a>
+            </div>
+            <div class="inst-card">
+                <div class="plan-name">Standard</div>
+                <div class="plan-students">Up to 300 students</div>
+                <div class="plan-price">₹1,20,000</div>
+                <div class="plan-per">₹400/student/year</div>
+                <a href="contact.html" class="inst-btn">Get Quote</a>
+            </div>
+            <div class="inst-card">
+                <div class="plan-name">Premium</div>
+                <div class="plan-students">Up to 1,000 students</div>
+                <div class="plan-price">₹3,00,000</div>
+                <div class="plan-per">₹300/student/year</div>
+                <a href="contact.html" class="inst-btn">Get Quote</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Comparison -->
+    <section class="comparison-section">
+        <h2>Feature Comparison</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th style="text-align:left">Feature</th>
+                    <th>Free</th>
+                    <th style="color:#a78bfa">Pro</th>
+                    <th style="color:#f59e0b">Institution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>UV-Vis Spectrophotometer</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>Polarimeter</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>Particle Size Analyzer</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>HPLC</td>
+                    <td class="cross">—</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>FTIR</td>
+                    <td class="cross">—</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>Gas Chromatography</td>
+                    <td class="cross">—</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>Mass Spectrometry</td>
+                    <td class="cross">—</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>Daily simulations</td>
+                    <td>5/day</td>
+                    <td>Unlimited</td>
+                    <td>Unlimited</td>
+                </tr>
+                <tr>
+                    <td>AI Lab Agent</td>
+                    <td class="cross">—</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>Spectral Matching Engine</td>
+                    <td class="cross">—</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>Adaptive Learning</td>
+                    <td class="cross">—</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>PDF Certificates</td>
+                    <td class="cross">—</td>
+                    <td class="checkmark">✓</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>Faculty Dashboard</td>
+                    <td class="cross">—</td>
+                    <td class="cross">—</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>LMS Integration</td>
+                    <td class="cross">—</td>
+                    <td class="cross">—</td>
+                    <td class="checkmark">✓</td>
+                </tr>
+                <tr>
+                    <td>White-Labeling</td>
+                    <td class="cross">—</td>
+                    <td class="cross">—</td>
+                    <td>Enterprise <span class="coming-soon">Q3</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                Can I try all instruments before paying?
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>The free plan gives you full access to UV-Vis, Polarimeter, and PSA — enough to experience the
+                    quality of our simulations. Upgrade to Pro when you're ready for HPLC, FTIR, GC, and Mass Spec.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                How does SimuPharma compare to Labster or PraxiLabs?
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>SimuPharma is 5× cheaper than Labster and 2× cheaper than PraxiLabs, while being far more
+                    pharma-specific. We use real physics engines (Beer-Lambert, Van Deemter, FFT) — not pre-recorded
+                    animations. Plus we have an AI lab agent no competitor offers.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                Can I cancel my subscription anytime?
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! You can cancel at any time from your billing dashboard. Your Pro access will continue until the
+                    end of your current billing period.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                Does the institution plan include support?
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>All institution plans include dedicated support, onboarding training for faculty, and analytics
+                    reports suitable for NAAC/NBA accreditation.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                Can I use SimuPharma on my phone?
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! SimuPharma is a PWA (Progressive Web App) — it works on any device with a browser, including
+                    smartphones. It even supports offline mode after first load.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cost Comparison CTA -->
+    <section class="cta-section">
+        <div class="cta-box">
+            <h2>Physical Lab: ₹2.2 Cr · Add SimuPharma: Just ₹6L</h2>
+            <p>Supplement your physical lab with 24/7 virtual access. Students get <strong>10× more practice time</strong>
+                with zero maintenance costs and AI-powered learning.</p>
+            <button class="cta-btn" onclick="handleProUpgrade()">Start Free Today</button>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 SimuPharma. India's first AI-powered virtual pharmaceutical laboratory.</p>
+    </footer>
+
+    <!-- Razorpay Checkout SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- API Client -->
+    <script src="api_client.js"></script>
+
+    <script>
+        // Billing period toggle
+        let billingPeriod = 'monthly';
+        const prices = {
+            monthly: { amount: '₹199', period: '/month', original: null, save: null },
+            semester: { amount: '₹799', period: '/semester', original: '₹1,194', save: 'Save 33%' },
+            annual: { amount: '₹1,299', period: '/year', original: '₹2,388', save: 'Save 46%' },
+        };
+
+        const toggle = document.getElementById('billing-toggle');
+        const labels = document.querySelectorAll('.toggle-label');
+
+        toggle?.addEventListener('click', () => {
+            billingPeriod = billingPeriod === 'monthly' ? 'annual' : 'monthly';
+            toggle.classList.toggle('active');
+            labels.forEach(l => l.classList.toggle('active'));
+            updatePriceDisplay();
+        });
+
+        function updatePriceDisplay() {
+            const p = prices[billingPeriod];
+            document.getElementById('pro-price-amount').textContent = p.amount;
+            document.getElementById('pro-price-period').textContent = p.period;
+        }
+
+        // Handle Pro upgrade via Razorpay
+        async function handleProUpgrade() {
+            if (!window.SimuPharmaAPI?.isLoggedIn()) {
+                window.SimuPharmaAPI?.showAuthModal();
+                return;
+            }
+
+            const btn = document.getElementById('pro-upgrade-btn');
+            if (btn) { btn.textContent = 'Processing...'; btn.disabled = true; }
+
+            try {
+                // Step 1: Create subscription on backend
+                const subData = await window.SimuPharmaAPI.billing.createSubscription('pro', billingPeriod);
+                if (!subData?.subscription_id) {
+                    alert('Payment system is being set up. Please try again later.');
+                    return;
+                }
+
+                // Step 2: Open Razorpay checkout modal
+                const options = {
+                    key: subData.razorpay_key_id,
+                    subscription_id: subData.subscription_id,
+                    name: 'SimuPharma',
+                    description: subData.description || 'Student Pro Plan',
+                    image: 'simupharma-logo.png',
+                    prefill: subData.prefill || {},
+                    theme: { color: '#2563eb' },
+                    handler: async function (response) {
+                        // Step 3: Verify payment on backend
+                        try {
+                            const verified = await window.SimuPharmaAPI.billing.verifyPayment({
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_subscription_id: response.razorpay_subscription_id,
+                                razorpay_signature: response.razorpay_signature,
+                            });
+                            if (verified?.plan === 'pro') {
+                                window.location.href = 'billing.html?success=true';
+                            }
+                        } catch (err) {
+                            alert('Payment received but verification failed. Contact support.');
+                        }
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            if (btn) { btn.textContent = 'Upgrade to Pro'; btn.disabled = false; }
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.on('payment.failed', function (response) {
+                    alert('Payment failed: ' + (response.error?.description || 'Unknown error'));
+                    if (btn) { btn.textContent = 'Upgrade to Pro'; btn.disabled = false; }
+                });
+                rzp.open();
+
+            } catch (err) {
+                alert(err.message || 'Could not start checkout. Please try again.');
+                if (btn) { btn.textContent = 'Upgrade to Pro'; btn.disabled = false; }
+            }
+        }
+    </script>
+</body>
+
+</html>

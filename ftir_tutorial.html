@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive FTIR Lab - SimuPharma</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="tutorial_style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body id="ftir-tutorial-page">
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <svg viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
+                    <style>.simu-text{font-family:'Poppins',sans-serif;font-size:40px;font-weight:600;fill:none;stroke:#007bff;stroke-width:1.5;}.pharma-text{font-family:'Poppins',sans-serif;font-size:40px;font-weight:600;fill:none;stroke:#6f42c1;stroke-width:1.5;}</style>
+                    <text class="simu-text" x="10" y="45" stroke="#007BFF" fill="#007BFF">Simu</text><text class="pharma-text" x="130" y="45" stroke="#6F42C1" fill="#6F42C1">Pharma</text>
+                </svg>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="instruments.html">Instruments</a></li>
+                    <li><a href="ftir_simulator.html">🚀 Launch Simulator</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h2>Interactive FTIR Laboratory</h2>
+                <p>Welcome, Analyst. Explore the instrument module by module to learn how it works.</p>
+            </div>
+
+            <div class="tutorial-explorer">
+                <div class="explorer-map">
+                    <img src="images/ftir_main_view.png" alt="FTIR Instrument Diagram">
+                    
+                    <a href="javascript:void(0)" class="hotspot-dot" style="top: 30%; left: 50%;" data-modal-id="modal-screen">
+                        <span class="tooltip-text">Instrument Control</span>
+                    </a>
+                    <a href="javascript:void(0)" class="hotspot-dot" style="top: 55%; left: 35%;" data-modal-id="modal-atr">
+                        <span class="tooltip-text">ATR Accessory</span>
+                    </a>
+                    <a href="javascript:void(0)" class="hotspot-dot" style="top: 55%; left: 65%;" data-modal-id="modal-sample">
+                        <span class="tooltip-text">Sample Stage</span>
+                    </a>
+                </div>
+                <div class="explorer-info">
+                    <i class="fas fa-hand-pointer"></i>
+                    <h3>Start Exploring!</h3>
+                    <p>Click any pulsing blue hotspot <span class="hotspot-dot-mini"></span> on the instrument to your left.</p>
+                    <p>A "deep dive" panel will appear, showing you photos, videos, and key information about that specific module. Learn what it does, what you control, and pro-tips for real-world analysis.</p>
+                    <p>When you're ready, scroll down to the **Troubleshooting Challenges**.</p>
+                </div>
+            </div>
+
+            <div class="challenge-header">
+                <h2><i class="fas fa-wrench"></i> Troubleshooting Challenges</h2>
+                <p>You've run an analysis, but the spectrum looks wrong. Based on your knowledge, what's the problem? Click a challenge to find the solution.</p>
+            </div>
+            <div class="challenge-buttons">
+                <a href="javascript:void(0)" class="challenge-btn" data-modal-id="modal-challenge-air">
+                    <i class="fas fa-cloud"></i>
+                    <span>Problem: My spectrum is messy! (Air)</span>
+                </a>
+                <a href="javascript:void(0)" class="challenge-btn" data-modal-id="modal-challenge-negative">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>Problem: My peaks are negative!</span>
+                </a>
+                <a href="javascript:void(0)" class="challenge-btn" data-modal-id="modal-challenge-baseline">
+                    <i class="fas fa-water"></i>
+                    <span>Problem: My baseline is slanted!</span>
+                </a>
+                <a href="javascript:void(0)" class="challenge-btn" data-modal-id="modal-challenge-contaminant">
+                    <i class="fas fa-tint"></i>
+                    <span>Problem: What are these extra peaks?</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="modal-backdrop"></div>
+
+    <div id="modal-screen" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <video src="images/video_ftir_software_bootup.mp4" loop muted autoplay playsinline></video>
+        </div>
+        <div class="modal-content">
+            <h3>Instrument Control</h3>
+            <p>This is your command center. From the software, you control every aspect of the analysis:</p>
+            <ul>
+                <li><strong>Background Scan:</strong> You MUST run this first! It measures the air (CO₂ and H₂O) to subtract it from your sample.</li>
+                <li><strong>Sample Scan:</strong> Runs the actual analysis on your material.</li>
+                <li><strong>Parameters:</strong> You set the **Resolution** (peak sharpness) and **Number of Scans** (higher = less noise).</li>
+            </ul>
+            <div class="pro-tip">
+                <span class="pro-tip-title">💡 Pro-Tip: Purging</span>
+                <p>Real labs "purge" the instrument with dry nitrogen gas to remove all air. A bad purge (or no purge) is the #1 cause of messy spectra. Always run a fresh background scan!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-atr" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <img src="images/atr_attachment.png" alt="ATR Accessory">
+        </div>
+        <div class="modal-content">
+            <h3>ATR Accessory</h3>
+            <p>This is the **Attenuated Total Reflectance (ATR)** module. It makes testing solids and liquids incredibly easy. It replaces the old, difficult method of making KBr pellets.</p>
+            <p>The IR beam is directed *into* the small crystal (the shiny circle). The sample is pressed on top, and the beam interacts with it at the surface. This is the most common accessory in a modern pharma lab.</p>
+        </div>
+    </div>
+
+    <div id="modal-sample" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <video src="images/sample_loading.mp4" loop muted autoplay playsinline></video>
+        </div>
+        <div class="modal-content">
+            <h3>Sample Stage & Press</h3>
+            <p>This is where the magic happens. A tiny amount of your sample (powder or liquid) is placed directly onto the ATR crystal.</p>
+            <p>The **Pressure Arm** is then lowered and tightened. This is critical! It ensures good, uniform contact between the sample and the crystal. Bad contact is a major source of bad data.</p>
+            <div class="challenge">
+                <span class="challenge-title">🎯 The "Golden Rule" of ATR:</span>
+                <p>If your peaks look weak and your baseline is wavy, your first step is to **re-apply the pressure** and run the scan again. 9 times out of 10, this fixes it.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-challenge-air" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <img src="images/image_ftir_air_interference.png" alt="Air Interference">
+        </div>
+        <div class="modal-content">
+            <h3><i class="fas fa-cloud"></i> Problem: Messy Spectrum (Air)</h3>
+            <p>Your spectrum has sharp, spiky "devil horns" around **2350 cm⁻¹** and a broad, messy "lump" of peaks from **3600-3000 cm⁻¹**.</p>
+            
+            <div class="pro-tip" style="border-color: var(--success-color);">
+                <span class="pro-tip-title" style="color: var(--success-color);">💡 Diagnosis & Solution:</span>
+                <p>This is classic **atmospheric interference**. The "horns" are **CO₂** and the lump is **H₂O (water vapor)** from the air.
+                <br>
+                <strong>Solution:</strong> You ran your *sample* without running a *background* scan first! Go back, click **"Acquire New" (Background)**, wait for it to finish, and *then* run your sample. This will subtract the air perfectly.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="modal-challenge-negative" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <img src="images/image_ftir_negative_peaks.png" alt="Negative Peaks">
+        </div>
+        <div class="modal-content">
+            <h3><i class="fas fa-arrow-down"></i> Problem: Negative Peaks</h3>
+            <p>Your spectrum looks strange, with sharp peaks going *down* (negative) where the CO₂ and water peaks should be.</p>
+            
+            <div class="pro-tip" style="border-color: var(--success-color);">
+                <span class="pro-tip-title" style="color: var(--success-color);">💡 Diagnosis & Solution:</span>
+                <p>This happens when your **background scan is "dirtier" than your sample scan**. For example, you ran a background when the air was full of CO₂, then the instrument purged, and *then* you ran your sample.
+                <br>
+                <strong>Solution:</strong> The background scan is no longer valid. You must **run a new background scan** and then immediately re-run your sample.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-challenge-baseline" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <img src="images/image_ftir_slanted_baseline.png" alt="Slanted Baseline">
+        </div>
+        <div class="modal-content">
+            <h3><i class="fas fa-water"></i> Problem: Slanted Baseline</h3>
+            <p>Your peaks look weak, and the entire baseline is on a steep slant or a broad "hump." It doesn't sit flat at zero.</p>
+            
+            <div class="pro-tip" style="border-color: var(--success-color);">
+                <span class="pro-tip-title" style="color: var(--success-color);">💡 Diagnosis & Solution:</span>
+                <p>This is almost always a **sample prep problem**.
+                <br>
+                <strong>Cause 1 (Most Likely):</strong> Bad ATR contact. The sample isn't pressed down hard enough or evenly.
+                <br>
+                <strong>Cause 2:** You are using a "bad" KBr pellet that was too thick or cracked.
+                <br>
+                <strong>Solution:</strong> Re-apply your sample to the ATR crystal, ensure the pressure arm is tight, and run the scan again. You can also use the **"Baseline Correct"** tool in the software to fix this mathematically.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-challenge-contaminant" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <img src="images/image_ftir_nujol_contaminant.png" alt="Contaminant Peaks">
+        </div>
+        <div class="modal-content">
+            <h3><i class="fas fa-tint"></i> Problem: Extra Peaks!</h3>
+            <p>You see your correct sample peaks (e.g., Polystyrene), but there are also three *huge*, "greasy" peaks between **2950-2800 cm⁻¹** that don't belong.</p>
+            
+            <div class="pro-tip" style="border-color: var(--success-color);">
+                <span class="pro-tip-title" style="color: var(--success-color);">💡 Diagnosis & Solution:</span>
+                <p>This is a **classic contaminant!** Those are the C-H stretch peaks from **Nujol (mineral oil)**. This spectrum was prepared using a "Nujol Mull" instead of ATR.
+                <br>
+                <strong>Solution:</strong> As an analyst, you must learn to **mentally ignore** these contaminant peaks. You know they are from your prep, so you focus on the *other* peaks (the "fingerprint region" < 1500 cm⁻¹) to identify your sample.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <footer style="margin-top: 5rem;">
+        <p>&copy; 2025 SimuPharma | Developed by Pranav & Piyush, PRCOP</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

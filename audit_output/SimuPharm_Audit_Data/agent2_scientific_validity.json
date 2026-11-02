@@ -1,0 +1,83 @@
+{
+  "agent": "Agent 2 \u2014 Scientific Validity Reviewer",
+  "role": "Senior Computational Scientist",
+  "findings": {
+    "hplc": {
+      "status": "Conditionally Sound (High Fidelity in Frontend, Simplified in Backend)",
+      "equations": [
+        "Van Deemter: H = A + B/u + C*u",
+        "LSS: ln(k) = ln(k_w) - S*phi",
+        "LSS Numerical Gradient Integration: sum(dt / tR_inst) = 1",
+        "Grunberg-Nissan Viscosity: ln(eta) = sum(x_i * ln(eta_i)) + G12*x1*x2",
+        "Darcy/Kozeny-Carman Pressure: dP ~ eta * L * u / dp^2",
+        "EMG Peak Shape: convolution of Gaussian with exponential decay via rational erf()"
+      ],
+      "validity_analysis": "Frontend implementation in hplc_simulator_script.js is scientifically impressive. Numerical gradient integration using 0.01 min time-slices correctly replicates band migration and gradient compression. However, solvent strength parameter S is heuristically derived as S = 2 + 1.2*logP rather than empirically determined per stationary-mobile phase pair. Backend hplc.py is a toy implementation using linear solvent suppression.",
+      "limitations": "Does not model secondary chemical equilibria (weak acid/base buffer dissociation across pH gradient). Column thermal gradients are neglected."
+    },
+    "gc": {
+      "status": "Conditionally Sound",
+      "equations": [
+        "Golay Capillary HETP: H = B/u + (C_g + C_s)*u",
+        "Temperature-dependent gas diffusivity: D_g(T) = D_g0 * (T/298)^1.75",
+        "Dead time: t_M = L/u",
+        "Kovats Retention Index Heuristic: k ~ exp((bp - T_avg)/50)"
+      ],
+      "validity_analysis": "Golay equation implementation correctly captures carrier gas velocity effects and optimal linear velocity u_opt = sqrt(B/C_g). However, retention time relies on an empirical boiling-point heuristic rather than thermodynamic enthalpy/entropy of solution from thermodynamic Kovats partition coefficients.",
+      "limitations": "Carrier gas compressibility (James-Martin pressure drop correction factor j) is omitted. Carrier gas velocity is treated as constant along the column axis."
+    },
+    "ftir": {
+      "status": "Questionable (Algorithmic Discrepancy Found)",
+      "equations": [
+        "Interferogram: I(x) = sum(S_i * cos(2*pi*nu_i*x) * damping)",
+        "Discrete FFT: S(nu) = abs(FFT(I))",
+        "Direct Gaussian Synthesis: A(nu) = sum(I_i * exp(-0.5*((nu - nu_i)/w)^2))",
+        "Transmittance: T = 10^(-A) * 100"
+      ],
+      "validity_analysis": "CRITICAL AUDIT FINDING: While docstrings claim FFT-based interferogram simulation, backend science/ftir.py explicitly comments '# Generate from Gaussian peaks directly (more reliable than FFT for simulation)' and bypasses the optical interferogram entirely. Peak shapes are modeled as pure Gaussians rather than true Lorentzian or Voigt profiles characteristic of molecular vibrational transitions.",
+      "limitations": "Zero optical instrumental line shape (ILS) convolution, no phase error modeling, no apodization functions (Norton-Beer / Happ-Genzel)."
+    },
+    "uvvis": {
+      "status": "Scientifically Sound",
+      "equations": [
+        "Beer-Lambert Law: A(lambda) = sum(epsilon_i * l * c * exp(-0.5*((lambda - lambda_max_i)/sigma_i)^2))",
+        "Linear Regression: A = m*c + b",
+        "Coefficient of Determination: R^2 = 1 - SS_res / SS_tot"
+      ],
+      "validity_analysis": "Mathematically rigorous and deterministic formulation of linear optical absorption for multi-chromophore systems in dilute solutions.",
+      "limitations": "Neglects stray light deviations at high absorbance (A > 2.0), polychromatic radiation effects, and refractive index dispersion."
+    },
+    "mass_spec": {
+      "status": "Conditionally Sound (Isotopes Sound, Fragmentation Heuristic)",
+      "equations": [
+        "M+1 ratio: 1.1% * C + 0.37% * N",
+        "M+2 ratio: 0.2% * O + 4.4% * S + 32.0% * Cl + 49.3% * Br",
+        "Nominal m/z stick calculation: m/z = round(MW - neutral_loss)"
+      ],
+      "validity_analysis": "Isotope pattern calculation is scientifically accurate for nominal mass spectrometry. Fragmentation generation, however, uses pseudorandom intensity generation (np.random.uniform(10, 80)) for uncurated compounds rather than quasi-equilibrium theory (QET/RRKM).",
+      "limitations": "Nominal mass only; no exact isotopic mass / mass defect (accurate mass high-resolution MS), no ion-trap collision-induced dissociation energy dynamics."
+    },
+    "polarimeter": {
+      "status": "Conditionally Sound (Flawed Enantiomeric Excess Calculation)",
+      "equations": [
+        "Biot's Law: alpha = [alpha] * l * c",
+        "Linear Temperature Correction: [alpha]_T = [alpha]_20 * (1 - 0.00035*(T - 20))",
+        "Drude Dispersion: [alpha]_lambda = [alpha]_D * (589.3 / lambda)^2"
+      ],
+      "validity_analysis": "Biot's law and Drude dispersion are textbook physics. However, backend polarimeter.py line 63 implements enantiomeric excess as ee = abs(observed / (specific_rotation * path_length * concentration) * 100), which algebraically reduces to the temperature-dispersion factor rather than enantiomer ratio (R-S)/(R+S).",
+      "limitations": "Circular ee logic must be corrected in any future scientific communication."
+    },
+    "psa": {
+      "status": "Conditionally Sound (Log-Normal Distribution Only; No Mie Scattering)",
+      "equations": [
+        "Log-Normal PDF: pdf = 1/(d * ln(sigma_g) * sqrt(2*pi)) * exp(-0.5 * ((ln d - ln d50)/ln sigma_g)^2)",
+        "Cumulative Interpolation: D10, D50, D90",
+        "Span: (D90 - D10) / D50",
+        "Sauter Mean D[3,2]: sum(v * d^3) / sum(v * d^2)",
+        "Specific Surface Area: SSA = 6 / (rho * D[3,2])"
+      ],
+      "validity_analysis": "Statistically sound formulation of particulate volume distributions and Sauter mean calculations. However, claims of 'Mie scattering intensity approximation' in docstrings are unsupported; no optical scattering computations exist in the code.",
+      "limitations": "Assumes strict sphericity; does not solve the inverse Fredholm integral of Fraunhofer diffraction or Mie theory."
+    }
+  }
+}

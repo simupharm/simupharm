@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UV-Vis Spectroscopy — SimuPharma</title>
+    <meta name="description"
+        content="Learn UV-Visible Spectroscopy principles, explore interactive diagrams, and launch the simulation.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="subpage.css">
+    <link rel="stylesheet" href="diagram_style.css">
+</head>
+
+<body>
+    <header class="sp-header">
+        <div class="header-inner container"><a href="index.html" class="logo" aria-label="SimuPharma Home"><svg
+                    class="logo-icon" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="17" stroke="url(#hLogoG)" stroke-width="2" />
+                    <path d="M14 12V28M26 12V28M14 20H26" stroke="url(#hLogoG)" stroke-width="2.5"
+                        stroke-linecap="round" />
+                    <defs>
+                        <linearGradient id="hLogoG" x1="0" y1="0" x2="40" y2="40">
+                            <stop stop-color="#2563EB" />
+                            <stop offset="1" stop-color="#7C3AED" />
+                        </linearGradient>
+                    </defs>
+                </svg><span class="logo-text">SimuPharma</span></a>
+            <nav>
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="instruments.html" class="nav-link active">Instruments</a></li>
+                    <li><a href="quiz.html" class="nav-link">Quiz</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </nav><a href="instruments.html" class="btn btn-primary btn-sm header-cta">All Instruments <i
+                    class="fas fa-arrow-right"></i></a><button class="mobile-toggle" id="sp-mobile-toggle"
+                aria-label="Toggle Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+    </header>
+    <div id="sp-mobile-menu" class="sp-mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-bg"></div>
+        <nav class="mobile-menu-inner">
+            <ul class="mobile-nav-list">
+                <li style="--i:0"><a href="index.html">Home</a></li>
+                <li style="--i:1"><a href="about.html">About</a></li>
+                <li style="--i:2"><a href="instruments.html">Instruments</a></li>
+                <li style="--i:3"><a href="quiz.html">Quiz</a></li>
+                <li style="--i:4"><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <section class="page-hero">
+        <div class="hero-particles">
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+        </div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        <div class="container hero-content">
+            <div class="breadcrumb"><a href="index.html">Home</a><i class="fas fa-chevron-right sep"></i><a
+                    href="instruments.html">Instruments</a><i class="fas fa-chevron-right sep"></i><span>UV-Vis</span>
+            </div>
+            <div class="hero-badge"><i class="fas fa-sun"></i><span>Spectroscopy</span></div>
+            <h1>UV-Visible <span class="text-gradient">Spectroscopy</span></h1>
+            <p class="hero-subtitle">Measure concentration and absorbance of pharmaceutical samples using the
+                Beer-Lambert Law.</p>
+        </div>
+    </section>
+
+    <main>
+        <section class="sp-section" style="background: var(--white);">
+            <div class="container">
+                <div class="theory-layout">
+                    <div class="theory-main">
+                        <div class="sp-card fade-in-up">
+                            <h3><i class="fas fa-lightbulb" style="color: var(--blue-500); margin-right: 8px;"></i>
+                                Principle</h3>
+                            <p>UV-Visible spectroscopy measures the absorption of UV or visible light by a substance.
+                                The amount of light absorbed is directly proportional to the concentration of the
+                                substance, a relationship described by the Beer-Lambert Law, making it ideal for
+                                quantitative analysis.</p>
+
+                            <h3><i class="fas fa-cogs" style="color: var(--purple-500); margin-right: 8px;"></i> Key
+                                Components & Working</h3>
+                            <div id="instrument-diagram-container" style="margin: 16px 0;">
+                                <div id="diagram-tooltip"></div>
+                                <svg id="instrument-diagram-svg" viewBox="0 0 800 400">
+                                    <defs>
+                                        <path id="flow-path-definition" class="diagram-flow-path"
+                                            d="M 90 200 H 210 H 330 H 450 H 570 H 690" />
+                                        <linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="violet" />
+                                            <stop offset="20%" stop-color="blue" />
+                                            <stop offset="40%" stop-color="green" />
+                                            <stop offset="60%" stop-color="yellow" />
+                                            <stop offset="80%" stop-color="orange" />
+                                            <stop offset="100%" stop-color="red" />
+                                        </linearGradient>
+                                    </defs>
+                                    <use href="#flow-path-definition" />
+                                    <circle id="flow-sparkle">
+                                        <animateMotion dur="8s" repeatCount="indefinite">
+                                            <mpath href="#flow-path-definition" />
+                                        </animateMotion>
+                                    </circle>
+                                    <g class="diagram-component" transform="translate(50, 170)"
+                                        data-title="Light Source"
+                                        data-desc="A lamp (e.g., Deuterium/Tungsten) that emits a broad spectrum of UV and visible light.">
+                                        <rect class="component-base" width="80" height="60" rx="5" />
+                                        <circle cx="40" cy="30" r="20" fill="#f1c40f" />
+                                    </g>
+                                    <g class="diagram-component" transform="translate(180, 170)"
+                                        data-title="Monochromator"
+                                        data-desc="Selects a single, specific wavelength of light from the broad spectrum source.">
+                                        <rect class="component-base" width="80" height="60" rx="5" />
+                                        <rect x="10" y="10" width="60" height="40" fill="url(#rainbow)" />
+                                    </g>
+                                    <g class="diagram-component" transform="translate(300, 150)"
+                                        data-title="Sample (Cuvette)"
+                                        data-desc="A transparent cell that holds the liquid sample in the path of the light beam.">
+                                        <rect class="component-base" width="80" height="100" rx="2" />
+                                        <rect class="component-detail" x="10" y="10" width="60" height="80"
+                                            fill="#aed6f1" />
+                                    </g>
+                                    <g class="diagram-component" transform="translate(450, 170)" data-title="Detector"
+                                        data-desc="Measures the intensity of the light that passes through the sample.">
+                                        <rect class="component-base" width="80" height="60" rx="5" />
+                                        <path class="component-accent" d="M10 10 L 70 30 L 10 50 Z" />
+                                    </g>
+                                    <g class="diagram-component" transform="translate(600, 170)"
+                                        data-title="Data System"
+                                        data-desc="A computer that calculates the absorbance and displays the final concentration value.">
+                                        <rect class="component-base" width="100" height="70" rx="5" />
+                                        <rect class="component-detail" x="10" y="10" width="80" height="40" rx="3"
+                                            fill="#2c3e50" /><text x="50" y="35" text-anchor="middle" font-size="14"
+                                            fill="white" font-family="monospace">Abs = 0.543</text>
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <h3><i class="fas fa-pills" style="color: var(--green-500); margin-right: 8px;"></i>
+                                Applications in Pharmacy</h3>
+                            <ul>
+                                <li><strong>Quantitative Analysis:</strong> To determine the precise concentration of an
+                                    API in a solution.</li>
+                                <li><strong>Purity Determination:</strong> Can be used to detect impurities that absorb
+                                    at different wavelengths.</li>
+                                <li><strong>Dissolution Testing:</strong> Used to measure the amount of drug dissolved
+                                    over time.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="theory-sidebar fade-in-up stagger-2">
+                        <div class="sidebar-card">
+                            <h3><i class="fas fa-play-circle" style="color: var(--blue-500); margin-right: 6px;"></i>
+                                Watch Demo</h3>
+                            <iframe src="https://www.youtube.com/embed/9XXBl7nBYIY" title="UV-Vis Demo" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen></iframe>
+                        </div>
+                        <div class="sidebar-card">
+                            <h3><i class="fas fa-rocket" style="color: var(--purple-500); margin-right: 6px;"></i>
+                                Launch Simulator</h3>
+                            <a href="uv_vis_simulator.html" class="btn btn-primary btn-lg"><i class="fas fa-flask"></i>
+                                Full Simulator</a>
+                            <img src="uv-vis-sim.png" alt="UV-Vis Simulator Preview" style="margin-top: 16px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="sp-footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand"><a href="index.html" class="footer-logo"><svg viewBox="0 0 40 40" fill="none">
+                            <circle cx="20" cy="20" r="17" stroke="rgba(255,255,255,0.35)" stroke-width="2" />
+                            <path d="M14 12V28M26 12V28M14 20H26" stroke="#fff" stroke-width="2.5"
+                                stroke-linecap="round" />
+                        </svg><span>SimuPharma</span></a>
+                    <p>Transforming pharmaceutical education through innovative virtual simulations.</p>
+                    <div class="footer-social"><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a
+                            href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a><a href="#"
+                            aria-label="GitHub"><i class="fab fa-github"></i></a><a href="#" aria-label="YouTube"><i
+                                class="fab fa-youtube"></i></a></div>
+                </div>
+                <div class="footer-links-wrap">
+                    <div class="footer-col">
+                        <h4>Platform</h4>
+                        <ul>
+                            <li><a href="instruments.html">Instruments</a></li>
+                            <li><a href="quiz.html">Assessments</a></li>
+                            <li><a href="about.html">About</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="hplc.html">HPLC Guide</a></li>
+                            <li><a href="ftir.html">FTIR Guide</a></li>
+                            <li><a href="gc.html">GC Guide</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="contact.html">Contact Us</a></li>
+                            <li><a href="mailto:contact@simupharma.com">Email</a></li>
+                            <li><a href="#">Collaborate</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SimuPharma. All rights reserved.</p>
+                <p>Built with <i class="fas fa-heart"></i> for pharmaceutical education.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="subpage.js"></script>
+
+    <!-- Feature Modules -->
+    <link rel="stylesheet" href="assistant.css">
+    <link rel="stylesheet" href="a11y.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="api_client.js"></script>
+    <script src="assistant.js"></script>
+    <script src="a11y.js"></script>
+    <script src="i18n.js"></script>
+    <script src="certificate.js"></script>
+    <script src="viewer3d.js"></script>
+    <script src="diagram_script.js"></script>
+</body>
+
+</html>

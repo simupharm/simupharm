@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard — SimuPharma</title>
+    <meta name="description" content="SimuPharma Faculty Admin Dashboard - Track student progress, view analytics, and generate NAAC/NBA reports">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0e1a; --surface: #111827; --card: #1a2235;
+            --border: rgba(99, 102, 241, 0.12); --text: #e2e8f0; --muted: #94a3b8;
+            --primary: #6366f1; --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+            --accent: linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        /* Header */
+        .dash-header {
+            background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border); padding: 20px 32px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .dash-header h1 { font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .dash-header h1 i { color: var(--primary); }
+        .header-actions { display: flex; gap: 12px; }
+        .btn { padding: 8px 18px; border-radius: 10px; border: none; cursor: pointer; font: 600 0.8rem 'Inter', sans-serif; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+        .btn-outline:hover { border-color: var(--primary); color: var(--text); }
+
+        /* Main */
+        .dash-main { max-width: 1400px; margin: 0 auto; padding: 28px 32px; }
+
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+        .stat-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+            padding: 20px 22px; position: relative; overflow: hidden;
+        }
+        .stat-card::after { content: ''; position: absolute; top: 0; right: 0; width: 60px; height: 60px; border-radius: 0 0 0 60px; opacity: 0.08; }
+        .stat-card.purple::after { background: var(--primary); }
+        .stat-card.green::after { background: var(--success); }
+        .stat-card.amber::after { background: var(--warning); }
+        .stat-card.red::after { background: var(--danger); }
+        .stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+        .stat-value { font-size: 1.8rem; font-weight: 800; }
+        .stat-card.purple .stat-value { color: #a5b4fc; }
+        .stat-card.green .stat-value { color: #6ee7b7; }
+        .stat-card.amber .stat-value { color: #fcd34d; }
+        .stat-card.red .stat-value { color: #fca5a5; }
+        .stat-sub { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+
+        /* Section */
+        .section { margin-bottom: 28px; }
+        .section-title { font-size: 1rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        .section-title i { color: var(--primary); font-size: 0.9rem; }
+
+        /* Instrument Usage Chart */
+        .chart-container {
+            background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+            padding: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px;
+        }
+        .chart-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .chart-bar-track { width: 48px; height: 140px; background: rgba(255,255,255,0.04); border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: flex-end; }
+        .chart-bar {
+            width: 100%; border-radius: 8px 8px 0 0; transition: height 0.8s cubic-bezier(.34,1.56,.64,1);
+            background: var(--accent); min-height: 4px;
+        }
+        .chart-bar-label { font-size: 0.65rem; color: var(--muted); text-align: center; }
+        .chart-bar-count { font-size: 0.72rem; font-weight: 700; color: var(--text); }
+
+        /* Student Table */
+        .student-table-wrap {
+            background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+            overflow-x: auto;
+        }
+        .student-table { width: 100%; border-collapse: collapse; }
+        .student-table th {
+            text-align: left; padding: 12px 16px; font-size: 0.68rem; text-transform: uppercase;
+            letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; background: var(--card);
+        }
+        .student-table td { padding: 10px 16px; font-size: 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .student-table tr:hover td { background: rgba(99, 102, 241, 0.04); }
+        .mastery-badge {
+            display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600;
+        }
+        .mastery-badge.high { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+        .mastery-badge.mid { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
+        .mastery-badge.low { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+
+        /* Mastery heatmap cell */
+        .mastery-cells { display: flex; gap: 3px; }
+        .m-cell {
+            width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center;
+            font-size: 0.55rem; font-weight: 700; color: rgba(255,255,255,0.7);
+        }
+
+        /* Auth overlay */
+        .auth-overlay {
+            position: fixed; inset: 0; background: rgba(10,14,26,0.95); display: flex;
+            align-items: center; justify-content: center; z-index: 1000;
+        }
+        .auth-box {
+            background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+            padding: 40px; text-align: center; max-width: 420px;
+        }
+        .auth-box i { font-size: 2.5rem; color: var(--primary); margin-bottom: 16px; }
+        .auth-box h2 { font-size: 1.2rem; margin-bottom: 8px; }
+        .auth-box p { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; }
+        .hidden { display: none !important; }
+
+        /* Empty state */
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+        .empty-state i { font-size: 3rem; margin-bottom: 16px; color: rgba(99, 102, 241, 0.3); }
+        .empty-state h3 { font-size: 1.1rem; color: var(--text); margin-bottom: 8px; }
+
+        /* Loading */
+        .loading { text-align: center; padding: 40px; color: var(--muted); }
+        .spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 768px) {
+            .dash-header { padding: 14px 16px; flex-wrap: wrap; gap: 12px; }
+            .dash-main { padding: 16px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Auth Overlay -->
+<div class="auth-overlay" id="authOverlay">
+    <div class="auth-box">
+        <i class="fas fa-shield-halved"></i>
+        <h2>Faculty Access Required</h2>
+        <p>This dashboard is restricted to faculty and admin users. Please log in with your instructor credentials.</p>
+        <a href="login.html" class="btn btn-primary" style="display:inline-block; text-decoration:none; padding:12px 32px;">
+            <i class="fas fa-sign-in-alt"></i> Log In
+        </a>
+    </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashContent" class="hidden">
+    <header class="dash-header">
+        <h1><i class="fas fa-graduation-cap"></i> Faculty Dashboard</h1>
+        <div class="header-actions">
+            <button class="btn btn-outline" onclick="downloadNAACReport()">
+                <i class="fas fa-file-pdf"></i> NAAC Report
+            </button>
+            <button class="btn btn-outline" onclick="loadDashboard()">
+                <i class="fas fa-arrows-rotate"></i> Refresh
+            </button>
+            <button class="btn btn-primary" onclick="location.href='index.html'">
+                <i class="fas fa-flask-vial"></i> Simulators
+            </button>
+        </div>
+    </header>
+
+    <main class="dash-main">
+        <!-- Loading -->
+        <div id="loadingState" class="loading">
+            <div class="spinner"></div>
+            <p style="margin-top:12px">Loading dashboard data...</p>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashData" class="hidden">
+
+            <!-- Stats Row -->
+            <div class="stats-grid" id="statsGrid"></div>
+
+            <!-- Instrument Usage -->
+            <div class="section">
+                <h2 class="section-title"><i class="fas fa-chart-bar"></i> Instrument Usage</h2>
+                <div class="chart-container" id="instrumentChart"></div>
+            </div>
+
+            <!-- Student Table -->
+            <div class="section">
+                <h2 class="section-title"><i class="fas fa-users"></i> Student Progress</h2>
+                <div class="student-table-wrap">
+                    <table class="student-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Student</th>
+                                <th>Plan</th>
+                                <th>Avg Mastery</th>
+                                <th>Instrument Mastery</th>
+                                <th>Simulations</th>
+                                <th>Quizzes</th>
+                                <th>Avg Quiz %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state hidden">
+            <i class="fas fa-user-graduate"></i>
+            <h3>No Students Found</h3>
+            <p>No students from your institution are registered yet. Share your institution's signup link to get started.</p>
+        </div>
+    </main>
+</div>
+
+<script>
+const API = '/api/v1';
+const INSTRUMENTS = ['uvvis','ftir','hplc','gc','mass_spec','polarimeter','psa'];
+const INST_LABELS = {uvvis:'UV-Vis',ftir:'FTIR',hplc:'HPLC',gc:'GC',mass_spec:'MS',polarimeter:'Polar',psa:'PSA'};
+
+async function checkAuth() {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+    try {
+        const res = await fetch(`${API}/auth/me`, { headers: { Authorization: `Bearer ${token}` }});
+        if (!res.ok) return false;
+        const user = await res.json();
+        return user.role === 'instructor' || user.role === 'admin';
+    } catch { return false; }
+}
+
+async function loadDashboard() {
+    const token = localStorage.getItem('token');
+    document.getElementById('loadingState').classList.remove('hidden');
+    document.getElementById('dashData').classList.add('hidden');
+    document.getElementById('emptyState').classList.add('hidden');
+
+    try {
+        const res = await fetch(`${API}/faculty/dashboard`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Failed to load');
+        const data = await res.json();
+
+        document.getElementById('loadingState').classList.add('hidden');
+
+        if (data.total_students === 0) {
+            document.getElementById('emptyState').classList.remove('hidden');
+            return;
+        }
+
+        document.getElementById('dashData').classList.remove('hidden');
+        renderStats(data);
+        renderInstrumentChart(data.instrument_usage);
+        renderStudentTable(data.students);
+    } catch (err) {
+        document.getElementById('loadingState').innerHTML = `
+            <i class="fas fa-exclamation-triangle" style="font-size:2rem;color:var(--danger);"></i>
+            <p style="margin-top:12px;color:var(--danger);">Failed to load dashboard: ${err.message}</p>
+        `;
+    }
+}
+
+function renderStats(data) {
+    document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card purple">
+            <div class="stat-label">Total Students</div>
+            <div class="stat-value">${data.total_students}</div>
+            <div class="stat-sub">${data.active_students_7d} active this week</div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-label">Simulations Run</div>
+            <div class="stat-value">${data.total_simulations.toLocaleString()}</div>
+            <div class="stat-sub">Across all instruments</div>
+        </div>
+        <div class="stat-card amber">
+            <div class="stat-label">Quizzes Completed</div>
+            <div class="stat-value">${data.total_quizzes}</div>
+            <div class="stat-sub">Assessment sessions</div>
+        </div>
+        <div class="stat-card purple">
+            <div class="stat-label">Avg Mastery</div>
+            <div class="stat-value">${(data.avg_mastery * 100).toFixed(0)}%</div>
+            <div class="stat-sub">Institution average</div>
+        </div>
+    `;
+}
+
+function renderInstrumentChart(usage) {
+    const max = Math.max(...Object.values(usage), 1);
+    document.getElementById('instrumentChart').innerHTML = INSTRUMENTS.map(inst => {
+        const count = usage[inst] || 0;
+        const pct = Math.max(3, (count / max) * 100);
+        return `
+            <div class="chart-bar-wrap">
+                <div class="chart-bar-count">${count}</div>
+                <div class="chart-bar-track"><div class="chart-bar" style="height:${pct}%"></div></div>
+                <div class="chart-bar-label">${INST_LABELS[inst] || inst}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function masteryColor(val) {
+    if (val >= 0.6) return '#10b981';
+    if (val >= 0.3) return '#f59e0b';
+    return '#ef4444';
+}
+
+function renderStudentTable(students) {
+    document.getElementById('studentTableBody').innerHTML = students.map((s, i) => {
+        const badge = s.avg_mastery >= 0.6 ? 'high' : s.avg_mastery >= 0.3 ? 'mid' : 'low';
+        const cells = INSTRUMENTS.map(inst => {
+            const val = s.mastery[inst] || 0;
+            const bg = `rgba(${val >= 0.6 ? '16,185,129' : val >= 0.3 ? '245,158,11' : '239,68,68'}, ${0.15 + val * 0.4})`;
+            return `<div class="m-cell" style="background:${bg}" title="${INST_LABELS[inst]}: ${(val*100).toFixed(0)}%">${(val*100).toFixed(0)}</div>`;
+        }).join('');
+        return `<tr>
+            <td>${i+1}</td>
+            <td><strong>${s.name}</strong><br><span style="font-size:0.68rem;color:var(--muted)">${s.email}</span></td>
+            <td><span style="text-transform:capitalize">${s.plan}</span></td>
+            <td><span class="mastery-badge ${badge}">${(s.avg_mastery*100).toFixed(0)}%</span></td>
+            <td><div class="mastery-cells">${cells}</div></td>
+            <td>${s.simulations_run}</td>
+            <td>${s.quizzes_completed}</td>
+            <td>${s.avg_quiz_score.toFixed(0)}%</td>
+        </tr>`;
+    }).join('');
+}
+
+async function downloadNAACReport() {
+    const token = localStorage.getItem('token');
+    try {
+        const res = await fetch(`${API}/faculty/report/naac`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `NAAC_Report_${new Date().toISOString().split('T')[0]}.json`;
+        a.click(); URL.revokeObjectURL(url);
+    } catch (err) { alert('Failed to generate report: ' + err.message); }
+}
+
+// Init
+(async () => {
+    const isAuth = await checkAuth();
+    if (isAuth) {
+        document.getElementById('authOverlay').classList.add('hidden');
+        document.getElementById('dashContent').classList.remove('hidden');
+        loadDashboard();
+    }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimuPharma - Advanced HPLC Simulator v2.0</title>
+    <link rel="stylesheet" href="hplc_simulator_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="guided_teacher.css">
+</head>
+
+<body>
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="hidden">
+        <div class="loader-content">
+            <div class="dna-loader">
+                <div class="helix"></div>
+                <div class="helix"></div>
+            </div>
+            <p id="loading-text">Initializing System...</p>
+        </div>
+    </div>
+
+    <div id="app-container">
+        <!-- Main Instrument View -->
+        <div id="hplc-main-view" class="view active">
+            <div class="main-view-header">
+                <div class="logo-section">
+                    <div class="logo-icon"><i class="fas fa-flask"></i></div>
+                    <div class="logo-text">
+                        <h1>SimuPharma</h1>
+                        <span>Advanced HPLC Simulator v2.0</span>
+                    </div>
+                </div>
+                <div class="header-status">
+                    <div class="status-chip" id="system-status-chip">
+                        <span class="status-dot offline"></span>
+                        <span>System Offline</span>
+                    </div>
+                    <div class="difficulty-selector">
+                        <button class="difficulty-btn active" data-level="beginner">Beginner</button>
+                        <button class="difficulty-btn" data-level="intermediate">Intermediate</button>
+                        <button class="difficulty-btn" data-level="advanced">Advanced</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instrument-container">
+                <img src="images/hplc_main.png" alt="HPLC Main View" class="hplc-bg-image">
+
+                <!-- Interactive Hotspots with Pulse Animation -->
+                <div class="hotspot pulse-animate" id="hotspot-screen" data-controls="solvents-modal"
+                    data-name="Instrument Screen">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-desktop"></i></div>
+                    <div class="hotspot-tooltip">
+                        <span class="tooltip-title">Instrument Screen</span>
+                        <span class="tooltip-desc">View chromatogram & system status</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-solvents" data-controls="solvents-modal"
+                    data-name="Mobile Phase">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-vial"></i></div>
+                    <div class="hotspot-tooltip left">
+                        <span class="tooltip-title">Mobile Phase</span>
+                        <span class="tooltip-desc">Configure solvents A & B</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-sample-prep" data-controls="sample-prep-modal"
+                    data-name="Sample Preparation" style="top: 75%; left: 30%;">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-flask"></i></div>
+                    <div class="hotspot-tooltip">
+                        <span class="tooltip-title">Sample Preparation</span>
+                        <span class="tooltip-desc">Weigh, dissolve, dilute & load vials</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-pump" data-controls="pump-modal"
+                    data-name="Pump & Autosampler">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-cogs"></i></div>
+                    <div class="hotspot-tooltip">
+                        <span class="tooltip-title">Pump & Autosampler</span>
+                        <span class="tooltip-desc">Set flow rate & injection parameters</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-column" data-controls="column-modal"
+                    data-name="Column Compartment">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-thermometer-half"></i></div>
+                    <div class="hotspot-tooltip left">
+                        <span class="tooltip-title">Column Oven</span>
+                        <span class="tooltip-desc">Temperature & column selection</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-detector" data-controls="detector-modal"
+                    data-name="UV Detector">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-sun"></i></div>
+                    <div class="hotspot-tooltip">
+                        <span class="tooltip-title">UV-Vis Detector</span>
+                        <span class="tooltip-desc">Wavelength & sensitivity</span>
+                    </div>
+                </div>
+
+                <!-- System Startup Button -->
+                <div class="startup-button" id="hotspot-setup">
+                    <div class="startup-icon">
+                        <i class="fas fa-power-off"></i>
+                    </div>
+                    <span class="startup-text">System Startup</span>
+                    <div class="startup-progress">
+                        <div class="startup-progress-fill" id="startup-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Panel -->
+            <div class="quick-stats-panel">
+                <div class="stat-card">
+                    <i class="fas fa-tint"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-solvent-level">0%</span>
+                        <span class="stat-label">Solvent Level</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-compress-arrows-alt"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-pressure">0 bar</span>
+                        <span class="stat-label">Pressure</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-temperature-high"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-temp">25°C</span>
+                        <span class="stat-label">Column Temp</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-runtime">0:00</span>
+                        <span class="stat-label">Run Time</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Screen View (Chromatogram Display) -->
+        <div id="main-screen-view" class="view">
+            <div class="screen-header glass-panel">
+                <div class="header-left">
+                    <button id="back-to-main-view-button" class="btn icon-btn" title="Return to Main View">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="method-info">
+                        <span class="method-label">Method:</span>
+                        <span id="method-name" class="method-value">Manual Run</span>
+                    </div>
+                </div>
+                <div class="header-center">
+                    <div class="run-status" id="run-status-indicator">
+                        <span class="status-icon"><i class="fas fa-circle"></i></span>
+                        <span id="screen-title" class="status-text">Ready</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <span class="screen-time" id="system-time">13:34</span>
+                    <button id="fullscreen-button" class="btn icon-btn" title="Toggle Fullscreen">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="screen-content">
+                <!-- Left Panel: Controls & Parameters -->
+                <div class="left-panel glass-panel">
+                    <div class="panel-section">
+                        <h4><i class="fas fa-sliders-h"></i> Run Parameters</h4>
+                        <div class="param-grid">
+                            <div class="param-item">
+                                <label>Flow Rate</label>
+                                <div class="param-display">
+                                    <span id="live-flow-rate" class="param-value">1.000</span>
+                                    <span class="param-unit">mL/min</span>
+                                </div>
+                            </div>
+                            <div class="param-item">
+                                <label>Column Temp</label>
+                                <div class="param-display">
+                                    <span id="live-column-temp" class="param-value">30</span>
+                                    <span class="param-unit">°C</span>
+                                </div>
+                            </div>
+                            <div class="param-item">
+                                <label>Wavelength</label>
+                                <div class="param-display">
+                                    <span id="live-wavelength" class="param-value">254</span>
+                                    <span class="param-unit">nm</span>
+                                </div>
+                            </div>
+                            <div class="param-item">
+                                <label>Injection Vol</label>
+                                <div class="param-display">
+                                    <span id="live-injection-vol" class="param-value">20</span>
+                                    <span class="param-unit">µL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h4><i class="fas fa-wave-square"></i> Gradient Profile</h4>
+                        <div class="gradient-mini-chart">
+                            <canvas id="gradient-preview-chart"></canvas>
+                        </div>
+                        <div class="gradient-legend">
+                            <span><i class="fas fa-square" style="color: #4CAF50;"></i> %A (Aqueous)</span>
+                            <span><i class="fas fa-square" style="color: #2196F3;"></i> %B (Organic)</span>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h4><i class="fas fa-flask"></i> Sample</h4>
+                        <div class="sample-info">
+                            <span id="sample-name" class="sample-name">Full Mixture</span>
+                            <span class="sample-vial"><i class="fas fa-vial"></i> Vial 1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center: Main Chromatogram -->
+                <div class="chromatogram-section glass-panel">
+                    <div class="chart-toolbar">
+                        <div class="toolbar-group">
+                            <button class="chart-tool" id="zoom-in-btn" title="Zoom In"><i
+                                    class="fas fa-search-plus"></i></button>
+                            <button class="chart-tool" id="zoom-out-btn" title="Zoom Out"><i
+                                    class="fas fa-search-minus"></i></button>
+                            <button class="chart-tool" id="reset-zoom-btn" title="Reset Zoom"><i
+                                    class="fas fa-compress"></i></button>
+                        </div>
+                        <div class="toolbar-group">
+                            <button class="chart-tool" id="toggle-integration-btn" title="Toggle Integration"><i
+                                    class="fas fa-chart-area"></i></button>
+                            <button class="chart-tool" id="toggle-peaks-btn" title="Show Peak Labels"><i
+                                    class="fas fa-tags"></i></button>
+                        </div>
+                        <div class="toolbar-group">
+                            <button class="chart-tool" id="export-data-btn" title="Export Data"><i
+                                    class="fas fa-download"></i></button>
+                            <button class="chart-tool" id="screenshot-btn" title="Screenshot"><i
+                                    class="fas fa-camera"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="hplc-chart"></canvas>
+                        <!-- Real-time cursor info -->
+                        <div id="cursor-info" class="cursor-info hidden">
+                            <span id="cursor-time">0.00 min</span>
+                            <span id="cursor-signal">0.00 mAU</span>
+                        </div>
+                    </div>
+                    <div class="chart-footer">
+                        <span class="axis-label">Time (min)</span>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Live Instruments -->
+                <div class="right-panel">
+                    <!-- Pressure Gauge -->
+                    <div class="instrument-card glass-panel">
+                        <h5>System Pressure</h5>
+                        <div class="gauge-container">
+                            <svg class="pressure-gauge" viewBox="0 0 200 120">
+                                <defs>
+                                    <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#4CAF50" />
+                                        <stop offset="50%" style="stop-color:#FFC107" />
+                                        <stop offset="100%" style="stop-color:#f44336" />
+                                    </linearGradient>
+                                </defs>
+                                <!-- Gauge background arc -->
+                                <path class="gauge-bg" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#2a2a3e"
+                                    stroke-width="12" />
+                                <!-- Gauge value arc -->
+                                <path id="gauge-value-arc" class="gauge-value" d="M 20 100 A 80 80 0 0 1 180 100"
+                                    fill="none" stroke="url(#gaugeGradient)" stroke-width="12"
+                                    stroke-dasharray="0 251" />
+                                <!-- Tick marks -->
+                                <g class="gauge-ticks">
+                                    <text x="15" y="105" class="gauge-label">0</text>
+                                    <text x="95" y="25" class="gauge-label">200</text>
+                                    <text x="175" y="105" class="gauge-label">400</text>
+                                </g>
+                                <!-- Needle -->
+                                <g id="gauge-needle" class="gauge-needle-group" transform="rotate(-90, 100, 100)">
+                                    <polygon points="100,25 96,100 104,100" fill="#fff" />
+                                    <circle cx="100" cy="100" r="8" fill="#fff" />
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="gauge-reading">
+                            <span id="screen-pressure" class="gauge-value-text">0.0</span>
+                            <span class="gauge-unit">bar</span>
+                        </div>
+                        <div class="gauge-limits">
+                            <span class="limit-warn">⚠ Limit: 400 bar</span>
+                        </div>
+                    </div>
+
+                    <!-- Temperature Display -->
+                    <div class="instrument-card glass-panel">
+                        <h5>Column Temperature</h5>
+                        <div class="thermometer-container">
+                            <div class="thermometer-visual">
+                                <div class="thermo-scale">
+                                    <span>80°C</span>
+                                    <span>50°C</span>
+                                    <span>20°C</span>
+                                </div>
+                                <div class="thermo-tube">
+                                    <div class="thermo-fill" id="thermo-fill-level"></div>
+                                    <div class="thermo-target" id="thermo-target-marker"></div>
+                                </div>
+                                <div class="thermo-bulb"></div>
+                            </div>
+                        </div>
+                        <div class="temp-reading">
+                            <span id="screen-column-temp" class="temp-value">30</span>
+                            <span class="temp-unit">°C</span>
+                        </div>
+                    </div>
+
+                    <!-- Pump Status -->
+                    <div class="instrument-card glass-panel">
+                        <h5>Pump Channels</h5>
+                        <div class="pump-channels">
+                            <div class="pump-channel">
+                                <div class="channel-header">
+                                    <span class="channel-label">A (Aqueous)</span>
+                                    <span id="pump-a-percent" class="channel-percent">50%</span>
+                                </div>
+                                <div class="channel-bar">
+                                    <div class="channel-fill a-fill" id="pump-a-bar"></div>
+                                </div>
+                            </div>
+                            <div class="pump-channel">
+                                <div class="channel-header">
+                                    <span class="channel-label">B (Organic)</span>
+                                    <span id="pump-b-percent" class="channel-percent">50%</span>
+                                </div>
+                                <div class="channel-bar">
+                                    <div class="channel-fill b-fill" id="pump-b-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flow-indicator">
+                            <div class="flow-animation" id="flow-animation">
+                                <div class="flow-droplet"></div>
+                                <div class="flow-droplet"></div>
+                                <div class="flow-droplet"></div>
+                            </div>
+                            <span id="screen-flow-rate" class="flow-value">0.000</span>
+                            <span class="flow-unit">mL/min</span>
+                        </div>
+                    </div>
+
+                    <!-- Timer -->
+                    <div class="instrument-card glass-panel timer-card">
+                        <div class="timer-display">
+                            <span id="elapsed-time" class="timer-value">00:00.0</span>
+                        </div>
+                        <div class="timer-progress">
+                            <div class="timer-progress-fill" id="timer-progress-fill"></div>
+                        </div>
+                        <span class="timer-label">Elapsed / <span id="total-run-time">12:00</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Panel -->
+            <div id="hplc-log-panel" class="glass-panel">
+                <div class="log-header">
+                    <h5><i class="fas fa-terminal"></i> System Log</h5>
+                    <button id="clear-log-btn" class="btn-small"><i class="fas fa-trash"></i></button>
+                </div>
+                <div id="log-content"></div>
+            </div>
+
+            <!-- Control Footer -->
+            <div class="screen-footer glass-panel">
+                <div class="footer-left">
+                    <button id="run-button" class="btn primary-btn" disabled>
+                        <i class="fas fa-play"></i> Run
+                    </button>
+                    <button id="stop-button" class="btn danger-btn" disabled>
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                    <button id="pause-button" class="btn warning-btn" disabled>
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                </div>
+                <div class="footer-center">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="instant-mode-toggle">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">Instant Result</span>
+                    </label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="fault-mode-toggle">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">Fault Simulation</span>
+                    </label>
+                </div>
+                <div class="footer-right">
+                    <button id="overlay-std-button" class="btn secondary-btn">
+                        <i class="fas fa-layer-group"></i> Overlay Standard
+                    </button>
+                    <button id="sst-report-button" class="btn secondary-btn" disabled>
+                        <i class="fas fa-file-medical-alt"></i> SST Report
+                    </button>
+                    <button id="reset-button" class="btn secondary-btn">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div id="modal-backdrop" class="hidden"></div>
+
+    <!-- Setup Modal (System Startup Wizard) -->
+    <div id="setup-modal" class="modal hidden wizard-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-power-off"></i> System Startup Wizard</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-progress">
+                <div class="wizard-step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <span>Mobile Phase</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <span>Pump Prime</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <span>Equilibration</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="4">
+                    <div class="step-number">4</div>
+                    <span>Ready</span>
+                </div>
+            </div>
+
+            <div class="wizard-content">
+                <!-- Step 1: Mobile Phase Prep -->
+                <div class="wizard-panel active" id="wizard-step-1">
+                    <div class="step-visual">
+                        <video src="images/video_solvents_filling.mp4" class="step-video" id="video-fill" loop muted
+                            playsinline></video>
+
+                        <video src="images/video_solvents_bubbling.mp4" class="step-video" id="video-degas-visual" loop
+                            muted playsinline style="display: none;"></video>
+
+                        <div class="step-overlay" id="overlay-step-1">
+                            <i class="fas fa-tint"></i>
+                            <span>Click to Fill Solvents</span>
+                        </div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Mobile Phase Preparation</h4>
+                        <p class="step-description">Fill solvent bottles and remove dissolved gases using helium
+                            sparging.</p>
+                        <div class="step-actions">
+                            <button id="btn-refill" class="btn action-btn">
+                                <i class="fas fa-fill-drip"></i> Fill Solvent Bottles
+                            </button>
+                            <button id="btn-degas" class="btn action-btn" disabled>
+                                <i class="fas fa-wind"></i> Degas with Helium
+                            </button>
+                        </div>
+                        <div class="step-status">
+                            <div class="status-item">
+                                <span class="status-label">Bottle A (Water):</span>
+                                <span id="status-bottle-a" class="status-value pending">Empty</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Bottle B (ACN):</span>
+                                <span id="status-bottle-b" class="status-value pending">Empty</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Degassing:</span>
+                                <span id="status-degas" class="status-value pending">Not Started</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Pump Priming -->
+                <div class="wizard-panel" id="wizard-step-2">
+                    <div class="step-visual">
+                        <video src="images/startup_pump_purge.mp4" class="step-video" id="video-step-2" loop muted
+                            playsinline></video>
+                        <div class="step-overlay" id="overlay-step-2">
+                            <i class="fas fa-sync"></i>
+                            <span>Purge System Lines</span>
+                        </div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Pump Priming</h4>
+                        <p class="step-description">Open the purge valve and run the pump to remove air bubbles from the
+                            lines.</p>
+                        <div class="valve-control">
+                            <span>Purge Valve:</span>
+                            <label class="valve-switch">
+                                <input type="checkbox" id="purge-valve-toggle">
+                                <span class="valve-handle"></span>
+                            </label>
+                            <span id="valve-status" class="valve-label">CLOSED</span>
+                        </div>
+                        <div class="step-actions">
+                            <button id="btn-prime" class="btn action-btn" disabled>
+                                <i class="fas fa-play"></i> Start Purge (5.0 mL/min)
+                            </button>
+                        </div>
+                        <div class="purge-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="purge-progress-fill"></div>
+                            </div>
+                            <span id="purge-progress-text">0%</span>
+                        </div>
+                        <div class="step-warning hidden" id="valve-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Close the purge valve before continuing!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Equilibration -->
+                <div class="wizard-panel" id="wizard-step-3">
+                    <div class="step-visual">
+                        <video src="images/startup_column_heat.mp4" class="step-video" id="video-step-3" loop muted
+                            playsinline></video>
+                        <div class="step-overlay" id="overlay-step-3">
+                            <i class="fas fa-temperature-high"></i>
+                            <span>Heat Column</span>
+                        </div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>System Equilibration</h4>
+                        <p class="step-description">Heat the column to operating temperature and stabilize baseline.</p>
+                        <div class="equilibration-display">
+                            <div class="eq-gauge">
+                                <svg viewBox="0 0 100 100" class="eq-circle">
+                                    <circle class="eq-bg" cx="50" cy="50" r="45" />
+                                    <circle class="eq-progress" id="eq-progress-circle" cx="50" cy="50" r="45" />
+                                </svg>
+                                <div class="eq-text">
+                                    <span id="eq-temp-display">25</span>
+                                    <span>°C</span>
+                                </div>
+                            </div>
+                            <div class="eq-info">
+                                <div class="eq-item">
+                                    <span>Target:</span>
+                                    <span id="eq-target-temp">30°C</span>
+                                </div>
+                                <div class="eq-item">
+                                    <span>Baseline RMS:</span>
+                                    <span id="eq-baseline-noise">--</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-actions">
+                            <button id="btn-equilibrate" class="btn action-btn">
+                                <i class="fas fa-play"></i> Start Equilibration
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Complete -->
+                <div class="wizard-panel" id="wizard-step-4">
+                    <div class="step-complete">
+                        <div class="complete-animation">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h4>System Ready!</h4>
+                        <p>All startup checks passed. The instrument is ready for analysis.</p>
+                        <div class="ready-stats">
+                            <div class="ready-stat">
+                                <i class="fas fa-tint"></i>
+                                <span>Solvents OK</span>
+                            </div>
+                            <div class="ready-stat">
+                                <i class="fas fa-compress-arrows-alt"></i>
+                                <span>Pressure Stable</span>
+                            </div>
+                            <div class="ready-stat">
+                                <i class="fas fa-temperature-high"></i>
+                                <span>Temperature OK</span>
+                            </div>
+                            <div class="ready-stat">
+                                <i class="fas fa-wave-square"></i>
+                                <span>Baseline Stable</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="wizard-prev-btn" class="btn secondary-btn" disabled>
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button id="wizard-next-btn" class="btn primary-btn" disabled>
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+            <button id="wizard-finish-btn" class="btn success-btn hidden">
+                <i class="fas fa-check"></i> Enter Run Mode
+            </button>
+        </div>
+    </div>
+
+    <!-- Pump Modal -->
+    <div id="pump-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-cogs"></i> Pump & Autosampler Configuration</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Flow Settings</h4>
+                <div class="config-control">
+                    <label>Flow Rate (mL/min)</label>
+                    <div class="range-with-input">
+                        <input type="range" id="flow-rate-input" min="0.1" max="5.0" step="0.1" value="1.0">
+                        <input type="number" id="flow-rate-number" min="0.1" max="5.0" step="0.1" value="1.0">
+                    </div>
+                    <div class="range-labels">
+                        <span>0.1</span>
+                        <span>2.5</span>
+                        <span>5.0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h4>Gradient Program</h4>
+                <div class="gradient-editor">
+                    <table class="gradient-table" id="gradient-table">
+                        <thead>
+                            <tr>
+                                <th>Time (min)</th>
+                                <th>%B</th>
+                                <th>Curve</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="gradient-table-body">
+                            <tr data-row="0">
+                                <td><input type="number" class="gradient-input" id="gradient_time_0" value="0"
+                                        step="0.1"></td>
+                                <td><input type="number" class="gradient-input" id="gradient_percent_0" value="10"
+                                        min="0" max="100"></td>
+                                <td>
+                                    <select class="gradient-curve" id="gradient_curve_0">
+                                        <option value="linear">Linear</option>
+                                        <option value="step">Step</option>
+                                    </select>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr data-row="1">
+                                <td><input type="number" class="gradient-input" id="gradient_time_1" value="8"
+                                        step="0.1"></td>
+                                <td><input type="number" class="gradient-input" id="gradient_percent_1" value="90"
+                                        min="0" max="100"></td>
+                                <td>
+                                    <select class="gradient-curve" id="gradient_curve_1">
+                                        <option value="linear">Linear</option>
+                                        <option value="step">Step</option>
+                                    </select>
+                                </td>
+                                <td><button class="btn-icon remove-gradient-row"><i class="fas fa-minus"></i></button>
+                                </td>
+                            </tr>
+                            <tr data-row="2">
+                                <td><input type="number" class="gradient-input" id="gradient_time_2" value="10"
+                                        step="0.1"></td>
+                                <td><input type="number" class="gradient-input" id="gradient_percent_2" value="90"
+                                        min="0" max="100"></td>
+                                <td>
+                                    <select class="gradient-curve" id="gradient_curve_2">
+                                        <option value="linear">Linear</option>
+                                        <option value="step">Step</option>
+                                    </select>
+                                </td>
+                                <td><button class="btn-icon remove-gradient-row"><i class="fas fa-minus"></i></button>
+                                </td>
+                            </tr>
+                            <tr data-row="3">
+                                <td><input type="number" class="gradient-input" id="gradient_time_3" value="10.1"
+                                        step="0.1"></td>
+                                <td><input type="number" class="gradient-input" id="gradient_percent_3" value="10"
+                                        min="0" max="100"></td>
+                                <td>
+                                    <select class="gradient-curve" id="gradient_curve_3">
+                                        <option value="linear">Linear</option>
+                                        <option value="step" selected>Step</option>
+                                    </select>
+                                </td>
+                                <td><button class="btn-icon remove-gradient-row"><i class="fas fa-minus"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button id="add-gradient-row" class="btn secondary-btn btn-small">
+                        <i class="fas fa-plus"></i> Add Step
+                    </button>
+                </div>
+                <div class="gradient-preview">
+                    <canvas id="gradient-modal-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h4>Autosampler</h4>
+                <div class="config-row">
+                    <div class="config-control half">
+                        <label>Sample Vial</label>
+                        <select id="sample-select">
+                            <option value="Mixture">Full Mixture (4 compounds)</option>
+                            <option value="Caffeine">Caffeine Standard</option>
+                            <option value="Paracetamol">Paracetamol Standard</option>
+                            <option value="Aspirin">Aspirin Standard</option>
+                            <option value="Ibuprofen">Ibuprofen Standard</option>
+                            <option value="Metformin">Metformin Standard</option>
+                            <option value="Unknown">Unknown Sample</option>
+                        </select>
+                    </div>
+                    <div class="config-control half">
+                        <label>Injection Volume (µL)</label>
+                        <div class="range-with-input small">
+                            <input type="range" id="injection-vol-input" min="1" max="100" step="1" value="20">
+                            <input type="number" id="injection-vol-number" min="1" max="100" value="20">
+                        </div>
+                    </div>
+                </div>
+                <div class="config-control">
+                    <label>Sample Concentration (µg/mL)</label>
+                    <div class="range-with-input">
+                        <input type="range" id="concentration-input" min="1" max="1000" step="1" value="100">
+                        <input type="number" id="concentration-number" min="1" max="1000" value="100">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn">
+                <i class="fas fa-check"></i> Apply Settings
+            </button>
+        </div>
+    </div>
+
+    <!-- Column Modal -->
+    <div id="column-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-thermometer-half"></i> Column Compartment</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Temperature Control</h4>
+                <div class="config-control">
+                    <label>Column Temperature (°C)</label>
+                    <div class="temp-slider-container">
+                        <input type="range" id="column-temp-input" min="20" max="80" step="1" value="30"
+                            class="temp-slider">
+                        <div class="temp-display">
+                            <span id="column-temp-display" class="temp-value">30</span>
+                            <span class="temp-unit">°C</span>
+                        </div>
+                    </div>
+                    <div class="temp-presets">
+                        <button class="temp-preset" data-temp="25">25°C</button>
+                        <button class="temp-preset active" data-temp="30">30°C</button>
+                        <button class="temp-preset" data-temp="40">40°C</button>
+                        <button class="temp-preset" data-temp="50">50°C</button>
+                        <button class="temp-preset" data-temp="60">60°C</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h4>Column Selection</h4>
+                <div class="column-cards">
+                    <label class="column-card selected">
+                        <input type="radio" name="column-type" value="C18" checked>
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-columns"></i></div>
+                            <h5>C18 (ODS)</h5>
+                            <p>Standard reverse phase. Best for most drug analyses.</p>
+                            <div class="column-specs">
+                                <span>250 × 4.6 mm</span>
+                                <span>5 µm particles</span>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="column-type" value="C8">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-columns"></i></div>
+                            <h5>C8</h5>
+                            <p>Less retentive. Faster elution for hydrophobic compounds.</p>
+                            <div class="column-specs">
+                                <span>150 × 4.6 mm</span>
+                                <span>5 µm particles</span>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="column-type" value="Phenyl">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-columns"></i></div>
+                            <h5>Phenyl</h5>
+                            <p>π-π interactions. Different selectivity for aromatics.</p>
+                            <div class="column-specs">
+                                <span>250 × 4.6 mm</span>
+                                <span>5 µm particles</span>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="column-type" value="HILIC">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-columns"></i></div>
+                            <h5>HILIC</h5>
+                            <p>For polar compounds. Reverse gradient (high organic start).</p>
+                            <div class="column-specs">
+                                <span>150 × 4.6 mm</span>
+                                <span>3 µm particles</span>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h4>Column Status</h4>
+                <div class="column-status-grid">
+                    <div class="status-box">
+                        <span class="status-label">Theoretical Plates</span>
+                        <span id="column-plates" class="status-value good">~15,000</span>
+                    </div>
+                    <div class="status-box">
+                        <span class="status-label">Back Pressure Factor</span>
+                        <span id="column-pressure-factor" class="status-value">1.0×</span>
+                    </div>
+                    <div class="status-box">
+                        <span class="status-label">Usage Count</span>
+                        <span id="column-usage" class="status-value">New</span>
+                    </div>
+                    <div class="status-box">
+                        <span class="status-label">Condition</span>
+                        <span id="column-condition" class="status-value good">Excellent</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn">
+                <i class="fas fa-check"></i> Apply Settings
+            </button>
+        </div>
+    </div>
+
+    <!-- Detector Modal -->
+    <div id="detector-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-sun"></i> UV-Vis Detector</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Wavelength Settings</h4>
+                <div class="wavelength-selector">
+                    <div class="spectrum-bar">
+                        <div class="spectrum-marker" id="wavelength-marker"></div>
+                    </div>
+                    <div class="spectrum-labels">
+                        <span>190 nm</span>
+                        <span>UV</span>
+                        <span>400 nm</span>
+                        <span>VIS</span>
+                        <span>800 nm</span>
+                    </div>
+                    <div class="config-control">
+                        <label>Detection Wavelength (nm)</label>
+                        <div class="range-with-input">
+                            <input type="range" id="wavelength-input" min="190" max="800" step="1" value="254">
+                            <input type="number" id="wavelength-number" min="190" max="800" value="254">
+                        </div>
+                    </div>
+                    <div class="wavelength-presets">
+                        <button class="wavelength-preset" data-wavelength="210">210
+                            nm<br><small>Peptides</small></button>
+                        <button class="wavelength-preset" data-wavelength="230">230 nm<br><small>Acids</small></button>
+                        <button class="wavelength-preset active" data-wavelength="254">254
+                            nm<br><small>General</small></button>
+                        <button class="wavelength-preset" data-wavelength="280">280
+                            nm<br><small>Proteins</small></button>
+                        <button class="wavelength-preset" data-wavelength="220">220 nm<br><small>NSAID</small></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h4>Detector Settings</h4>
+                <div class="config-row">
+                    <div class="config-control half">
+                        <label>Response Time (s)</label>
+                        <select id="response-time-select">
+                            <option value="0.1">0.1 (Fast)</option>
+                            <option value="0.5">0.5</option>
+                            <option value="1.0" selected>1.0 (Standard)</option>
+                            <option value="2.0">2.0 (Slow)</option>
+                        </select>
+                    </div>
+                    <div class="config-control half">
+                        <label>Data Rate (Hz)</label>
+                        <select id="data-rate-select">
+                            <option value="1">1</option>
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h4>Lamp Status</h4>
+                <div class="lamp-status">
+                    <div class="lamp-indicator active">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>D2 Lamp (UV)</span>
+                        <span class="lamp-hours">1,247 hrs</span>
+                    </div>
+                    <div class="lamp-indicator active">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>W Lamp (Vis)</span>
+                        <span class="lamp-hours">892 hrs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn">
+                <i class="fas fa-check"></i> Apply Settings
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal hidden confirmation-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-clipboard-check"></i> Confirm Run Parameters</h3>
+        </div>
+        <div class="modal-body">
+            <div class="confirmation-grid" id="confirmation-list">
+                <!-- Dynamically filled -->
+            </div>
+            <div class="run-checklist">
+                <h4>Pre-Run Checklist</h4>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" id="check-solvents" checked disabled>
+                        <span class="checkmark"></span>
+                        <span>Solvents degassed and sufficient</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" id="check-column" checked disabled>
+                        <span class="checkmark"></span>
+                        <span>Column equilibrated</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" id="check-baseline" checked disabled>
+                        <span class="checkmark"></span>
+                        <span>Baseline stable</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" id="check-sample">
+                        <span class="checkmark"></span>
+                        <span>Sample loaded correctly</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="modify-params-button" class="btn secondary-btn">
+                <i class="fas fa-edit"></i> Modify
+            </button>
+            <button id="confirm-run-button" class="btn success-btn">
+                <i class="fas fa-play"></i> Confirm & Start Run
+            </button>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="results-modal" class="modal hidden results-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-chart-bar"></i> Analysis Results</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="results-summary">
+                <div class="summary-card">
+                    <i class="fas fa-clock"></i>
+                    <span class="summary-value" id="result-runtime">--</span>
+                    <span class="summary-label">Run Time</span>
+                </div>
+                <div class="summary-card">
+                    <i class="fas fa-mountain"></i>
+                    <span class="summary-value" id="result-peaks">--</span>
+                    <span class="summary-label">Peaks Detected</span>
+                </div>
+                <div class="summary-card">
+                    <i class="fas fa-check-circle"></i>
+                    <span class="summary-value" id="result-status">--</span>
+                    <span class="summary-label">SST Status</span>
+                </div>
+            </div>
+            <div id="results-table-container">
+                <!-- Dynamic table -->
+            </div>
+            <div class="results-actions">
+                <button class="btn secondary-btn" id="export-results-btn">
+                    <i class="fas fa-file-excel"></i> Export to CSV
+                </button>
+                <button class="btn secondary-btn" id="print-results-btn">
+                    <i class="fas fa-print"></i> Print Report
+                </button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn">Close</button>
+        </div>
+    </div>
+
+    <!-- SST Report Modal -->
+    <div id="sst-modal" class="modal hidden sst-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-file-medical-alt"></i> System Suitability Test Report</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="sst-header">
+                <div class="sst-info">
+                    <p><strong>Method:</strong> <span id="sst-method-name">--</span></p>
+                    <p><strong>Date:</strong> <span id="sst-date">--</span></p>
+                    <p><strong>Analyst:</strong> SimuPharma User</p>
+                </div>
+                <div class="sst-criteria">
+                    <h5>Acceptance Criteria (USP)</h5>
+                    <ul>
+                        <li>Resolution (R) ≥ 2.0</li>
+                        <li>Tailing Factor (T) ≤ 1.5</li>
+                        <li>Plate Count (N) ≥ 2000</li>
+                        <li>%RSD ≤ 2.0</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="sst-table-container">
+                <table class="sst-table">
+                    <thead>
+                        <tr>
+                            <th>Peak</th>
+                            <th>RT (min)</th>
+                            <th>Resolution (R)</th>
+                            <th>Tailing (T)</th>
+                            <th>Plates (N)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sst-table-body">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="sst-verdict" id="sst-verdict">
+                <!-- Pass/Fail verdict -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn secondary-btn" id="export-sst-btn">
+                <i class="fas fa-file-pdf"></i> Export PDF
+            </button>
+            <button class="btn primary-btn modal-confirm-btn">Close</button>
+        </div>
+    </div>
+
+    <!-- Fault Injection Modal -->
+    <div id="fault-modal" class="modal hidden fault-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-bug"></i> Fault Simulation Mode</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <p class="fault-description">Select a fault to simulate during the next run. Learn to identify and
+                troubleshoot common HPLC problems.</p>
+            <div class="fault-options">
+                <label class="fault-option">
+                    <input type="radio" name="fault-type" value="none" checked>
+                    <div class="fault-card">
+                        <i class="fas fa-check-circle"></i>
+                        <h5>Normal Operation</h5>
+                        <p>No faults - ideal conditions</p>
+                    </div>
+                </label>
+                <label class="fault-option">
+                    <input type="radio" name="fault-type" value="air_bubble">
+                    <div class="fault-card">
+                        <i class="fas fa-circle"></i>
+                        <h5>Air Bubble</h5>
+                        <p>Noisy baseline, irregular pressure</p>
+                    </div>
+                </label>
+                <label class="fault-option">
+                    <input type="radio" name="fault-type" value="column_degradation">
+                    <div class="fault-card">
+                        <i class="fas fa-columns"></i>
+                        <h5>Column Degradation</h5>
+                        <p>Peak tailing, reduced efficiency</p>
+                    </div>
+                </label>
+                <label class="fault-option">
+                    <input type="radio" name="fault-type" value="leak">
+                    <div class="fault-card">
+                        <i class="fas fa-tint-slash"></i>
+                        <h5>System Leak</h5>
+                        <p>Pressure drop, RT shift</p>
+                    </div>
+                </label>
+                <label class="fault-option">
+                    <input type="radio" name="fault-type" value="contamination">
+                    <div class="fault-card">
+                        <i class="fas fa-skull-crossbones"></i>
+                        <h5>Mobile Phase Contamination</h5>
+                        <p>Ghost peaks, elevated baseline</p>
+                    </div>
+                </label>
+                <label class="fault-option">
+                    <input type="radio" name="fault-type" value="lamp_failure">
+                    <div class="fault-card">
+                        <i class="fas fa-lightbulb"></i>
+                        <h5>Detector Lamp Issue</h5>
+                        <p>Reduced sensitivity, noise</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn" id="apply-fault-btn">
+                <i class="fas fa-check"></i> Apply Fault
+            </button>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- MOBILE PHASE CONFIGURATION MODAL (Industry-Grade)                 -->
+    <!-- ================================================================= -->
+    <div id="solvents-modal" class="modal hidden config-modal solvents-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-vial"></i> Mobile Phase Configuration</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <!-- Channel A: Aqueous Phase -->
+            <div class="config-section">
+                <h4><i class="fas fa-tint" style="color:#4fc3f7"></i> Channel A — Aqueous Phase</h4>
+                <div class="config-row">
+                    <div class="config-control half">
+                        <label>Solvent Type</label>
+                        <select id="solvent-a-select">
+                            <option value="water">Water (HPLC Grade)</option>
+                            <option value="phosphate_buffer">Phosphate Buffer</option>
+                            <option value="acetate_buffer">Acetate Buffer</option>
+                            <option value="formate_buffer">Ammonium Formate Buffer</option>
+                            <option value="citrate_buffer">Citrate Buffer</option>
+                            <option value="tris_buffer">Tris-HCl Buffer</option>
+                        </select>
+                    </div>
+                    <div class="config-control half">
+                        <label>Grade / Purity</label>
+                        <select id="solvent-a-grade">
+                            <option value="hplc">HPLC Grade</option>
+                            <option value="lcms">LC-MS Grade</option>
+                            <option value="ar">AR Grade</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- pH Control (visible when buffer is selected) -->
+                <div class="config-control ph-control-section" id="ph-control-section">
+                    <label>Mobile Phase pH</label>
+                    <div class="ph-slider-container">
+                        <div class="ph-gradient-bar">
+                            <div class="ph-marker" id="ph-marker"></div>
+                        </div>
+                        <div class="ph-labels">
+                            <span>2.0</span><span>4.0</span><span>6.0</span><span>8.0</span><span>10.0</span><span>12.0</span>
+                        </div>
+                        <div class="range-with-input">
+                            <input type="range" id="ph-input" min="2.0" max="12.0" step="0.1" value="7.0">
+                            <input type="number" id="ph-number" min="2.0" max="12.0" step="0.1" value="7.0">
+                        </div>
+                    </div>
+                    <div class="ph-presets">
+                        <button class="ph-preset" data-ph="2.5">2.5<br><small>Low pH RP</small></button>
+                        <button class="ph-preset" data-ph="3.0">3.0<br><small>Acid suppress</small></button>
+                        <button class="ph-preset" data-ph="4.5">4.5<br><small>Acetate</small></button>
+                        <button class="ph-preset" data-ph="6.8">6.8<br><small>Phosphate</small></button>
+                        <button class="ph-preset active" data-ph="7.0">7.0<br><small>Neutral</small></button>
+                        <button class="ph-preset" data-ph="7.4">7.4<br><small>Physiol.</small></button>
+                    </div>
+                </div>
+
+                <!-- Buffer Concentration -->
+                <div class="config-control buffer-conc-section" id="buffer-conc-section">
+                    <label>Buffer Concentration (mM)</label>
+                    <div class="range-with-input">
+                        <input type="range" id="buffer-conc-input" min="5" max="100" step="5" value="20">
+                        <input type="number" id="buffer-conc-number" min="5" max="100" step="5" value="20">
+                    </div>
+                    <div class="range-labels">
+                        <span>5 mM</span><span>50 mM</span><span>100 mM</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel B: Organic Phase -->
+            <div class="config-section">
+                <h4><i class="fas fa-flask" style="color:#81c784"></i> Channel B — Organic Phase</h4>
+                <div class="solvent-b-cards">
+                    <label class="solvent-card selected">
+                        <input type="radio" name="solvent-b-type" value="acetonitrile" checked>
+                        <div class="solvent-card-content">
+                            <div class="solvent-icon"><i class="fas fa-vial"></i></div>
+                            <h5>Acetonitrile</h5>
+                            <div class="solvent-specs">
+                                <span>UV cutoff: 190 nm</span>
+                                <span>η: 0.34 cP</span>
+                            </div>
+                            <span class="solvent-tag recommended">Recommended</span>
+                        </div>
+                    </label>
+                    <label class="solvent-card">
+                        <input type="radio" name="solvent-b-type" value="methanol">
+                        <div class="solvent-card-content">
+                            <div class="solvent-icon"><i class="fas fa-vial"></i></div>
+                            <h5>Methanol</h5>
+                            <div class="solvent-specs">
+                                <span>UV cutoff: 205 nm</span>
+                                <span>η: 0.54 cP</span>
+                            </div>
+                            <span class="solvent-tag">Higher viscosity</span>
+                        </div>
+                    </label>
+                    <label class="solvent-card">
+                        <input type="radio" name="solvent-b-type" value="thf">
+                        <div class="solvent-card-content">
+                            <div class="solvent-icon"><i class="fas fa-vial"></i></div>
+                            <h5>THF</h5>
+                            <div class="solvent-specs">
+                                <span>UV cutoff: 215 nm</span>
+                                <span>η: 0.46 cP</span>
+                            </div>
+                            <span class="solvent-tag caution">Strong eluent</span>
+                        </div>
+                    </label>
+                    <label class="solvent-card">
+                        <input type="radio" name="solvent-b-type" value="ipa">
+                        <div class="solvent-card-content">
+                            <div class="solvent-icon"><i class="fas fa-vial"></i></div>
+                            <h5>Isopropanol</h5>
+                            <div class="solvent-specs">
+                                <span>UV cutoff: 205 nm</span>
+                                <span>η: 2.04 cP</span>
+                            </div>
+                            <span class="solvent-tag caution">Very viscous</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="uv-cutoff-warning hidden" id="uv-cutoff-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="uv-cutoff-warning-text">Warning: detector wavelength is below the UV cutoff of this solvent.</span>
+                </div>
+            </div>
+
+            <!-- Additives / Modifiers -->
+            <div class="config-section">
+                <h4><i class="fas fa-plus-circle" style="color:#ffb74d"></i> Additives / Modifiers</h4>
+                <div class="config-row">
+                    <div class="config-control half">
+                        <label>Additive</label>
+                        <select id="additive-select">
+                            <option value="none">None</option>
+                            <option value="tfa">Trifluoroacetic Acid (TFA)</option>
+                            <option value="formic_acid">Formic Acid</option>
+                            <option value="acetic_acid">Acetic Acid</option>
+                            <option value="tea">Triethylamine (TEA)</option>
+                            <option value="ammonium_formate">Ammonium Formate</option>
+                            <option value="ammonium_acetate">Ammonium Acetate</option>
+                            <option value="phosphoric_acid">Phosphoric Acid</option>
+                        </select>
+                    </div>
+                    <div class="config-control half">
+                        <label>Concentration (%)</label>
+                        <div class="range-with-input small">
+                            <input type="range" id="additive-conc-input" min="0.01" max="1.0" step="0.01" value="0.1">
+                            <input type="number" id="additive-conc-number" min="0.01" max="1.0" step="0.01" value="0.1">
+                        </div>
+                    </div>
+                </div>
+                <div class="additive-info" id="additive-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="additive-info-text">TFA is used for peptide/protein separations. Improves peak shape of basic compounds.</span>
+                </div>
+            </div>
+
+            <!-- Mobile Phase Properties Summary -->
+            <div class="config-section mobile-phase-summary">
+                <h4><i class="fas fa-clipboard-list"></i> Mobile Phase Properties</h4>
+                <div class="mp-properties-grid">
+                    <div class="mp-prop">
+                        <span class="mp-prop-label">Channel A</span>
+                        <span class="mp-prop-value" id="mp-summary-a">Water (HPLC Grade)</span>
+                    </div>
+                    <div class="mp-prop">
+                        <span class="mp-prop-label">Channel B</span>
+                        <span class="mp-prop-value" id="mp-summary-b">Acetonitrile</span>
+                    </div>
+                    <div class="mp-prop">
+                        <span class="mp-prop-label">pH</span>
+                        <span class="mp-prop-value" id="mp-summary-ph">7.0</span>
+                    </div>
+                    <div class="mp-prop">
+                        <span class="mp-prop-label">Mix Viscosity (50:50)</span>
+                        <span class="mp-prop-value" id="mp-summary-viscosity">0.89 cP</span>
+                    </div>
+                    <div class="mp-prop">
+                        <span class="mp-prop-label">UV Cutoff (B)</span>
+                        <span class="mp-prop-value" id="mp-summary-cutoff">190 nm</span>
+                    </div>
+                    <div class="mp-prop">
+                        <span class="mp-prop-label">Additive</span>
+                        <span class="mp-prop-value" id="mp-summary-additive">None</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn" id="apply-solvents-btn">
+                <i class="fas fa-check"></i> Apply Mobile Phase
+            </button>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- SAMPLE PREPARATION MODAL (Industry-Grade)                         -->
+    <!-- ================================================================= -->
+    <div id="sample-prep-modal" class="modal hidden config-modal sample-prep-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-mortar-pestle"></i> Sample Preparation</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <!-- Prep step progress -->
+            <div class="prep-progress">
+                <div class="prep-step active" data-prep-step="1">
+                    <div class="prep-step-number">1</div>
+                    <span>Weigh</span>
+                </div>
+                <div class="prep-connector"></div>
+                <div class="prep-step" data-prep-step="2">
+                    <div class="prep-step-number">2</div>
+                    <span>Dissolve</span>
+                </div>
+                <div class="prep-connector"></div>
+                <div class="prep-step" data-prep-step="3">
+                    <div class="prep-step-number">3</div>
+                    <span>Dilute</span>
+                </div>
+                <div class="prep-connector"></div>
+                <div class="prep-step" data-prep-step="4">
+                    <div class="prep-step-number">4</div>
+                    <span>Filter</span>
+                </div>
+                <div class="prep-connector"></div>
+                <div class="prep-step" data-prep-step="5">
+                    <div class="prep-step-number">5</div>
+                    <span>Load Vial</span>
+                </div>
+            </div>
+
+            <div class="prep-content">
+                <!-- Step 1: Weighing -->
+                <div class="prep-panel active" id="prep-step-1">
+                    <div class="prep-visual">
+                        <div class="balance-3d">
+                            <div class="balance-body">
+                                <div class="balance-display" id="balance-display">0.0000 g</div>
+                                <div class="balance-pan">
+                                    <div class="balance-sample" id="balance-sample"></div>
+                                </div>
+                                <div class="balance-base"></div>
+                            </div>
+                            <div class="balance-draft-shield"></div>
+                        </div>
+                    </div>
+                    <div class="prep-controls">
+                        <h4>Step 1: Weigh Sample</h4>
+                        <p class="prep-description">Use the analytical balance to weigh the required amount of sample/standard accurately.</p>
+                        <div class="config-row">
+                            <div class="config-control half">
+                                <label>Target Weight (mg)</label>
+                                <input type="number" id="target-weight" value="10.0" min="1" max="1000" step="0.1" class="prep-input">
+                            </div>
+                            <div class="config-control half">
+                                <label>Material</label>
+                                <select id="weigh-material">
+                                    <option value="reference_standard">Reference Standard (USP/IP)</option>
+                                    <option value="sample">Test Sample</option>
+                                    <option value="working_standard">Working Standard</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button id="btn-tare" class="btn action-btn">
+                            <i class="fas fa-balance-scale-left"></i> Tare Balance
+                        </button>
+                        <button id="btn-weigh" class="btn action-btn" disabled>
+                            <i class="fas fa-weight-hanging"></i> Add Sample & Weigh
+                        </button>
+                        <div class="weigh-result hidden" id="weigh-result">
+                            <span class="result-label">Actual Weight:</span>
+                            <span class="result-value" id="actual-weight">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Dissolution -->
+                <div class="prep-panel" id="prep-step-2">
+                    <div class="prep-visual">
+                        <div class="flask-3d">
+                            <div class="volumetric-flask">
+                                <div class="flask-neck"></div>
+                                <div class="flask-body">
+                                    <div class="flask-liquid" id="flask-liquid"></div>
+                                    <div class="flask-mark"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prep-controls">
+                        <h4>Step 2: Dissolve in Solvent</h4>
+                        <p class="prep-description">Transfer the weighed sample to a volumetric flask and dissolve in the appropriate solvent.</p>
+                        <div class="config-row">
+                            <div class="config-control half">
+                                <label>Volumetric Flask Size (mL)</label>
+                                <select id="flask-volume">
+                                    <option value="10">10 mL</option>
+                                    <option value="25">25 mL</option>
+                                    <option value="50">50 mL</option>
+                                    <option value="100" selected>100 mL</option>
+                                    <option value="200">200 mL</option>
+                                    <option value="250">250 mL</option>
+                                    <option value="500">500 mL</option>
+                                    <option value="1000">1000 mL</option>
+                                </select>
+                            </div>
+                            <div class="config-control half">
+                                <label>Dissolution Solvent</label>
+                                <select id="dissolution-solvent">
+                                    <option value="mobile_phase">Mobile Phase</option>
+                                    <option value="water">Water</option>
+                                    <option value="methanol">Methanol</option>
+                                    <option value="acetonitrile">Acetonitrile</option>
+                                    <option value="dmso">DMSO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button id="btn-dissolve" class="btn action-btn">
+                            <i class="fas fa-fill-drip"></i> Add Solvent & Dissolve
+                        </button>
+                        <button id="btn-sonicate" class="btn action-btn" disabled>
+                            <i class="fas fa-wave-square"></i> Sonicate (5 min)
+                        </button>
+                        <button id="btn-makeup" class="btn action-btn" disabled>
+                            <i class="fas fa-ruler-vertical"></i> Make Up to Volume
+                        </button>
+                        <div class="stock-result hidden" id="stock-result">
+                            <span class="result-label">Stock Concentration:</span>
+                            <span class="result-value" id="stock-concentration">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Dilution -->
+                <div class="prep-panel" id="prep-step-3">
+                    <div class="prep-visual">
+                        <div class="dilution-visual">
+                            <div class="dilution-diagram">
+                                <div class="dilution-step-vis">
+                                    <div class="pipette-vis">
+                                        <div class="pipette-tip"></div>
+                                        <div class="pipette-body"></div>
+                                    </div>
+                                    <div class="arrow-right"><i class="fas fa-arrow-right"></i></div>
+                                    <div class="dilution-flask-vis">
+                                        <div class="small-flask"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prep-controls">
+                        <h4>Step 3: Dilution (C₁V₁ = C₂V₂)</h4>
+                        <p class="prep-description">Prepare working solutions by serial dilution if needed.</p>
+                        <div class="dilution-calculator">
+                            <div class="dilution-row">
+                                <div class="config-control">
+                                    <label>Stock Concentration (C₁, µg/mL)</label>
+                                    <input type="number" id="dilution-c1" class="prep-input" readonly>
+                                </div>
+                            </div>
+                            <div class="config-row">
+                                <div class="config-control half">
+                                    <label>Pipette Volume (V₁, mL)</label>
+                                    <input type="number" id="dilution-v1" value="1.0" min="0.1" max="100" step="0.1" class="prep-input">
+                                </div>
+                                <div class="config-control half">
+                                    <label>Flask Volume (V₂, mL)</label>
+                                    <select id="dilution-v2">
+                                        <option value="10">10 mL</option>
+                                        <option value="25">25 mL</option>
+                                        <option value="50" selected>50 mL</option>
+                                        <option value="100">100 mL</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="dilution-result">
+                                <div class="result-box">
+                                    <span class="result-label">Final Concentration (C₂)</span>
+                                    <span class="result-value" id="dilution-c2">-- µg/mL</span>
+                                </div>
+                                <div class="result-box">
+                                    <span class="result-label">Dilution Factor</span>
+                                    <span class="result-value" id="dilution-factor">--</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dilution-toggle">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="skip-dilution-toggle">
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Use stock solution directly (no dilution)</span>
+                            </label>
+                        </div>
+                        <button id="btn-prepare-dilution" class="btn action-btn">
+                            <i class="fas fa-vial"></i> Prepare Dilution
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Filtration -->
+                <div class="prep-panel" id="prep-step-4">
+                    <div class="prep-visual">
+                        <div class="filter-3d">
+                            <div class="syringe-filter">
+                                <div class="syringe-barrel">
+                                    <div class="syringe-plunger" id="syringe-plunger"></div>
+                                    <div class="syringe-liquid" id="syringe-liquid"></div>
+                                </div>
+                                <div class="filter-housing">
+                                    <div class="filter-membrane"></div>
+                                </div>
+                                <div class="filter-output"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prep-controls">
+                        <h4>Step 4: Filter Sample</h4>
+                        <p class="prep-description">Filter the sample through a syringe filter to remove particulate matter before injection.</p>
+                        <div class="config-row">
+                            <div class="config-control half">
+                                <label>Filter Pore Size</label>
+                                <select id="filter-pore-size">
+                                    <option value="0.22">0.22 µm (UHPLC)</option>
+                                    <option value="0.45" selected>0.45 µm (HPLC Standard)</option>
+                                    <option value="1.0">1.0 µm (Pre-filter)</option>
+                                </select>
+                            </div>
+                            <div class="config-control half">
+                                <label>Filter Material</label>
+                                <select id="filter-material">
+                                    <option value="pvdf" selected>PVDF (Universal)</option>
+                                    <option value="nylon">Nylon (Aqueous)</option>
+                                    <option value="ptfe">PTFE (Organic)</option>
+                                    <option value="pes">PES (Low protein binding)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button id="btn-filter" class="btn action-btn">
+                            <i class="fas fa-filter"></i> Filter Sample
+                        </button>
+                        <div class="filter-status hidden" id="filter-status">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Sample filtered — ready for loading</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Vial Loading -->
+                <div class="prep-panel" id="prep-step-5">
+                    <div class="prep-visual">
+                        <div class="vial-loading-3d">
+                            <div class="autosampler-tray">
+                                <div class="tray-grid" id="vial-tray-grid">
+                                    <!-- Vial positions generated by JS -->
+                                </div>
+                            </div>
+                            <div class="selected-vial-vis">
+                                <div class="hplc-vial">
+                                    <div class="vial-cap"></div>
+                                    <div class="vial-body">
+                                        <div class="vial-liquid" id="vial-liquid-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prep-controls">
+                        <h4>Step 5: Load Autosampler Vial</h4>
+                        <p class="prep-description">Transfer the filtered sample into an HPLC vial with a crimp/snap cap and place it in the autosampler tray.</p>
+                        <div class="config-row">
+                            <div class="config-control half">
+                                <label>Vial Type</label>
+                                <select id="vial-type">
+                                    <option value="2ml_clear">2 mL Clear Glass</option>
+                                    <option value="2ml_amber">2 mL Amber Glass</option>
+                                    <option value="300ul_insert">300 µL Insert</option>
+                                </select>
+                            </div>
+                            <div class="config-control half">
+                                <label>Fill Volume (µL)</label>
+                                <div class="range-with-input small">
+                                    <input type="range" id="vial-fill-input" min="100" max="1500" step="50" value="500">
+                                    <input type="number" id="vial-fill-number" min="100" max="1500" step="50" value="500">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="config-control">
+                            <label>Tray Position</label>
+                            <div class="tray-position-selector" id="tray-position-selector">
+                                <!-- 12 vial position buttons -->
+                            </div>
+                        </div>
+                        <button id="btn-load-vial" class="btn action-btn">
+                            <i class="fas fa-syringe"></i> Fill & Cap Vial
+                        </button>
+                        <button id="btn-place-vial" class="btn action-btn" disabled>
+                            <i class="fas fa-inbox"></i> Place in Autosampler
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="prep-prev-btn" class="btn secondary-btn" disabled>
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button id="prep-next-btn" class="btn primary-btn" disabled>
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+            <button id="prep-finish-btn" class="btn success-btn hidden">
+                <i class="fas fa-check"></i> Sample Ready — Return to Instrument
+            </button>
+        </div>
+    </div>
+    <audio id="audio-click" src="sounds/click.wav" preload="auto"></audio>
+    <audio id="audio-pump-start" src="sounds/pump_start.wav" preload="auto"></audio>
+    <audio id="audio-pump-loop" src="sounds/pump_loop.wav" loop preload="auto"></audio>
+    <audio id="audio-analysis-complete" src="sounds/analysis_complete.wav" preload="auto"></audio>
+    <audio id="audio-error" src="sounds/error.wav" preload="auto"></audio>
+    <audio id="audio-beep" src="sounds/beep.wav" preload="auto"></audio>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="hplc_simulator_script.js"></script>
+    <script src="voice_engine.js"></script>
+    <script src="guided_teacher.js"></script>
+    <script src="hplc_guided_steps.js"></script>
+    <script src="edtech.js?v=402"></script>
+    <script>
+        // EdTech integration — record HPLC usage
+        if (typeof EdTech !== 'undefined') {
+            EdTech.recordInstrument('hplc');
+        }
+    </script>
+</body>
+
+</html>

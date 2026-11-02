@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimuPharma - Advanced Mass Spectrometer Digital Twin v2.0</title>
+    <link rel="stylesheet" href="hplc_simulator_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+    <style>
+        /* Mass Spec specific overrides */
+        .ms-bar-chart {
+            position: relative;
+        }
+
+        .isotope-pattern {
+            background: rgba(37, 99, 235, 0.06);
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+
+        .isotope-pattern h6 {
+            font-size: 12px;
+            color: #94a3b8;
+            margin: 0 0 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .isotope-bar {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 60px;
+            padding-top: 4px;
+        }
+
+        .isotope-bar .bar {
+            width: 18px;
+            background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+            border-radius: 3px 3px 0 0;
+            transition: height 0.4s ease;
+            position: relative;
+        }
+
+        .isotope-bar .bar span {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: #94a3b8;
+            white-space: nowrap;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .fragment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .fragment-table th {
+            text-align: left;
+            color: #64748b;
+            font-weight: 600;
+            padding: 6px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .fragment-table td {
+            padding: 5px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: #cbd5e1;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .fragment-table tr:hover td {
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .fragment-table .bar-cell {
+            width: 80px;
+        }
+
+        .fragment-table .bar-cell .frag-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #6366f1, #3b82f6);
+            border-radius: 4px;
+            transition: width 0.4s;
+        }
+
+        .ion-mode-selector {
+            display: flex;
+            gap: 4px;
+            background: #1e293b;
+            padding: 3px;
+            border-radius: 8px;
+        }
+
+        .ion-mode-selector button {
+            flex: 1;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            background: transparent;
+            color: #64748b;
+            font-family: inherit;
+        }
+
+        .ion-mode-selector button.active {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .vacuum-gauge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 8px;
+            font-size: 12px;
+            color: #22c55e;
+        }
+
+        .vacuum-gauge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: vacPulse 2s infinite;
+        }
+
+        @keyframes vacPulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .source-temp {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="hidden">
+        <div class="loader-content">
+            <div class="dna-loader">
+                <div class="helix"></div>
+                <div class="helix"></div>
+            </div>
+            <p id="loading-text">Initializing Mass Spectrometer...</p>
+        </div>
+    </div>
+
+    <div id="app-container">
+        <!-- ========== VIEW 1: MAIN INSTRUMENT VIEW ========== -->
+        <div id="hplc-main-view" class="view active">
+            <div class="main-view-header">
+                <div class="logo-section">
+                    <div class="logo-icon"><i class="fas fa-atom"></i></div>
+                    <div class="logo-text">
+                        <h1>SimuPharma</h1>
+                        <span>Mass Spectrometer Digital Twin v2.0</span>
+                    </div>
+                </div>
+                <div class="header-status">
+                    <div class="status-chip" id="system-status-chip">
+                        <span class="status-dot offline"></span>
+                        <span>System Offline</span>
+                    </div>
+                    <div class="difficulty-selector">
+                        <button class="difficulty-btn active" data-level="beginner">Beginner</button>
+                        <button class="difficulty-btn" data-level="intermediate">Intermediate</button>
+                        <button class="difficulty-btn" data-level="advanced">Advanced</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instrument-container">
+                <img src="images/mass_spec_main.png" alt="Mass Spectrometer" class="hplc-bg-image"
+                    onerror="this.style.display='none'">
+
+                <!-- Interactive Hotspots -->
+                <div class="hotspot pulse-animate" id="hotspot-screen" data-controls="screen-view"
+                    data-name="Data System">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-desktop"></i></div>
+                    <div class="hotspot-tooltip">
+                        <span class="tooltip-title">Data System</span>
+                        <span class="tooltip-desc">View mass spectrum & analysis</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-source" data-controls="source-modal"
+                    data-name="Ion Source">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-bolt"></i></div>
+                    <div class="hotspot-tooltip left">
+                        <span class="tooltip-title">Ion Source</span>
+                        <span class="tooltip-desc">EI / ESI / APCI ionization</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-analyzer" data-controls="analyzer-modal"
+                    data-name="Mass Analyzer">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-magnet"></i></div>
+                    <div class="hotspot-tooltip">
+                        <span class="tooltip-title">Mass Analyzer</span>
+                        <span class="tooltip-desc">Quadrupole / TOF / Ion Trap</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-detector" data-controls="detector-modal"
+                    data-name="Detector">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-broadcast-tower"></i></div>
+                    <div class="hotspot-tooltip left">
+                        <span class="tooltip-title">Electron Multiplier</span>
+                        <span class="tooltip-desc">Ion detection & amplification</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-inlet" data-controls="inlet-modal"
+                    data-name="Sample Inlet">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-syringe"></i></div>
+                    <div class="hotspot-tooltip">
+                        <span class="tooltip-title">Sample Inlet</span>
+                        <span class="tooltip-desc">Direct probe / GC / LC interface</span>
+                    </div>
+                </div>
+
+                <!-- System Startup Button -->
+                <div class="startup-button" id="hotspot-setup">
+                    <div class="startup-icon"><i class="fas fa-power-off"></i></div>
+                    <span class="startup-text">System Startup</span>
+                    <div class="startup-progress">
+                        <div class="startup-progress-fill" id="startup-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Panel -->
+            <div class="quick-stats-panel">
+                <div class="stat-card">
+                    <i class="fas fa-wind"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-vacuum">--</span>
+                        <span class="stat-label">Vacuum (Torr)</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-bolt"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-source-temp">--</span>
+                        <span class="stat-label">Source Temp</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-wave-square"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-scan-mode">EI</span>
+                        <span class="stat-label">Ionization</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-runtime">0:00</span>
+                        <span class="stat-label">Scan Time</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== VIEW 2: SOFTWARE / SPECTRUM VIEW ========== -->
+        <div id="main-screen-view" class="view">
+            <div class="screen-header glass-panel">
+                <div class="header-left">
+                    <button id="back-to-main-view-button" class="btn icon-btn" title="Return to Instrument">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="method-info">
+                        <span class="method-label">Mode:</span>
+                        <span id="method-name" class="method-value">Full Scan (m/z 50–600)</span>
+                    </div>
+                </div>
+                <div class="header-center">
+                    <div class="run-status" id="run-status-indicator">
+                        <span class="status-icon"><i class="fas fa-circle"></i></span>
+                        <span id="screen-title" class="status-text">Ready</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <span class="screen-time" id="system-time">--:--</span>
+                    <button id="fullscreen-button" class="btn icon-btn" title="Fullscreen">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="screen-content">
+                <!-- Left Panel: Parameters & Controls -->
+                <div class="left-panel glass-panel">
+                    <div class="panel-section">
+                        <h4><i class="fas fa-sliders-h"></i> Scan Parameters</h4>
+                        <div class="param-grid">
+                            <div class="param-item">
+                                <label>m/z Range</label>
+                                <div class="param-display">
+                                    <span id="live-mz-range" class="param-value">50–600</span>
+                                    <span class="param-unit">Da</span>
+                                </div>
+                            </div>
+                            <div class="param-item">
+                                <label>Ion Source</label>
+                                <div class="param-display">
+                                    <span id="live-ion-mode" class="param-value">EI</span>
+                                    <span class="param-unit">70 eV</span>
+                                </div>
+                            </div>
+                            <div class="param-item">
+                                <label>Source Temp</label>
+                                <div class="param-display">
+                                    <span id="live-source-temp" class="param-value">200</span>
+                                    <span class="param-unit">°C</span>
+                                </div>
+                            </div>
+                            <div class="param-item">
+                                <label>Electron Energy</label>
+                                <div class="param-display">
+                                    <span id="live-ee" class="param-value">70</span>
+                                    <span class="param-unit">eV</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h4><i class="fas fa-flask"></i> Sample</h4>
+                        <div class="sample-info">
+                            <span id="sample-name" class="sample-name">No sample loaded</span>
+                            <span class="sample-vial"><i class="fas fa-vial"></i> Direct Probe</span>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h4><i class="fas fa-fingerprint"></i> Isotope Pattern</h4>
+                        <div class="isotope-pattern" id="isotope-pattern-display">
+                            <h6>Run scan to see isotope data</h6>
+                            <div class="isotope-bar" id="isotope-bars"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center: Mass Spectrum Chart -->
+                <div class="chromatogram-section glass-panel">
+                    <div class="chart-toolbar">
+                        <div class="toolbar-group">
+                            <button class="chart-tool" id="zoom-in-btn" title="Zoom In"><i
+                                    class="fas fa-search-plus"></i></button>
+                            <button class="chart-tool" id="zoom-out-btn" title="Zoom Out"><i
+                                    class="fas fa-search-minus"></i></button>
+                            <button class="chart-tool" id="reset-zoom-btn" title="Reset View"><i
+                                    class="fas fa-compress"></i></button>
+                        </div>
+                        <div class="toolbar-group">
+                            <button class="chart-tool" id="toggle-peaks-btn" title="Label Peaks"><i
+                                    class="fas fa-tags"></i></button>
+                            <button class="chart-tool" id="toggle-integration-btn" title="Show Isotope Pattern"><i
+                                    class="fas fa-chart-bar"></i></button>
+                        </div>
+                        <div class="toolbar-group">
+                            <button class="chart-tool" id="export-data-btn" title="Export Data"><i
+                                    class="fas fa-download"></i></button>
+                            <button class="chart-tool" id="screenshot-btn" title="Screenshot"><i
+                                    class="fas fa-camera"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="hplc-chart"></canvas>
+                        <div id="cursor-info" class="cursor-info hidden">
+                            <span id="cursor-time">m/z 0.0</span>
+                            <span id="cursor-signal">0.0%</span>
+                        </div>
+                    </div>
+                    <div class="chart-footer">
+                        <span class="axis-label">m/z (Mass-to-Charge Ratio)</span>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Fragment Table & Identification -->
+                <div class="right-panel">
+                    <!-- Vacuum Gauge -->
+                    <div class="instrument-card glass-panel">
+                        <h5>Vacuum System</h5>
+                        <div class="vacuum-gauge">
+                            <div class="dot"></div>
+                            <span>Analyzer: </span>
+                            <span id="screen-vacuum" style="font-family:'JetBrains Mono';font-weight:600">2.4 ×
+                                10⁻⁶</span>
+                            <span>Torr</span>
+                        </div>
+                        <div class="vacuum-gauge"
+                            style="margin-top:6px;background:rgba(37,99,235,0.08);border-color:rgba(37,99,235,0.2);color:#3b82f6">
+                            <div class="dot" style="background:#3b82f6"></div>
+                            <span>Source: </span>
+                            <span id="screen-source-vacuum" style="font-family:'JetBrains Mono';font-weight:600">1.2 ×
+                                10⁻⁴</span>
+                            <span>Torr</span>
+                        </div>
+                    </div>
+
+                    <!-- Molecular Ion Info -->
+                    <div class="instrument-card glass-panel">
+                        <h5>Molecular Ion</h5>
+                        <div style="text-align:center;padding:8px 0">
+                            <div id="molecular-ion-mz" class="source-temp">--</div>
+                            <div style="font-size:12px;color:#94a3b8;margin-top:2px">M⁺ (m/z)</div>
+                        </div>
+                        <div
+                            style="display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;margin-top:6px">
+                            <div><span style="color:#64748b">Formula:</span> <span id="mol-formula"
+                                    style="color:#cbd5e1;font-family:'JetBrains Mono'">--</span></div>
+                            <div><span style="color:#64748b">MW:</span> <span id="mol-weight"
+                                    style="color:#cbd5e1;font-family:'JetBrains Mono'">--</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Fragment Table -->
+                    <div class="instrument-card glass-panel" style="flex:1;overflow-y:auto">
+                        <h5>Fragmentation Pattern</h5>
+                        <table class="fragment-table" id="fragment-table">
+                            <thead>
+                                <tr>
+                                    <th>m/z</th>
+                                    <th>Rel. %</th>
+                                    <th>Assignment</th>
+                                    <th class="bar-cell"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="fragment-tbody">
+                                <tr>
+                                    <td colspan="4" style="color:#64748b;text-align:center;padding:20px">Run scan to see
+                                        fragments</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Timer -->
+                    <div class="instrument-card glass-panel timer-card">
+                        <div class="timer-display">
+                            <span id="elapsed-time" class="timer-value">00:00.0</span>
+                        </div>
+                        <div class="timer-progress">
+                            <div class="timer-progress-fill" id="timer-progress-fill"></div>
+                        </div>
+                        <span class="timer-label">Scan Progress</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Panel -->
+            <div id="hplc-log-panel" class="glass-panel">
+                <div class="log-header">
+                    <h5><i class="fas fa-terminal"></i> System Log</h5>
+                    <button id="clear-log-btn" class="btn-small"><i class="fas fa-trash"></i></button>
+                </div>
+                <div id="log-content"></div>
+            </div>
+
+            <!-- Control Footer -->
+            <div class="screen-footer glass-panel">
+                <div class="footer-left">
+                    <button id="run-button" class="btn primary-btn" disabled>
+                        <i class="fas fa-play"></i> Acquire
+                    </button>
+                    <button id="stop-button" class="btn danger-btn" disabled>
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                    <button id="pause-button" class="btn warning-btn" disabled>
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                </div>
+                <div class="footer-center">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="instant-mode-toggle">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">Instant Result</span>
+                    </label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="fault-mode-toggle">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">Fault Simulation</span>
+                    </label>
+                </div>
+                <div class="footer-right">
+                    <button id="overlay-std-button" class="btn secondary-btn">
+                        <i class="fas fa-layer-group"></i> Library Search
+                    </button>
+                    <button id="sst-report-button" class="btn secondary-btn" disabled>
+                        <i class="fas fa-file-medical-alt"></i> Report
+                    </button>
+                    <button id="reset-button" class="btn secondary-btn">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div id="modal-backdrop" class="hidden"></div>
+
+    <!-- ========== STARTUP WIZARD ========== -->
+    <div id="setup-modal" class="modal hidden wizard-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-power-off"></i> Mass Spectrometer Startup</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-progress">
+                <div class="wizard-step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <span>Vacuum</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <span>Ion Source</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <span>Tune</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="4">
+                    <div class="step-number">4</div>
+                    <span>Ready</span>
+                </div>
+            </div>
+            <div class="wizard-content">
+                <!-- Step 1: Pump Down -->
+                <div class="wizard-panel active" id="wizard-step-1">
+                    <div class="step-visual">
+                        <div class="step-overlay" id="overlay-step-1">
+                            <i class="fas fa-wind" style="font-size:48px;color:#3b82f6"></i>
+                            <span>Pumping Down Vacuum System</span>
+                        </div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Vacuum System Pump-Down</h4>
+                        <p class="step-description">Engage the turbo-molecular pump to achieve high vacuum in the
+                            analyzer region.</p>
+                        <div class="step-actions">
+                            <button id="btn-pumpdown" class="btn action-btn">
+                                <i class="fas fa-play"></i> Start Turbo Pump
+                            </button>
+                        </div>
+                        <div class="step-status">
+                            <div class="status-item">
+                                <span class="status-label">Fore Pump:</span>
+                                <span id="status-forepump" class="status-value pending">Standby</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Turbo Pump:</span>
+                                <span id="status-turbo" class="status-value pending">Standby</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Vacuum:</span>
+                                <span id="status-vacuum" class="status-value pending">Atmosphere</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Ion Source -->
+                <div class="wizard-panel" id="wizard-step-2">
+                    <div class="step-visual">
+                        <div class="step-overlay" id="overlay-step-2">
+                            <i class="fas fa-bolt" style="font-size:48px;color:#f59e0b"></i>
+                            <span>Heating Ion Source</span>
+                        </div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Ion Source Initialization</h4>
+                        <p class="step-description">Heat the ion source to operating temperature and verify filament
+                            current.</p>
+                        <div class="step-actions">
+                            <button id="btn-heat-source" class="btn action-btn" disabled>
+                                <i class="fas fa-fire"></i> Heat Ion Source
+                            </button>
+                        </div>
+                        <div class="equilibration-display">
+                            <div class="eq-gauge">
+                                <svg viewBox="0 0 100 100" class="eq-circle">
+                                    <circle class="eq-bg" cx="50" cy="50" r="45" />
+                                    <circle class="eq-progress" id="eq-progress-circle" cx="50" cy="50" r="45" />
+                                </svg>
+                                <div class="eq-text">
+                                    <span id="eq-temp-display">25</span>
+                                    <span>°C</span>
+                                </div>
+                            </div>
+                            <div class="eq-info">
+                                <div class="eq-item"><span>Target:</span><span id="eq-target-temp">200°C</span></div>
+                                <div class="eq-item"><span>Filament:</span><span id="eq-filament-status">Off</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Auto-Tune -->
+                <div class="wizard-panel" id="wizard-step-3">
+                    <div class="step-visual">
+                        <div class="step-overlay" id="overlay-step-3">
+                            <i class="fas fa-sliders-h" style="font-size:48px;color:#22c55e"></i>
+                            <span>Auto-Tuning</span>
+                        </div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Auto-Tune & Calibration</h4>
+                        <p class="step-description">Optimize lens voltages and calibrate mass axis using PFTBA
+                            (perfluorotributylamine).</p>
+                        <div class="step-actions">
+                            <button id="btn-autotune" class="btn action-btn" disabled>
+                                <i class="fas fa-magic"></i> Run Auto-Tune
+                            </button>
+                        </div>
+                        <div class="purge-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="tune-progress-fill"></div>
+                            </div>
+                            <span id="tune-progress-text">0%</span>
+                        </div>
+                        <div class="step-status">
+                            <div class="status-item"><span class="status-label">Mass Calibration:</span><span
+                                    id="status-mass-cal" class="status-value pending">Pending</span></div>
+                            <div class="status-item"><span class="status-label">Resolution:</span><span
+                                    id="status-resolution" class="status-value pending">Pending</span></div>
+                            <div class="status-item"><span class="status-label">Sensitivity:</span><span
+                                    id="status-sensitivity" class="status-value pending">Pending</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Ready -->
+                <div class="wizard-panel" id="wizard-step-4">
+                    <div class="step-complete">
+                        <div class="complete-animation"><i class="fas fa-check-circle"></i></div>
+                        <h4>System Ready!</h4>
+                        <p>All startup checks passed. The mass spectrometer is ready for acquisition.</p>
+                        <div class="ready-stats">
+                            <div class="ready-stat"><i class="fas fa-wind"></i><span>Vacuum OK</span></div>
+                            <div class="ready-stat"><i class="fas fa-fire"></i><span>Source Heated</span></div>
+                            <div class="ready-stat"><i class="fas fa-bullseye"></i><span>Mass Calibrated</span></div>
+                            <div class="ready-stat"><i class="fas fa-check-double"></i><span>Tune Passed</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="wizard-prev-btn" class="btn secondary-btn" disabled><i class="fas fa-arrow-left"></i>
+                Previous</button>
+            <button id="wizard-next-btn" class="btn primary-btn" disabled>Next <i
+                    class="fas fa-arrow-right"></i></button>
+            <button id="wizard-finish-btn" class="btn success-btn hidden"><i class="fas fa-check"></i> Enter Acquisition
+                Mode</button>
+        </div>
+    </div>
+
+    <!-- ========== ION SOURCE MODAL ========== -->
+    <div id="source-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-bolt"></i> Ion Source Configuration</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Ionization Mode</h4>
+                <div class="column-cards">
+                    <label class="column-card selected">
+                        <input type="radio" name="ion-mode" value="EI" checked>
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-bolt"></i></div>
+                            <h5>Electron Ionization (EI)</h5>
+                            <p>70 eV electron beam. Extensive fragmentation. Standard library matching.</p>
+                            <div class="column-specs"><span>Hard ionization</span><span>NIST library</span></div>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="ion-mode" value="ESI">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-spray-can"></i></div>
+                            <h5>Electrospray (ESI)</h5>
+                            <p>Soft ionization via charged droplets. Intact molecular ion [M+H]⁺.</p>
+                            <div class="column-specs"><span>Soft ionization</span><span>LC-MS</span></div>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="ion-mode" value="APCI">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-fire"></i></div>
+                            <h5>APCI</h5>
+                            <p>Corona discharge ionization. Good for non-polar, thermally stable compounds.</p>
+                            <div class="column-specs"><span>Medium fragmentation</span><span>Robust</span></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="config-section">
+                <h4>Source Parameters</h4>
+                <div class="config-control">
+                    <label>Source Temperature (°C)</label>
+                    <div class="range-with-input">
+                        <input type="range" id="source-temp-input" min="100" max="350" step="5" value="200">
+                        <input type="number" id="source-temp-number" min="100" max="350" step="5" value="200">
+                    </div>
+                </div>
+                <div class="config-control">
+                    <label>Electron Energy (eV) — EI mode only</label>
+                    <div class="range-with-input">
+                        <input type="range" id="electron-energy-input" min="10" max="100" step="5" value="70">
+                        <input type="number" id="electron-energy-number" min="10" max="100" step="5" value="70">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn"><i class="fas fa-check"></i> Apply Settings</button>
+        </div>
+    </div>
+
+    <!-- ========== ANALYZER MODAL ========== -->
+    <div id="analyzer-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-magnet"></i> Mass Analyzer Configuration</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Analyzer Type</h4>
+                <div class="column-cards">
+                    <label class="column-card selected">
+                        <input type="radio" name="analyzer-type" value="quadrupole" checked>
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-bars"></i></div>
+                            <h5>Single Quadrupole</h5>
+                            <p>Four parallel rods with RF/DC fields. Unit mass resolution.</p>
+                            <div class="column-specs"><span>m/z 2–1000</span><span>Unit resolution</span></div>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="analyzer-type" value="ion-trap">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-circle-notch"></i></div>
+                            <h5>Ion Trap</h5>
+                            <p>3D trapping field. MSⁿ capability for structural elucidation.</p>
+                            <div class="column-specs"><span>m/z 50–2000</span><span>MS/MS</span></div>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="analyzer-type" value="tof">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-ruler-horizontal"></i></div>
+                            <h5>Time-of-Flight (TOF)</h5>
+                            <p>Flight-tube separation by velocity. High resolution & mass accuracy.</p>
+                            <div class="column-specs"><span>m/z 50–100000</span><span>High res</span></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="config-section">
+                <h4>Scan Settings</h4>
+                <div class="config-row">
+                    <div class="config-control half">
+                        <label>Start m/z</label>
+                        <input type="number" id="mz-start-input" min="1" max="1000" value="50"
+                            style="width:100%;padding:8px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-family:inherit">
+                    </div>
+                    <div class="config-control half">
+                        <label>End m/z</label>
+                        <input type="number" id="mz-end-input" min="50" max="2000" value="600"
+                            style="width:100%;padding:8px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-family:inherit">
+                    </div>
+                </div>
+                <div class="config-control">
+                    <label>Scan Speed (scans/sec)</label>
+                    <div class="range-with-input">
+                        <input type="range" id="scan-speed-input" min="1" max="20" step="1" value="5">
+                        <input type="number" id="scan-speed-number" min="1" max="20" value="5">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn"><i class="fas fa-check"></i> Apply Settings</button>
+        </div>
+    </div>
+
+    <!-- ========== SAMPLE INLET MODAL ========== -->
+    <div id="inlet-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-syringe"></i> Sample Introduction</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Sample Selection</h4>
+                <div class="config-control">
+                    <label>Compound</label>
+                    <select id="sample-select"
+                        style="width:100%;padding:10px;background:#1e293b;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-family:inherit;font-size:14px">
+                        <option value="Paracetamol">Paracetamol (Acetaminophen) — C₈H₉NO₂ — MW 151.16</option>
+                        <option value="Aspirin">Aspirin (Acetylsalicylic Acid) — C₉H₈O₄ — MW 180.16</option>
+                        <option value="Caffeine">Caffeine — C₈H₁₀N₄O₂ — MW 194.19</option>
+                        <option value="Ibuprofen">Ibuprofen — C₁₃H₁₈O₂ — MW 206.28</option>
+                        <option value="Diclofenac">Diclofenac — C₁₄H₁₁Cl₂NO₂ — MW 296.15</option>
+                        <option value="Metformin">Metformin HCl — C₄H₁₂ClN₅ — MW 165.63</option>
+                        <option value="Omeprazole">Omeprazole — C₁₇H₁₉N₃O₃S — MW 345.42</option>
+                        <option value="Amoxicillin">Amoxicillin — C₁₆H₁₉N₃O₅S — MW 365.40</option>
+                        <option value="Ciprofloxacin">Ciprofloxacin — C₁₇H₁₈FN₃O₃ — MW 331.34</option>
+                        <option value="Atorvastatin">Atorvastatin — C₃₃H₃₅FN₂O₅ — MW 558.64</option>
+                    </select>
+                </div>
+            </div>
+            <div class="config-section">
+                <h4>Inlet System</h4>
+                <div class="column-cards">
+                    <label class="column-card selected">
+                        <input type="radio" name="inlet-type" value="direct" checked>
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-syringe"></i></div>
+                            <h5>Direct Insertion Probe</h5>
+                            <p>For solid/liquid samples. Heated probe vaporization.</p>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="inlet-type" value="gc">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-project-diagram"></i></div>
+                            <h5>GC Interface</h5>
+                            <p>Coupled to gas chromatograph. Heated transfer line.</p>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="inlet-type" value="lc">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-water"></i></div>
+                            <h5>LC Interface</h5>
+                            <p>Coupled to HPLC. Electrospray or APCI interface.</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn"><i class="fas fa-check"></i> Load Sample</button>
+        </div>
+    </div>
+
+    <!-- ========== DETECTOR MODAL ========== -->
+    <div id="detector-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-broadcast-tower"></i> Detector Configuration</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Electron Multiplier</h4>
+                <div class="config-control">
+                    <label>EM Voltage (V)</label>
+                    <div class="range-with-input">
+                        <input type="range" id="em-voltage-input" min="800" max="3000" step="50" value="1600">
+                        <input type="number" id="em-voltage-number" min="800" max="3000" step="50" value="1600">
+                    </div>
+                    <div class="range-labels"><span>800</span><span>1900</span><span>3000</span></div>
+                </div>
+                <div class="config-control">
+                    <label>Gain Mode</label>
+                    <div class="ion-mode-selector">
+                        <button class="active" data-gain="normal">Normal</button>
+                        <button data-gain="high">High Sensitivity</button>
+                        <button data-gain="attenuated">Attenuated</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn"><i class="fas fa-check"></i> Apply Settings</button>
+        </div>
+    </div>
+
+    <!-- ========== SST / REPORT MODAL ========== -->
+    <div id="sst-modal" class="modal hidden config-modal" style="max-width:700px">
+        <div class="modal-header">
+            <h3><i class="fas fa-file-medical-alt"></i> Mass Spectrum Report</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body" id="report-body">
+            <p style="color:#64748b;text-align:center">Run a scan first to generate report</p>
+        </div>
+        <div class="modal-footer">
+            <button id="export-report-btn" class="btn primary-btn"><i class="fas fa-download"></i> Export PDF</button>
+        </div>
+    </div>
+
+    <!-- ========== FAULT SELECTOR MODAL ========== -->
+    <div id="fault-selector-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Fault Simulation</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Select Instrument Fault</h4>
+                <div class="column-cards">
+                    <label class="column-card selected">
+                        <input type="radio" name="fault-type" value="none" checked>
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#22c55e"><i class="fas fa-check-circle"></i></div>
+                            <h5>Normal Operation</h5>
+                            <p>No faults. Clean spectrum.</p>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="fault-type" value="air-leak">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#ef4444"><i class="fas fa-wind"></i></div>
+                            <h5>Air Leak</h5>
+                            <p>m/z 28 (N₂), 32 (O₂), 18 (H₂O) peaks appear.</p>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="fault-type" value="dirty-source">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#f59e0b"><i class="fas fa-smog"></i></div>
+                            <h5>Contaminated Source</h5>
+                            <p>High chemical noise, reduced sensitivity.</p>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="fault-type" value="low-em">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#8b5cf6"><i class="fas fa-signal"></i></div>
+                            <h5>Weak Detector</h5>
+                            <p>EM dying — low sensitivity, missing low-abundance peaks.</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn"><i class="fas fa-check"></i> Apply Fault</button>
+        </div>
+    </div>
+
+    <script src="mass_spec_script.js"></script>
+    <script src="api_client.js"></script>
+    <script src="assistant.js"></script>
+</body>
+
+</html>

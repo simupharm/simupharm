@@ -1,0 +1,9 @@
+# SimuPharma - AI-Powered Virtual Pharmaceutical Laboratory
+# https://simupharma.com
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /backend/
+
+Sitemap: https://simupharma.com/sitemap.xml

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive HPLC Lab - SimuPharma</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="tutorial_style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body id="hplc-tutorial-page">
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <svg viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
+                    <style>.simu-text{font-family:'Poppins',sans-serif;font-size:40px;font-weight:600;fill:none;stroke:#007bff;stroke-width:1.5;}.pharma-text{font-family:'Poppins',sans-serif;font-size:40px;font-weight:600;fill:none;stroke:#6f42c1;stroke-width:1.5;}</style>
+                    <text class="simu-text" x="10" y="45" stroke="#007BFF" fill="#007BFF">Simu</text><text class="pharma-text" x="130" y="45" stroke="#6F42C1" fill="#6F42C1">Pharma</text>
+                </svg>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="instruments.html">Instruments</a></li>
+                    <li><a href="hplc_simulator.html">🚀 Launch Simulator</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h2>Interactive HPLC Laboratory</h2>
+                <p>Welcome, Analyst. Explore the instrument module by module to learn how it works.</p>
+            </div>
+
+            <div class="tutorial-explorer">
+                <div class="explorer-map">
+                    <img src="images/hplc_main.png" alt="HPLC Instrument Diagram">
+                    
+                    <a href="javascript:void(0)" class="hotspot-dot" style="top: 8%; left: 49%;" data-modal-id="modal-solvents">
+                        <span class="tooltip-text">Mobile Phase (Solvents)</span>
+                    </a>
+                    <a href="javascript:void(0)" class="hotspot-dot" style="top: 25%; left: 49%;" data-modal-id="modal-screen">
+                        <span class="tooltip-text">Instrument Screen</span>
+                    </a>
+                    <a href="javascript:void(0)" class="hotspot-dot" style="top: 65%; left: 49%;" data-modal-id="modal-pump">
+                        <span class="tooltip-text">Pump & Autosampler</span>
+                    </a>
+                    <a href="javascript:void(0)" class="hotspot-dot" style="top: 45%; left: 49%;" data-modal-id="modal-column">
+                        <span class="tooltip-text">Column Compartment</span>
+                    </a>
+                </div>
+                <div class="explorer-info">
+                    <i class="fas fa-hand-pointer"></i>
+                    <h3>Start Exploring!</h3>
+                    <p>Click any pulsing blue hotspot <span class="hotspot-dot-mini"></span> on the instrument to your left.</p>
+                    <p>A "deep dive" panel will appear, showing you photos, videos, and key information about that specific module. Learn what it does, what you control, and pro-tips for real-world analysis.</p>
+                    <p>When you're ready, scroll down to the **Troubleshooting Challenges**.</p>
+                </div>
+            </div>
+
+            <div class="challenge-header">
+                <h2><i class="fas fa-wrench"></i> Troubleshooting Challenges</h2>
+                <p>You've run an analysis, but the chromatogram looks wrong. Based on your knowledge, what's the problem? Click a challenge to find the solution.</p>
+            </div>
+            <div class="challenge-buttons">
+                <a href="javascript:void(0)" class="challenge-btn" data-modal-id="modal-challenge-tailing">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Problem: My peaks are tailing!</span>
+                </a>
+                <a href="javascript:void(0)" class="challenge-btn" data-modal-id="modal-challenge-resolution">
+                    <i class="fas fa-compress-alt"></i>
+                    <span>Problem: My peaks aren't separating!</span>
+                </a>
+                <a href="javascript:void(0)" class="challenge-btn" data-modal-id="modal-challenge-noisy">
+                    <i class="fas fa-wave-square"></i>
+                    <span>Problem: My baseline is noisy!</span>
+                </a>
+                <a href="javascript:void(0)" class="challenge-btn" data-modal-id="modal-challenge-nopeaks">
+                    <i class="fas fa-ban"></i>
+                    <span>Problem: I have no peaks at all!</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="modal-backdrop"></div>
+
+    <div id="modal-solvents" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <video src="images/video_solvents_bubbling.mp4" loop muted autoplay playsinline></video>
+        </div>
+        <div class="modal-content">
+            <h3>Mobile Phase (Solvents)</h3>
+            <p>This is the liquid that carries your sample through the system. In "Reversed-Phase" HPLC (the most common type), we use a mix of:</p>
+            <ul>
+                <li><strong>Solvent A (Weak):</strong> Purified Water</li>
+                <li><strong>Solvent B (Strong):</strong> Acetonitrile or Methanol</li>
+            </ul>
+            <div class="pro-tip">
+                <span class="pro-tip-title">💡 Pro-Tip: Degassing</span>
+                <p>The video shows **degassing** (bubbling helium *through* the solvent). This removes dissolved air, which can cause bubbles in the pump and create a noisy, unstable baseline. Always use degassed solvents!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-screen" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <video src="images/video_screen_bootup.mp4" loop muted autoplay playsinline></video>
+        </div>
+        <div class="modal-content">
+            <h3>Instrument Screen</h3>
+            <p>This is your command center. From here, you (or the computer software) will:</p>
+            <ul>
+                <li>Set up the entire method (flow rate, gradient, etc.).</li>
+                <li>Monitor the run in real-time.</li>
+                <li>View the live chromatogram as it develops.</li>
+                <li>Check critical system stats like **Pressure** and **Temperature**.</li>
+            </ul>
+            <div class="pro-tip">
+                <span class="pro-tip-title">💡 Pro-Tip: The Pressure Reading</span>
+                <p>Pressure is the HPLC's "heartbeat." A stable pressure (e.g., 2500 psi) is good. A pressure of 0 means the pump is off. A pressure that is climbing too high means you have a **clog**!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-pump" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <video src="images/video_injector_sequence.mp4" loop muted autoplay playsinline></video>
+        </div>
+        <div class="modal-content">
+            <h3>Pump & Autosampler</h3>
+            <p>The <strong>Pump</strong> is the "heart." It's a high-precision machine that mixes Solvents A and B to your exact recipe (the gradient) and pushes them at a constant, high pressure.</p>
+            <p>The <strong>Autosampler</strong> is the "robot." The video shows it in action. It precisely draws a tiny amount of your sample from a vial and injects it into the high-pressure liquid stream to start the analysis.</p>
+            <div class="challenge">
+                <span class="challenge-title">🎯 Parameter Control:</span>
+                <p>In the simulator, this is where you control the **Flow Rate** (e.g., 1.0 mL/min) and the **Gradient Program** (the %B recipe).</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-column" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <video src="images/video_column_oven.mp4" loop muted autoplay playsinline></video>
+        </div>
+        <div class="modal-content">
+            <h3>Column Compartment</h3>
+            <p>This is the "brain" of the HPLC. The stainless steel **Column** inside is where the separation actually happens. It's packed with a solid material (like C18) that interacts with your sample.</p>
+            <p>The <strong>Oven** holds the column at a stable temperature (e.g., 30°C). This is critical because temperature changes can (and will) change your peak retention times, ruining your analysis.</p>
+            <div class="challenge">
+                <span class="challenge-title">🎯 Parameter Control:</span>
+                <p>In the simulator, this is where you control the **Column Temperature**. A higher temperature often makes peaks elute *faster* and become *sharper*.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-challenge-tailing" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <img src="images/chroma_tailing_peaks.png" alt="Tailing Peaks">
+        </div>
+        <div class="modal-content">
+            <h3><i class="fas fa-chart-line"></i> Problem: Tailing Peaks</h3>
+            <p>Your peaks look like "shark fins." They rise quickly but have a long, slow tail on the right. This is bad because it's hard for the software to tell where the peak ends, and it can hide small impurity peaks.</p>
+            
+            <div class="pro-tip" style="border-color: var(--success-color);">
+                <span class="pro-tip-title" style="color: var(--success-color);">💡 Common Solutions:</span>
+                <p>1. **Check pH:** The most common cause. Your mobile phase pH might be wrong for your compound. <br>
+                   2. **Lower Sample Load:** You injected *too much* sample. Try diluting it.<br>
+                   3. **Increase Temperature:** A higher column temp can sometimes sharpen peaks.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="modal-challenge-resolution" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <img src="images/chroma_poor_resolution.png" alt="Poor Resolution">
+        </div>
+        <div class="modal-content">
+            <h3><i class="fas fa-compress-alt"></i> Problem: Poor Resolution</h3>
+            <p>Your peaks are "mashed" or "fused" together. The valley between them doesn't return to the baseline. You can't accurately measure the area of either peak.</p>
+            
+            <div class="pro-tip" style="border-color: var(--success-color);">
+                <span class="pro-tip-title" style="color: var(--success-color);">💡 Common Solutions:</span>
+                <p>1. **Slow Down the Gradient:** This is the best fix. Make your gradient ramp *slower* (e.g., from 8 minutes to 12 minutes). This gives the peaks more time to separate.<br>
+                   2. **Change Solvent B:** Maybe Acetonitrile isn't the best. Try Methanol (or vice-versa).<br>
+                   3. **Lower the Flow Rate:** Slower flow (e.g., 0.8 mL/min) can increase separation.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-challenge-noisy" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <img src="images/chroma_noisy_baseline.png" alt="Noisy Baseline">
+        </div>
+        <div class="modal-content">
+            <h3><i class="fas fa-wave-square"></i> Problem: Noisy Baseline</h3>
+            <p>Your baseline is fuzzy, jagged, or has "static." This makes it impossible to detect very small impurity peaks and throws off your calculations.</p>
+            
+            <div class="pro-tip" style="border-color: var(--success-color);">
+                <span class="pro-tip-title" style="color: var(--success-color);">💡 Common Solutions:</span>
+                <p>1. **Degas Solvents:** This is the #1 cause. Dissolved air is getting into the pump. Re-degas your solvents (like in the video!).<br>
+                   2. **Check for Leaks:** A tiny, loose fitting can draw in air. Check all connections.<br>
+                   3. **Failing Lamp:** The detector's lamp might be old and dying.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-challenge-nopeaks" class="tutorial-modal">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-visual">
+            <img src="images/chroma_no_peaks.png" alt="No Peaks">
+        </div>
+        <div class="modal-content">
+            <h3><i class="fas fa-ban"></i> Problem: No Peaks At All!</h3>
+            <p>You ran your sample, the time ticked by, and... nothing. A flat line. This is a very common (and scary) problem!</p>
+            
+            <div class="pro-tip" style="border-color: var(--success-color);">
+                <span class="pro-tip-title" style="color: var(--success-color);">💡 Common Solutions:</span>
+                <p>1. **Check the Autosampler:** Did the needle actually go into the vial? Is the vial empty? Did the injection fail?<br>
+                   2. **Check the Detector:** Are you at the *wrong wavelength*? If your compound absorbs at 254nm and your detector is set to 210nm, you won't see it.<br>
+                   3. **Check the Sample:** Is your sample diluted *too much*? Is it the wrong sample?
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <footer style="margin-top: 5rem;">
+        <p>&copy; 2025 SimuPharma | Developed by Pranav & Piyush, PRCOP</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

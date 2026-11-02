@@ -1,0 +1,19 @@
+{
+  "name": "SimuPharma — Virtual Pharmaceutical Laboratory",
+  "short_name": "SimuPharma",
+  "description": "Interactive simulations of advanced pharmaceutical analytical instruments.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#2563EB",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "simupharma-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "medical"]
+}

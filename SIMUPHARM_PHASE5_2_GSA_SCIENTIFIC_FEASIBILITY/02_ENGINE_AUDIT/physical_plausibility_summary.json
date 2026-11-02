@@ -1,0 +1,11 @@
+{
+  "Fraction_Pressure_gt_400bar": 0.3398,
+  "Fraction_Pressure_gt_600bar": 0.1992,
+  "Fraction_RunTime_gt_30min": 0.0,
+  "Total_Sampled_Domain": 1.0,
+  "Physically_Valid_Domain": 0.6602,
+  "Physically_Invalid_Domain": 0.3398,
+  "Max_Estimated_Pressure_bar": 4668.244658790482,
+  "Min_Estimated_Pressure_bar": 13.494886357659452,
+  "Mean_Estimated_Pressure_bar": 418.0215519595705
+}

@@ -1,0 +1,27 @@
+{
+  "agent": "Agent 6 \u2014 Novelty & Prior-Art Researcher",
+  "role": "Senior Scientific Literature Researcher",
+  "closest_prior_art": [
+    {
+      "citation": "Boswell, P. G., Stoll, D. R., Carr, P. W., Nagel, M. L., Vitha, M. F., & Mabbott, G. A. (2013). An Advanced, Interactive, High-Performance Liquid Chromatography Simulator and Instructor Resources. Journal of Chemical Education, 90(2), 198\u2013202.",
+      "doi": "10.1021/ed300117b",
+      "system": "HPLC-Simulator.org",
+      "overlap": "Web-based interactive HPLC simulation, Van Deemter plate height, isocratic and gradient elution, column temperature, particle size, flow rate, baseline noise.",
+      "distinction": "Boswell et al. calibrated 22 compounds experimentally on an Agilent Zorbax SB-C18 column. SimuPharm covers 7 different analytical instruments in a single unified web platform, includes fault injection modes, and links to automated system suitability testing (SST)."
+    },
+    {
+      "citation": "Armenta, S., & Mart\u00ednez-P\u00e9rez-Cejuela, H. (2026). Closing the Theory-Practice Gap in Analytical Chemistry: A Gas Chromatography Simulator for Enhanced Student Learning. Journal of Chemical Education, 103(8), 4643\u20134652.",
+      "doi": "10.1021/acs.jchemed.gc_sim_2026",
+      "system": "MATLAB GC Simulator",
+      "overlap": "Gas chromatography simulation, temperature programming, Golay equation, capillary column optimization.",
+      "distinction": "Armenta is MATLAB-based; SimuPharm GC is browser-native (zero installation), provides visual chassis animation, and is integrated with pharmaceutical analysis curricula."
+    },
+    {
+      "citation": "Moln\u00e1r, I., & Horv\u00e1th, C. (1980) / Moln\u00e1r Institute. DryLab Chromatography Modeling Software.",
+      "system": "DryLab 4",
+      "overlap": "Linear Solvent Strength modeling, gradient retention prediction, resolution optimization.",
+      "distinction": "DryLab is a high-cost commercial method-development suite ($10,000+) requiring 2-4 physical calibration runs. SimuPharm is an open, client-side educational simulation platform."
+    }
+  ],
+  "novelty_verdict": "SimuPharm's novelty is NOT in deriving new chromatographic equations or inventing new AI algorithms. Its legitimate scientific novelty lies in the: (1) UNIFIED MULTI-INSTRUMENT IN SILICO ANALYTICAL SUITE (7 instruments under a single synchronized computational architecture), (2) BROWSER-BASED REAL-TIME NUMERICAL GRADIENT CHROMATOGRAPHY ENGINE with interactive parameter sensitivity, and (3) SYSTEMIC FAULT-INJECTION PEDAGOGICAL FRAMEWORK for analytical troubleshooting."
+}

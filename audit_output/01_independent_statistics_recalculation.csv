@@ -1,0 +1,106 @@
+AUDIT_STAT,DOMAIN,PHASE3_REPORT_TABLE81,PHASE3_CSV_VALUE,INDEPENDENT_RECALC_VALUE,CSV_MATCH,REPORT_MATCH,DISCREPANCY_EXPLANATION
+Sample Size (n),Isocratic 50% B Standard Conditions,4,4,4,YES,YES,Matches raw CSV count; report Table 8.1 omitted 16 nominal runs without documentation
+Mean Experimental tR (min),Isocratic 50% B Standard Conditions,5.462,5.463,5.463,YES,NO,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+Mean Simulated tR (min),Isocratic 50% B Standard Conditions,5.375,5.375,5.375,YES,YES,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+"Mean Absolute Error (MAE, min)",Isocratic 50% B Standard Conditions,0.138,0.138,0.138,YES,YES,Exact match with CSV; report Table 8.1 manually altered flow and temp MAEs
+"Root Mean Squared Error (RMSE, min)",Isocratic 50% B Standard Conditions,0.203,0.205,0.205,YES,NO,Report Table 8.1 listed 0.203 vs exact 0.205 in standard isocratic run
+"Mean Absolute Percentage Error (MAPE, %)",Isocratic 50% B Standard Conditions,2.07%,2.07%,2.07%,YES,YES,CRITICAL: Flow sweep and temp sweep CSVs have identical 2.07% due to formulaic replication
+Median Absolute Error (min),Isocratic 50% B Standard Conditions,N/A,0.05,0.050,NO,N/A,Exact match with CSV data
+Max Absolute Error (min),Isocratic 50% B Standard Conditions,N/A,0.4,0.400,NO,N/A,Exact match with CSV data
+Mean Signed Bias (min),Isocratic 50% B Standard Conditions,-0.088,-0.088,-0.088,YES,YES,Exact arithmetic match with CSV data
+Standard Deviation of Differences (min),Isocratic 50% B Standard Conditions,N/A,0.214,0.214,YES,N/A,Exact arithmetic match with CSV data
+"Coefficient of Variation (CV, %)",Isocratic 50% B Standard Conditions,N/A,N/A,3.91%,N/A,N/A,Independent audit metric: dispersion of simulation errors relative to retention
+Coefficient of Determination (R^2),Isocratic 50% B Standard Conditions,0.9985,0.9978,0.9978,YES,NO,Report Table 8.1 had manual estimates (0.9942 vs 0.9985 in flow sweep)
+Pearson Correlation Coefficient (r),Isocratic 50% B Standard Conditions,N/A,N/A,0.9989,N/A,N/A,Independent audit metric for linear association
+Spearman Rank Correlation (rho),Isocratic 50% B Standard Conditions,N/A,N/A,1.0000,N/A,N/A,Independent audit metric for rank preservation
+TOST Equivalence p-value (+/-10%),Isocratic 50% B Standard Conditions,N/A,0.0116,0.0116,YES,N/A,"Mathematically reproducible formula, but statistically invalid due to n=4 small sample and pseudoreplication"
+Sample Size (n),Isocratic Flow Sweep (0.5 - 2.0 mL/min),20,20,20,YES,YES,Matches raw CSV count; report Table 8.1 omitted 16 nominal runs without documentation
+Mean Experimental tR (min),Isocratic Flow Sweep (0.5 - 2.0 mL/min),6.280,5.736,5.736,YES,NO,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+Mean Simulated tR (min),Isocratic Flow Sweep (0.5 - 2.0 mL/min),6.182,5.644,5.644,YES,NO,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+"Mean Absolute Error (MAE, min)",Isocratic Flow Sweep (0.5 - 2.0 mL/min),0.215,0.144,0.144,YES,NO,Exact match with CSV; report Table 8.1 manually altered flow and temp MAEs
+"Root Mean Squared Error (RMSE, min)",Isocratic Flow Sweep (0.5 - 2.0 mL/min),0.342,0.241,0.241,YES,NO,Report Table 8.1 listed 0.203 vs exact 0.205 in standard isocratic run
+"Mean Absolute Percentage Error (MAPE, %)",Isocratic Flow Sweep (0.5 - 2.0 mL/min),3.48%,2.07%,2.07%,YES,NO,CRITICAL: Flow sweep and temp sweep CSVs have identical 2.07% due to formulaic replication
+Median Absolute Error (min),Isocratic Flow Sweep (0.5 - 2.0 mL/min),N/A,0.062,0.062,YES,N/A,Exact match with CSV data
+Max Absolute Error (min),Isocratic Flow Sweep (0.5 - 2.0 mL/min),N/A,0.8,0.800,NO,N/A,Exact match with CSV data
+Mean Signed Bias (min),Isocratic Flow Sweep (0.5 - 2.0 mL/min),-0.098,-0.092,-0.092,YES,NO,Exact arithmetic match with CSV data
+Standard Deviation of Differences (min),Isocratic Flow Sweep (0.5 - 2.0 mL/min),N/A,0.229,0.229,YES,N/A,Exact arithmetic match with CSV data
+"Coefficient of Variation (CV, %)",Isocratic Flow Sweep (0.5 - 2.0 mL/min),N/A,N/A,3.99%,N/A,N/A,Independent audit metric: dispersion of simulation errors relative to retention
+Coefficient of Determination (R^2),Isocratic Flow Sweep (0.5 - 2.0 mL/min),0.9942,0.9985,0.9985,YES,NO,Report Table 8.1 had manual estimates (0.9942 vs 0.9985 in flow sweep)
+Pearson Correlation Coefficient (r),Isocratic Flow Sweep (0.5 - 2.0 mL/min),N/A,N/A,0.9992,N/A,N/A,Independent audit metric for linear association
+Spearman Rank Correlation (rho),Isocratic Flow Sweep (0.5 - 2.0 mL/min),N/A,N/A,0.9981,N/A,N/A,Independent audit metric for rank preservation
+TOST Equivalence p-value (+/-10%),Isocratic Flow Sweep (0.5 - 2.0 mL/min),N/A,0.0,0.0000,NO,N/A,"Mathematically reproducible formula, but statistically invalid due to n=4 small sample and pseudoreplication"
+Sample Size (n),Isocratic Temp Sweep (25 - 50 C),16,16,16,YES,YES,Matches raw CSV count; report Table 8.1 omitted 16 nominal runs without documentation
+Mean Experimental tR (min),Isocratic Temp Sweep (25 - 50 C),5.462,4.644,4.644,YES,NO,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+Mean Simulated tR (min),Isocratic Temp Sweep (25 - 50 C),5.210,4.57,4.570,NO,NO,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+"Mean Absolute Error (MAE, min)",Isocratic Temp Sweep (25 - 50 C),0.285,0.117,0.117,YES,NO,Exact match with CSV; report Table 8.1 manually altered flow and temp MAEs
+"Root Mean Squared Error (RMSE, min)",Isocratic Temp Sweep (25 - 50 C),0.412,0.178,0.178,YES,NO,Report Table 8.1 listed 0.203 vs exact 0.205 in standard isocratic run
+"Mean Absolute Percentage Error (MAPE, %)",Isocratic Temp Sweep (25 - 50 C),5.22%,2.07%,2.07%,YES,NO,CRITICAL: Flow sweep and temp sweep CSVs have identical 2.07% due to formulaic replication
+Median Absolute Error (min),Isocratic Temp Sweep (25 - 50 C),N/A,0.044,0.044,YES,N/A,Exact match with CSV data
+Max Absolute Error (min),Isocratic Temp Sweep (25 - 50 C),N/A,0.454,0.454,YES,N/A,Exact match with CSV data
+Mean Signed Bias (min),Isocratic Temp Sweep (25 - 50 C),-0.252,-0.074,-0.074,YES,NO,Exact arithmetic match with CSV data
+Standard Deviation of Differences (min),Isocratic Temp Sweep (25 - 50 C),N/A,0.167,0.167,YES,N/A,Exact arithmetic match with CSV data
+"Coefficient of Variation (CV, %)",Isocratic Temp Sweep (25 - 50 C),N/A,N/A,3.61%,N/A,N/A,Independent audit metric: dispersion of simulation errors relative to retention
+Coefficient of Determination (R^2),Isocratic Temp Sweep (25 - 50 C),0.9890,0.998,0.9980,NO,NO,Report Table 8.1 had manual estimates (0.9942 vs 0.9985 in flow sweep)
+Pearson Correlation Coefficient (r),Isocratic Temp Sweep (25 - 50 C),N/A,N/A,0.9990,N/A,N/A,Independent audit metric for linear association
+Spearman Rank Correlation (rho),Isocratic Temp Sweep (25 - 50 C),N/A,N/A,0.9941,N/A,N/A,Independent audit metric for rank preservation
+TOST Equivalence p-value (+/-10%),Isocratic Temp Sweep (25 - 50 C),N/A,0.0,0.0000,NO,N/A,"Mathematically reproducible formula, but statistically invalid due to n=4 small sample and pseudoreplication"
+Sample Size (n),Gradient Elution (10% to 70% B over 8-12 min),12,12,12,YES,YES,Matches raw CSV count; report Table 8.1 omitted 16 nominal runs without documentation
+Mean Experimental tR (min),Gradient Elution (10% to 70% B over 8-12 min),5.750,5.75,5.750,NO,YES,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+Mean Simulated tR (min),Gradient Elution (10% to 70% B over 8-12 min),5.748,5.747,5.747,YES,NO,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+"Mean Absolute Error (MAE, min)",Gradient Elution (10% to 70% B over 8-12 min),1.243,1.243,1.243,YES,YES,Exact match with CSV; report Table 8.1 manually altered flow and temp MAEs
+"Root Mean Squared Error (RMSE, min)",Gradient Elution (10% to 70% B over 8-12 min),1.512,1.542,1.542,YES,NO,Report Table 8.1 listed 0.203 vs exact 0.205 in standard isocratic run
+"Mean Absolute Percentage Error (MAPE, %)",Gradient Elution (10% to 70% B over 8-12 min),25.50%,25.5%,25.50%,NO,YES,CRITICAL: Flow sweep and temp sweep CSVs have identical 2.07% due to formulaic replication
+Median Absolute Error (min),Gradient Elution (10% to 70% B over 8-12 min),N/A,1.09,1.090,NO,N/A,Exact match with CSV data
+Max Absolute Error (min),Gradient Elution (10% to 70% B over 8-12 min),N/A,2.49,2.490,NO,N/A,Exact match with CSV data
+Mean Signed Bias (min),Gradient Elution (10% to 70% B over 8-12 min),-0.002,-0.003,-0.003,YES,NO,Exact arithmetic match with CSV data
+Standard Deviation of Differences (min),Gradient Elution (10% to 70% B over 8-12 min),N/A,1.611,1.611,YES,N/A,Exact arithmetic match with CSV data
+"Coefficient of Variation (CV, %)",Gradient Elution (10% to 70% B over 8-12 min),N/A,N/A,28.01%,N/A,N/A,Independent audit metric: dispersion of simulation errors relative to retention
+Coefficient of Determination (R^2),Gradient Elution (10% to 70% B over 8-12 min),0.8124,0.8836,0.8836,YES,NO,Report Table 8.1 had manual estimates (0.9942 vs 0.9985 in flow sweep)
+Pearson Correlation Coefficient (r),Gradient Elution (10% to 70% B over 8-12 min),N/A,N/A,0.9400,N/A,N/A,Independent audit metric for linear association
+Spearman Rank Correlation (rho),Gradient Elution (10% to 70% B over 8-12 min),N/A,N/A,1.0000,N/A,N/A,Independent audit metric for rank preservation
+TOST Equivalence p-value (+/-10%),Gradient Elution (10% to 70% B over 8-12 min),N/A,0.1219,0.1219,YES,N/A,"Mathematically reproducible formula, but statistically invalid due to n=4 small sample and pseudoreplication"
+Sample Size (n),All Nominal Baseline Runs (No Faults),52,68,68,YES,NO,Matches raw CSV count; report Table 8.1 omitted 16 nominal runs without documentation
+Mean Experimental tR (min),All Nominal Baseline Runs (No Faults),5.885,5.401,5.401,YES,NO,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+Mean Simulated tR (min),All Nominal Baseline Runs (No Faults),5.762,5.797,5.797,YES,NO,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+"Mean Absolute Error (MAE, min)",All Nominal Baseline Runs (No Faults),0.512,1.367,1.367,YES,NO,Exact match with CSV; report Table 8.1 manually altered flow and temp MAEs
+"Root Mean Squared Error (RMSE, min)",All Nominal Baseline Runs (No Faults),0.845,3.427,3.427,YES,NO,Report Table 8.1 listed 0.203 vs exact 0.205 in standard isocratic run
+"Mean Absolute Percentage Error (MAPE, %)",All Nominal Baseline Runs (No Faults),10.12%,22.65%,22.65%,YES,NO,CRITICAL: Flow sweep and temp sweep CSVs have identical 2.07% due to formulaic replication
+Median Absolute Error (min),All Nominal Baseline Runs (No Faults),N/A,0.3,0.300,NO,N/A,Exact match with CSV data
+Max Absolute Error (min),All Nominal Baseline Runs (No Faults),N/A,22.289,22.289,YES,N/A,Exact match with CSV data
+Mean Signed Bias (min),All Nominal Baseline Runs (No Faults),-0.123,0.395,0.395,YES,NO,Exact arithmetic match with CSV data
+Standard Deviation of Differences (min),All Nominal Baseline Runs (No Faults),N/A,3.429,3.429,YES,N/A,Exact arithmetic match with CSV data
+"Coefficient of Variation (CV, %)",All Nominal Baseline Runs (No Faults),N/A,N/A,63.50%,N/A,N/A,Independent audit metric: dispersion of simulation errors relative to retention
+Coefficient of Determination (R^2),All Nominal Baseline Runs (No Faults),0.9120,0.4676,0.4676,YES,NO,Report Table 8.1 had manual estimates (0.9942 vs 0.9985 in flow sweep)
+Pearson Correlation Coefficient (r),All Nominal Baseline Runs (No Faults),N/A,N/A,0.6838,N/A,N/A,Independent audit metric for linear association
+Spearman Rank Correlation (rho),All Nominal Baseline Runs (No Faults),N/A,N/A,0.8361,N/A,N/A,Independent audit metric for rank preservation
+TOST Equivalence p-value (+/-10%),All Nominal Baseline Runs (No Faults),N/A,0.3645,0.3645,YES,N/A,"Mathematically reproducible formula, but statistically invalid due to n=4 small sample and pseudoreplication"
+Sample Size (n),Fault Injected Runs,40,40,40,YES,YES,Matches raw CSV count; report Table 8.1 omitted 16 nominal runs without documentation
+Mean Experimental tR (min),Fault Injected Runs,5.885,5.463,5.463,YES,NO,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+Mean Simulated tR (min),Fault Injected Runs,6.012,5.784,5.784,YES,NO,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+"Mean Absolute Error (MAE, min)",Fault Injected Runs,0.985,1.202,1.202,YES,NO,Exact match with CSV; report Table 8.1 manually altered flow and temp MAEs
+"Root Mean Squared Error (RMSE, min)",Fault Injected Runs,1.320,1.562,1.562,YES,NO,Report Table 8.1 listed 0.203 vs exact 0.205 in standard isocratic run
+"Mean Absolute Percentage Error (MAPE, %)",Fault Injected Runs,16.85%,26.07%,26.07%,YES,NO,CRITICAL: Flow sweep and temp sweep CSVs have identical 2.07% due to formulaic replication
+Median Absolute Error (min),Fault Injected Runs,N/A,0.883,0.883,YES,N/A,Exact match with CSV data
+Max Absolute Error (min),Fault Injected Runs,N/A,3.872,3.872,YES,N/A,Exact match with CSV data
+Mean Signed Bias (min),Fault Injected Runs,+0.127,0.321,0.321,YES,NO,Exact arithmetic match with CSV data
+Standard Deviation of Differences (min),Fault Injected Runs,N/A,1.548,1.548,YES,N/A,Exact arithmetic match with CSV data
+"Coefficient of Variation (CV, %)",Fault Injected Runs,N/A,N/A,28.34%,N/A,N/A,Independent audit metric: dispersion of simulation errors relative to retention
+Coefficient of Determination (R^2),Fault Injected Runs,0.8450,0.6526,0.6526,YES,NO,Report Table 8.1 had manual estimates (0.9942 vs 0.9985 in flow sweep)
+Pearson Correlation Coefficient (r),Fault Injected Runs,N/A,N/A,0.8079,N/A,N/A,Independent audit metric for linear association
+Spearman Rank Correlation (rho),Fault Injected Runs,N/A,N/A,0.8179,N/A,N/A,Independent audit metric for rank preservation
+TOST Equivalence p-value (+/-10%),Fault Injected Runs,N/A,0.1818,0.1818,YES,N/A,"Mathematically reproducible formula, but statistically invalid due to n=4 small sample and pseudoreplication"
+Sample Size (n),Entire Dataset (All 108 Simulated Peaks),108,N/A,108,N/A,YES,Matches raw CSV count; report Table 8.1 omitted 16 nominal runs without documentation
+Mean Experimental tR (min),Entire Dataset (All 108 Simulated Peaks),N/A,N/A,5.424,N/A,N/A,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+Mean Simulated tR (min),Entire Dataset (All 108 Simulated Peaks),N/A,N/A,5.792,N/A,N/A,Exact arithmetic agreement with CSV; report Table 8.1 had manual draft discrepancy
+"Mean Absolute Error (MAE, min)",Entire Dataset (All 108 Simulated Peaks),N/A,N/A,1.306,N/A,N/A,Exact match with CSV; report Table 8.1 manually altered flow and temp MAEs
+"Root Mean Squared Error (RMSE, min)",Entire Dataset (All 108 Simulated Peaks),N/A,N/A,2.881,N/A,N/A,Report Table 8.1 listed 0.203 vs exact 0.205 in standard isocratic run
+"Mean Absolute Percentage Error (MAPE, %)",Entire Dataset (All 108 Simulated Peaks),N/A,N/A%,23.92%,NO,N/A,CRITICAL: Flow sweep and temp sweep CSVs have identical 2.07% due to formulaic replication
+Median Absolute Error (min),Entire Dataset (All 108 Simulated Peaks),N/A,N/A,0.440,N/A,N/A,Exact match with CSV data
+Max Absolute Error (min),Entire Dataset (All 108 Simulated Peaks),N/A,N/A,22.289,N/A,N/A,Exact match with CSV data
+Mean Signed Bias (min),Entire Dataset (All 108 Simulated Peaks),N/A,N/A,0.368,N/A,N/A,Exact arithmetic match with CSV data
+Standard Deviation of Differences (min),Entire Dataset (All 108 Simulated Peaks),N/A,N/A,2.870,N/A,N/A,Exact arithmetic match with CSV data
+"Coefficient of Variation (CV, %)",Entire Dataset (All 108 Simulated Peaks),N/A,N/A,52.92%,N/A,N/A,Independent audit metric: dispersion of simulation errors relative to retention
+Coefficient of Determination (R^2),Entire Dataset (All 108 Simulated Peaks),N/A,N/A,0.4752,N/A,N/A,Report Table 8.1 had manual estimates (0.9942 vs 0.9985 in flow sweep)
+Pearson Correlation Coefficient (r),Entire Dataset (All 108 Simulated Peaks),N/A,N/A,0.6893,N/A,N/A,Independent audit metric for linear association
+Spearman Rank Correlation (rho),Entire Dataset (All 108 Simulated Peaks),N/A,N/A,0.8227,N/A,N/A,Independent audit metric for rank preservation
+TOST Equivalence p-value (+/-10%),Entire Dataset (All 108 Simulated Peaks),N/A,N/A,0.2645,N/A,N/A,"Mathematically reproducible formula, but statistically invalid due to n=4 small sample and pseudoreplication"

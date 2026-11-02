@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Viva Quiz — SimuPharma</title>
+    <meta name="description"
+        content="Practice viva questions with AI-generated quizzes on pharmaceutical instruments. Earn XP and badges.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1a2e 50%, #0f172a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* ---- Nav ---- */
+        .q-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+            padding: 14px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .q-nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #818cf8;
+            text-decoration: none;
+        }
+
+        .q-nav-brand i {
+            font-size: 1.3rem;
+        }
+
+        .q-nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .q-nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .q-nav-links a:hover,
+        .q-nav-links a.active {
+            color: #818cf8;
+        }
+
+        /* ---- Container ---- */
+        .q-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        /* ---- Hero ---- */
+        .q-hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .q-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #818cf8, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .q-hero p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        /* ---- Topic Selection ---- */
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .topic-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 14px;
+            padding: 20px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .topic-card:hover {
+            border-color: rgba(99, 102, 241, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .topic-card.selected {
+            border-color: #818cf8;
+            background: rgba(99, 102, 241, 0.08);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+        }
+
+        .topic-card .topic-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .topic-card h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .topic-card p {
+            font-size: 0.68rem;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+        /* ---- Config ---- */
+        .quiz-config {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .quiz-config h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: #f1f5f9;
+        }
+
+        .difficulty-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .diff-btn {
+            padding: 8px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .diff-btn:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #f1f5f9;
+        }
+
+        .diff-btn.selected {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border-color: transparent;
+        }
+
+        .start-btn {
+            padding: 12px 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        /* ---- Quiz Area ---- */
+        .quiz-area {
+            display: none;
+        }
+
+        .quiz-area.active {
+            display: block;
+        }
+
+        .quiz-progress {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-progress-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .quiz-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border-radius: 3px;
+            transition: width 0.5s;
+        }
+
+        .quiz-progress-text {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .quiz-timer {
+            font-size: 0.8rem;
+            color: #f59e0b;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .question-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-number {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #818cf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.6;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: rgba(99, 102, 241, 0.25);
+            color: #f1f5f9;
+        }
+
+        .option-btn .opt-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .option-btn.correct {
+            background: rgba(74, 222, 128, 0.1);
+            border-color: rgba(74, 222, 128, 0.4);
+            color: #4ade80;
+        }
+
+        .option-btn.correct .opt-letter {
+            background: rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+
+        .option-btn.wrong {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #ef4444;
+        }
+
+        .option-btn.wrong .opt-letter {
+            background: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .option-btn.disabled {
+            pointer-events: none;
+        }
+
+        .explanation-card {
+            background: rgba(99, 102, 241, 0.06);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #94a3b8;
+            display: none;
+        }
+
+        .explanation-card.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .explanation-card strong {
+            color: #818cf8;
+        }
+
+        .next-btn {
+            margin-top: 16px;
+            padding: 10px 28px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            float: right;
+            transition: all 0.2s;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        /* ---- Results ---- */
+        .results-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.12);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            display: none;
+        }
+
+        .results-card.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .results-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .results-card h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .results-card h2.great {
+            color: #4ade80;
+        }
+
+        .results-card h2.good {
+            color: #818cf8;
+        }
+
+        .results-card h2.ok {
+            color: #f59e0b;
+        }
+
+        .results-card h2.poor {
+            color: #ef4444;
+        }
+
+        .results-sub {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .results-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+        }
+
+        .results-stat {
+            text-align: center;
+        }
+
+        .results-stat .rs-val {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #f1f5f9;
+        }
+
+        .results-stat .rs-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .results-xp {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #818cf8;
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            padding: 12px 36px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 0 8px;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 640px) {
+            .topic-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .q-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .question-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Nav -->
+    <nav class="q-nav">
+        <a href="index.html" class="q-nav-brand"><i class="fas fa-flask-vial"></i> SimuPharma</a>
+        <div class="q-nav-links">
+            <a href="index.html">Home</a>
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="quiz.html" class="active">Viva Quiz</a>
+            <a href="curriculum.html">Curriculum</a>
+            <a href="pricing.html">Pricing</a>
+        </div>
+    </nav>
+
+    <div class="q-container">
+        <!-- Hero -->
+        <div class="q-hero">
+            <h1>🧠 AI Viva Quiz</h1>
+            <p>Practice exam-style viva questions. Earn XP for every correct answer!</p>
+        </div>
+
+        <!-- Setup Area -->
+        <div id="setup-area">
+            <div class="topic-grid" id="topic-grid"></div>
+            <div class="quiz-config">
+                <h3>Select Difficulty</h3>
+                <div class="difficulty-btns">
+                    <button class="diff-btn" data-diff="easy" onclick="selectDifficulty('easy')">🟢 Easy</button>
+                    <button class="diff-btn selected" data-diff="medium" onclick="selectDifficulty('medium')">🟡
+                        Medium</button>
+                    <button class="diff-btn" data-diff="hard" onclick="selectDifficulty('hard')">🔴 Hard</button>
+                </div>
+                <button class="start-btn" onclick="startQuiz()">
+                    <i class="fas fa-play"></i>&ensp;Start Quiz (10 Questions)
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Area -->
+        <div class="quiz-area" id="quiz-area">
+            <div class="quiz-progress">
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="quiz-progress-text" id="progress-text">1 / 10</div>
+                <div class="quiz-timer"><i class="fas fa-clock"></i> <span id="timer">30</span>s</div>
+            </div>
+            <div id="question-container"></div>
+        </div>
+
+        <!-- Results -->
+        <div class="results-card" id="results-card"></div>
+    </div>
+
+    <script src="edtech.js"></script>
+    <script>
+        /* ================================================================
+           AI VIVA QUIZ ENGINE — 60+ Questions, 6 Topics
+           ================================================================ */
+
+        const TOPICS = [
+            { id: 'hplc', name: 'HPLC', icon: '💧', desc: 'Liquid Chromatography' },
+            { id: 'gc', name: 'Gas Chromatography', icon: '🔥', desc: 'GC & GC-MS' },
+            { id: 'ftir', name: 'FTIR', icon: '🌊', desc: 'IR Spectroscopy' },
+            { id: 'uv', name: 'UV-Vis', icon: '🔬', desc: 'Spectrophotometry' },
+            { id: 'pharma', name: 'Pharma General', icon: '💊', desc: 'IP/USP/ICH' },
+            { id: 'analytical', name: 'Analytical Chem', icon: '⚗️', desc: 'Validation & QC' },
+        ];
+
+        const QUESTION_BANK = {
+            hplc: [
+                { q: 'What is the principle of HPLC?', opts: ['Separation based on differential partitioning between mobile and stationary phase', 'Separation based on molecular weight only', 'Separation based on color', 'Separation based on density'], ans: 0, exp: 'HPLC separates compounds based on their differential interaction (partitioning/adsorption) between the mobile phase (liquid) and stationary phase (column packing).' },
+                { q: 'Which detector is most commonly used in HPLC?', opts: ['Flame Ionization Detector (FID)', 'UV-Vis detector', 'Thermal Conductivity Detector (TCD)', 'Mass Spectrometer'], ans: 1, exp: 'UV-Vis is the most widely used HPLC detector because most pharmaceutical compounds absorb UV light (200-400 nm).' },
+                { q: 'In reverse-phase HPLC, the stationary phase is:', opts: ['Polar (silica)', 'Non-polar (C18/C8)', 'Ion exchange resin', 'Size exclusion gel'], ans: 1, exp: 'Reverse-phase HPLC uses a non-polar stationary phase (C18 or C8 bonded silica) with a polar mobile phase (water/organic solvent).' },
+                { q: 'What does "retention time" refer to?', opts: ['Time for column equilibration', 'Time from injection to peak maximum at detector', 'Time for mobile phase preparation', 'Time between two injections'], ans: 1, exp: 'Retention time (tR) is the time from injection to the peak maximum and is characteristic of each analyte under given conditions.' },
+                { q: 'Column efficiency is measured by:', opts: ['Height Equivalent to a Theoretical Plate (HETP)', 'Column diameter', 'Mobile phase volume', 'Sample concentration'], ans: 0, exp: 'Column efficiency = N (number of theoretical plates). Higher N means narrower peaks. N = 5.54 × (tR/W½)².' },
+                { q: 'What is the purpose of a guard column?', opts: ['To increase separation', 'To protect the analytical column from contamination', 'To increase flow rate', 'To provide UV detection'], ans: 1, exp: 'Guard columns are short, disposable columns placed before the analytical column to trap particulates and strongly retained compounds.' },
+                { q: 'In gradient elution, what changes during the run?', opts: ['Temperature', 'Column length', 'Mobile phase composition', 'Injection volume'], ans: 2, exp: 'In gradient elution, the mobile phase composition changes over time (e.g., increasing organic solvent) to elute compounds of varying polarity.' },
+                { q: 'What is tailing factor?', opts: ['Measure of peak symmetry', 'Column pressure', 'Detector sensitivity', 'Mobile phase pH'], ans: 0, exp: 'Tailing factor measures peak symmetry. USP requires T between 0.8 and 2.0. T = W₀.₀₅/(2f).' },
+                { q: 'Common mobile phase in RP-HPLC:', opts: ['Hexane:ethyl acetate', 'Acetonitrile:water', 'Chloroform:methanol', 'Petroleum ether:diethyl ether'], ans: 1, exp: 'ACN:water and MeOH:water are standard RP-HPLC mobile phases. ACN gives better peak shapes and lower viscosity.' },
+                { q: 'System suitability test checks:', opts: ['Only resolution', 'Resolution, tailing, RSD, plates, and capacity factor', 'Only injection volume', 'Only wavelength accuracy'], ans: 1, exp: 'SST verifies system performance before analysis. Checks: resolution (≥2.0), tailing (≤2.0), RSD (≤2.0%), theoretical plates.' },
+            ],
+            gc: [
+                { q: 'What type of compounds can be analyzed by GC?', opts: ['Only solids', 'Volatile and thermally stable compounds', 'Only aqueous solutions', 'Only proteins'], ans: 1, exp: 'GC requires compounds that can be vaporized without decomposition. Analytes must be volatile (BP typically <400°C) and thermally stable.' },
+                { q: 'The most common carrier gas in GC is:', opts: ['Oxygen', 'Helium', 'Carbon dioxide', 'Methane'], ans: 1, exp: 'Helium is most popular — inert, good efficiency, compatible with all detectors. Hydrogen gives best efficiency but is flammable.' },
+                { q: 'FID responds to:', opts: ['All compounds equally', 'Only halogenated compounds', 'Organic compounds with C-H bonds', 'Only water'], ans: 2, exp: 'FID burns organic compounds in H₂/air flame producing ions. Does NOT respond to H₂O, CO₂, N₂, noble gases, or fully halogenated compounds.' },
+                { q: 'USP <467> deals with:', opts: ['Dissolution testing', 'Residual solvents', 'Microbial limits', 'Heavy metals'], ans: 1, exp: 'USP <467> specifies limits and methods for organic solvent residues in pharmaceuticals, following ICH Q3C guidelines.' },
+                { q: 'In split injection mode:', opts: ['All sample enters the column', 'Only a fraction enters the column', 'No sample is injected', 'Sample is injected cold'], ans: 1, exp: 'Split injection diverts most vaporized sample to waste. Only a fraction (e.g., 1/50 at 50:1 ratio) enters the column.' },
+                { q: 'Temperature programming in GC means:', opts: ['Constant oven temp', 'Increasing oven temperature during the run', 'Cooling the column', 'Heating only the detector'], ans: 1, exp: 'Temperature programming increases oven temp over time to progressively elute compounds of increasing boiling points.' },
+                { q: 'A GC capillary column stationary phase is:', opts: ['Liquid coated on the inner wall', 'Packed silica particles', 'A metal wire', 'Compressed gas'], ans: 0, exp: 'Capillary columns have a thin liquid film on the inner wall. Common: DB-1 (non-polar), DB-5 (5% phenyl), DB-WAX (polar PEG).' },
+                { q: 'Headspace analysis is used for:', opts: ['Solid samples only', 'Volatile compounds in non-volatile matrices', 'Only gases', 'Metal analysis'], ans: 1, exp: 'Headspace sampling analyzes the vapor above a sample in a sealed vial — ideal for residual solvents in pharmaceuticals.' },
+                { q: 'The Van Deemter equation relates:', opts: ['Plate height to linear velocity', 'Temperature to pressure', 'Concentration to time', 'Wavelength to absorbance'], ans: 0, exp: 'H = A + B/u + Cu. Plate height depends on eddy diffusion (A), longitudinal diffusion (B/u), and mass transfer (Cu).' },
+                { q: 'The injection port liner function is:', opts: ['Filter the carrier gas', 'Vaporize sample and mix with carrier gas', 'Detect the analyte', 'Cool the column'], ans: 1, exp: 'The liner provides volume for sample vaporization and mixing with carrier gas. Different designs suit different injection modes.' },
+            ],
+            ftir: [
+                { q: 'FTIR measures absorption in which region?', opts: ['Visible (400-700 nm)', 'Infrared (4000-400 cm⁻¹)', 'X-ray', 'Microwave'], ans: 1, exp: 'FTIR measures mid-infrared absorption (4000-400 cm⁻¹, or 2.5-25 μm) corresponding to molecular vibrations.' },
+                { q: 'What differentiates FTIR from dispersive IR?', opts: ['Sample holder', 'Michelson interferometer', 'The detector', 'The light source'], ans: 1, exp: 'FTIR uses an interferometer instead of a monochromator, measuring all wavelengths simultaneously (Fellgett advantage).' },
+                { q: 'ATR stands for:', opts: ['Advanced Total Reflection', 'Attenuated Total Reflectance', 'Automatic Temperature Recording', 'Analytical Transmission Range'], ans: 1, exp: 'ATR uses total internal reflection through a high-refractive-index crystal. The evanescent wave penetrates ~2 μm into the sample.' },
+                { q: 'O-H stretch absorption appears around:', opts: ['1000-1200 cm⁻¹', '3200-3600 cm⁻¹', '500-800 cm⁻¹', '2000-2200 cm⁻¹'], ans: 1, exp: 'O-H stretch: broad absorption at 3200-3600 cm⁻¹. Hydrogen bonding makes it broad. Free O-H is sharp near 3600 cm⁻¹.' },
+                { q: 'The "fingerprint region" is:', opts: ['4000-2500 cm⁻¹', '1500-400 cm⁻¹', '3600-3200 cm⁻¹', '2500-2000 cm⁻¹'], ans: 1, exp: 'Fingerprint region (1500-400 cm⁻¹) has unique patterns for each compound — C-O, C-N stretches, bending modes, ring vibrations.' },
+                { q: 'The Fellgett advantage of FTIR is:', opts: ['Better resolution', 'All frequencies measured simultaneously', 'Lower cost', 'Smaller size'], ans: 1, exp: 'Fellgett (multiplex) advantage: the interferometer measures all wavelengths at once, dramatically reducing measurement time.' },
+                { q: 'Carbonyl (C=O) absorbs at approximately:', opts: ['3000 cm⁻¹', '1650-1750 cm⁻¹', '500 cm⁻¹', '2200 cm⁻¹'], ans: 1, exp: 'C=O is one of the strongest IR absorptions. Exact position: ketones ~1715, aldehydes ~1725, esters ~1735, amides ~1650 cm⁻¹.' },
+                { q: 'KBr pellet method is used for:', opts: ['Liquid samples', 'Solid samples to make transparent discs', 'Gas analysis', 'UV measurements'], ans: 1, exp: 'KBr is transparent in mid-IR. Samples are mixed with dry KBr and pressed at ~10 tons to form transparent pellets.' },
+                { q: 'Paracetamol IR spectrum shows:', opts: ['Only C-H stretches', 'N-H, O-H, C=O (amide), aromatic C=C', 'Only fingerprint peaks', 'No identifiable peaks'], ans: 1, exp: 'Paracetamol shows: N-H (3325), O-H (3160), amide C=O (1654), N-H bend (1565), aromatic C=C (1506), C-O (1227) cm⁻¹.' },
+                { q: 'Why is background subtraction important?', opts: ['To save time', 'To remove atmospheric CO₂ and H₂O interference', 'To increase concentration', 'To change spectrum color'], ans: 1, exp: 'CO₂ absorbs at 2349 and 667 cm⁻¹; water vapor at 3500-3800 and 1400-1900 cm⁻¹. Background subtraction removes these.' },
+            ],
+            uv: [
+                { q: 'Beer-Lambert Law: absorbance is proportional to:', opts: ['Temperature', 'Concentration × path length', 'Wavelength only', 'Solvent viscosity'], ans: 1, exp: 'A = εlc. ε = molar absorptivity, l = path length (1 cm), c = concentration. This is the basis of quantitative UV-Vis analysis.' },
+                { q: 'UV-Vis wavelength range is:', opts: ['100-200 nm', '190-800 nm', '800-2000 nm', '1-100 nm'], ans: 1, exp: 'UV: 190-380 nm; Visible: 380-800 nm. Most pharma UV analysis uses 200-400 nm where aromatics and conjugated systems absorb.' },
+                { q: 'Common reference solvent in UV:', opts: ['Hexane', 'Water or methanol', 'Chloroform only', 'Acetone'], ans: 1, exp: 'Water (cutoff 190 nm), MeOH (205 nm), ACN (190 nm) are transparent in UV. Acetone absorbs at 330 nm — NOT suitable.' },
+                { q: 'A chromophore is:', opts: ['A colored filter', 'A functional group that absorbs UV-Vis light', 'A detector type', 'A reference standard'], ans: 1, exp: 'Chromophores are groups with π electrons or lone pairs that absorb UV-Vis: C=C, C=O, -N=N-, benzene, -NO₂.' },
+                { q: 'λmax refers to:', opts: ['Maximum concentration', 'Wavelength of maximum absorption', 'Maximum path length', 'Maximum S/N ratio'], ans: 1, exp: 'λmax is the wavelength of maximum absorption — characteristic of the compound, used for identification and quantification.' },
+                { q: 'Deviation from Beer-Lambert Law occurs due to:', opts: ['Using a cuvette', 'High concentration, stray light, chemical interactions', 'Low temperature', 'Clean solvent'], ans: 1, exp: 'At high concentrations, intermolecular interactions change absorptivity. Stray light and chemical equilibria also cause deviation.' },
+                { q: 'A double-beam spectrophotometer:', opts: ['Uses two light sources', 'Simultaneously measures sample and reference', 'Has two detectors', 'Measures two samples'], ans: 1, exp: 'Double-beam splits light into sample and reference beams. The ratio compensates for lamp fluctuations, solvent absorption, and drift.' },
+                { q: 'Unit of molar absorptivity (ε):', opts: ['nm', 'L·mol⁻¹·cm⁻¹', 'mol/L', 'cm'], ans: 1, exp: 'From A = εlc → ε = A/(l×c). A is dimensionless, l in cm, c in mol/L. So ε has units L·mol⁻¹·cm⁻¹.' },
+            ],
+            pharma: [
+                { q: 'ICH Q3C classifies residual solvents into:', opts: ['2 classes', '3 classes', '4 classes', '5 classes'], ans: 1, exp: 'Class 1: Toxic (benzene, CCl₄). Class 2: Limited use (DCM ≤600 ppm). Class 3: Low toxicity, ≤5000 ppm (ethanol, acetone).' },
+                { q: 'GMP stands for:', opts: ['General Manufacturing Plan', 'Good Manufacturing Practice', 'Global Medicine Protocol', 'Guaranteed Medicine Production'], ans: 1, exp: 'Good Manufacturing Practice ensures products are consistently produced to quality standards. cGMP = current GMP.' },
+                { q: 'IP in pharma stands for:', opts: ['International Protocol', 'Indian Pharmacopoeia', 'Industrial Product', 'Instrument Parameter'], ans: 1, exp: 'Indian Pharmacopoeia — the official pharmacopoeia of India, setting quality standards for medicines.' },
+                { q: 'Purpose of dissolution testing:', opts: ['Check tablet color', 'Measure rate and extent of drug release', 'Count tablets', 'Measure tablet weight'], ans: 1, exp: 'Dissolution measures how much drug dissolves over time in specified media. Predicts in vivo bioavailability.' },
+                { q: 'Analytical method validation includes:', opts: ['Only accuracy', 'Accuracy, precision, specificity, linearity, range, LOD, LOQ, robustness', 'Only linearity', 'Only specificity'], ans: 1, exp: 'ICH Q2(R1) requires: accuracy, precision, specificity, linearity, range, LOD, LOQ, and robustness.' },
+                { q: 'LOD and LOQ stand for:', opts: ['Limit of Detection and Limit of Quality', 'Limit of Detection and Limit of Quantitation', 'Level of Determination', 'Lowest Observable Dose'], ans: 1, exp: 'LOD = lowest detectable amount. LOQ = lowest quantifiable amount with acceptable precision. LOD = 3.3σ/S; LOQ = 10σ/S.' },
+                { q: 'ICH stability testing conditions:', opts: ['Only room temperature', '25°C/60%RH, 30°C/65%RH, 40°C/75%RH', 'Only 4°C', 'Only 60°C'], ans: 1, exp: 'Long-term: 25±2°C/60±5%RH. Intermediate: 30±2°C/65±5%RH. Accelerated: 40±2°C/75±5%RH (ICH Q1A).' },
+                { q: 'Purpose of a reference standard:', opts: ['Calibrate the balance', 'Establish identity and quantify the analyte accurately', 'Clean equipment', 'Prepare mobile phase'], ans: 1, exp: 'Reference standards are well-characterized materials of known purity used for identification and quantification of drugs.' },
+            ],
+            analytical: [
+                { q: 'A calibration curve plots:', opts: ['Time vs temperature', 'Instrument response vs known concentrations', 'Mass vs volume', 'pH vs conductivity'], ans: 1, exp: 'Calibration curves plot response vs concentration. The linear equation y = mx + b allows calculating unknown concentrations.' },
+                { q: 'RSD is also called:', opts: ['Variance', 'Coefficient of Variation (CV)', 'Mean deviation', 'Range'], ans: 1, exp: '%RSD = (SD/mean) × 100. Concentration-independent precision measure. SST often requires ≤2.0% RSD.' },
+                { q: 'Method transfer involves:', opts: ['Moving equipment', 'Transferring a validated method to another lab', 'Changing the method', 'Deleting the method'], ans: 1, exp: 'Method transfer verifies the receiving lab can perform the method with equivalent results through co-validation or comparative testing.' },
+                { q: 'Forced degradation studies are performed to:', opts: ['Destroy samples', 'Develop stability-indicating methods and identify degradation products', 'Speed up production', 'Reduce costs'], ans: 1, exp: 'Stress testing exposes drug to acid, base, oxidation, heat, light to generate degradation products and prove method specificity.' },
+                { q: 'QC vs QA:', opts: ['They are the same', 'QC tests products; QA ensures processes and systems', 'QA tests products', 'Neither matters'], ans: 1, exp: 'QC is reactive — testing/inspecting. QA is proactive — designing systems and SOPs to prevent defects. Both essential in pharma.' },
+                { q: 'Resolution suitability criterion in chromatography:', opts: ['Rs ≥ 0.5', 'Rs ≥ 1.5', 'Rs ≥ 5.0', 'Rs ≥ 10.0'], ans: 1, exp: 'Rs ≥ 1.5 for baseline separation (≤2% overlap). Rs ≥ 2.0 preferred for regulatory submissions.' },
+                { q: 'OOS results require:', opts: ['Ignoring the result', 'Investigation, retesting, and CAPA if confirmed', 'Immediately recalling batch', 'Changing specification'], ans: 1, exp: 'OOS investigation: Phase I (lab investigation), Phase II (full investigation). Results cannot be invalidated without scientific justification.' },
+                { q: 'Equipment qualification sequence:', opts: ['OQ, IQ, DQ, PQ', 'DQ, IQ, OQ, PQ', 'PQ, DQ, IQ, OQ', 'IQ, PQ, DQ, OQ'], ans: 1, exp: 'DQ (Design) → IQ (Installation) → OQ (Operational) → PQ (Performance).' },
+            ]
+        };
+
+        let selectedTopic = null;
+        let selectedDifficulty = 'medium';
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let timer = null;
+        let timeLeft = 30;
+
+        // ---- Render topics ----
+        const topicGrid = document.getElementById('topic-grid');
+        TOPICS.forEach(t => {
+            const card = document.createElement('div');
+            card.className = 'topic-card';
+            card.dataset.topic = t.id;
+            card.innerHTML = `<div class="topic-icon">${t.icon}</div><h4>${t.name}</h4><p>${t.desc}</p>`;
+            card.onclick = () => selectTopic(t.id);
+            topicGrid.appendChild(card);
+        });
+
+        function selectTopic(id) {
+            selectedTopic = id;
+            document.querySelectorAll('.topic-card').forEach(c => c.classList.toggle('selected', c.dataset.topic === id));
+        }
+
+        function selectDifficulty(level) {
+            selectedDifficulty = level;
+            document.querySelectorAll('.diff-btn').forEach(b => b.classList.toggle('selected', b.dataset.diff === level));
+        }
+
+        function startQuiz() {
+            if (!selectedTopic) { alert('Please select a topic first!'); return; }
+            const bank = QUESTION_BANK[selectedTopic];
+            if (!bank || bank.length === 0) { alert('No questions yet.'); return; }
+
+            currentQuestions = [...bank].sort(() => Math.random() - 0.5).slice(0, 10);
+            currentIndex = 0;
+            score = 0;
+
+            document.getElementById('setup-area').style.display = 'none';
+            document.getElementById('quiz-area').classList.add('active');
+            document.getElementById('results-card').classList.remove('active');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            if (currentIndex >= currentQuestions.length) { showResults(); return; }
+
+            const q = currentQuestions[currentIndex];
+            const total = currentQuestions.length;
+            document.getElementById('progress-fill').style.width = ((currentIndex) / total * 100) + '%';
+            document.getElementById('progress-text').textContent = `${currentIndex + 1} / ${total}`;
+
+            const letters = ['A', 'B', 'C', 'D'];
+            document.getElementById('question-container').innerHTML = `
+            <div class="question-card">
+                <div class="question-number">Question ${currentIndex + 1} of ${total}</div>
+                <div class="question-text">${q.q}</div>
+                <div class="options-list">
+                    ${q.opts.map((opt, i) => `
+                        <button class="option-btn" data-idx="${i}" onclick="answerQuestion(${i})">
+                            <span class="opt-letter">${letters[i]}</span>
+                            <span>${opt}</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="explanation-card" id="explanation"><strong>💡 Explanation:</strong> ${q.exp || ''}</div>
+            </div>
+        `;
+            resetTimer();
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            const timerMap = { easy: 45, medium: 30, hard: 20 };
+            timeLeft = timerMap[selectedDifficulty];
+            document.getElementById('timer').textContent = timeLeft;
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                if (timeLeft <= 0) { clearInterval(timer); answerQuestion(-1); }
+            }, 1000);
+        }
+
+        function answerQuestion(idx) {
+            clearInterval(timer);
+            const q = currentQuestions[currentIndex];
+            document.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.add('disabled');
+                const bIdx = parseInt(b.dataset.idx);
+                if (bIdx === q.ans) b.classList.add('correct');
+                if (bIdx === idx && idx !== q.ans) b.classList.add('wrong');
+            });
+
+            if (idx === q.ans) {
+                score++;
+                const diffXP = { easy: 5, medium: 10, hard: 20 };
+                if (typeof EdTech !== 'undefined') EdTech.addXP(diffXP[selectedDifficulty], 'quiz');
+            }
+
+            document.getElementById('explanation').classList.add('show');
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'next-btn';
+            nextBtn.innerHTML = currentIndex < currentQuestions.length - 1 ? 'Next Question →' : 'View Results →';
+            nextBtn.onclick = () => { currentIndex++; renderQuestion(); };
+            document.querySelector('.question-card').appendChild(nextBtn);
+        }
+
+        function showResults() {
+            clearInterval(timer);
+            const total = currentQuestions.length;
+            const pct = Math.round((score / total) * 100);
+
+            document.getElementById('quiz-area').classList.remove('active');
+
+            let grade, icon, cls;
+            if (pct >= 90) { grade = 'Outstanding!'; icon = '🏆'; cls = 'great'; }
+            else if (pct >= 70) { grade = 'Great Job!'; icon = '🎉'; cls = 'good'; }
+            else if (pct >= 50) { grade = 'Not Bad!'; icon = '👍'; cls = 'ok'; }
+            else { grade = 'Keep Practicing!'; icon = '📚'; cls = 'poor'; }
+
+            const xpEarned = score * ({ easy: 5, medium: 10, hard: 20 }[selectedDifficulty]);
+            if (typeof EdTech !== 'undefined') EdTech.recordQuiz(score, total);
+
+            const rc = document.getElementById('results-card');
+            rc.innerHTML = `
+            <div class="results-icon">${icon}</div>
+            <h2 class="${cls}">${grade}</h2>
+            <p class="results-sub">You scored ${score} out of ${total} correctly</p>
+            <div class="results-stats">
+                <div class="results-stat"><div class="rs-val">${pct}%</div><div class="rs-label">Score</div></div>
+                <div class="results-stat"><div class="rs-val">${score}/${total}</div><div class="rs-label">Correct</div></div>
+                <div class="results-stat"><div class="rs-val">${selectedDifficulty.toUpperCase()}</div><div class="rs-label">Difficulty</div></div>
+            </div>
+            <div class="results-xp">+${xpEarned} XP Earned!</div>
+            <button class="retry-btn" onclick="retryQuiz()">🔄 Try Again</button>
+            <a href="leaderboard.html" class="retry-btn" style="text-decoration:none;display:inline-block">🏆 Leaderboard</a>
+        `;
+            rc.classList.add('active');
+        }
+
+        function retryQuiz() {
+            document.getElementById('results-card').classList.remove('active');
+            document.getElementById('setup-area').style.display = '';
+        }
+    </script>
+</body>
+
+</html>

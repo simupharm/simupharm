@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimuPharma — PCI Curriculum & Experiments</title>
+    <meta name="description"
+        content="PCI B.Pharm curriculum experiments mapped to SimuPharma virtual instruments. Semesters 4-7 with direct links to guided simulations.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-primary: #0B1120;
+            --bg-secondary: #111827;
+            --bg-card: rgba(30, 41, 59, 0.6);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #3b82f6;
+            --accent-purple: #7c3aed;
+            --accent-gradient: linear-gradient(135deg, #2563EB, #7C3AED);
+            --success: #4ade80;
+            --warning: #fbbf24;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ---- Top Nav ---- */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 14px 32px;
+            background: rgba(11, 17, 32, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-bar a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .top-bar a:hover {
+            color: var(--text-primary);
+        }
+
+        .top-bar .logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .top-bar .logo i {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .top-bar nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        /* ---- Hero Section ---- */
+        .hero {
+            padding: 140px 32px 60px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #f1f5f9, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero h1 span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ---- Semester Tabs ---- */
+        .semester-nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 32px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .sem-tab {
+            padding: 10px 20px;
+            border-radius: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+
+        .sem-tab:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            color: var(--text-primary);
+        }
+
+        .sem-tab.active {
+            background: var(--accent-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* ---- Semester Sections ---- */
+        .semester-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 32px 60px;
+            display: none;
+        }
+
+        .semester-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .semester-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .semester-header .sem-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .semester-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .semester-header p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ---- Experiment Cards ---- */
+        .exp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }
+
+        .exp-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .exp-card:hover {
+            border-color: rgba(59, 130, 246, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .exp-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .exp-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .exp-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .exp-subject {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .exp-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .exp-tag {
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .exp-tag.instrument {
+            background: rgba(124, 58, 237, 0.12);
+            color: #a78bfa;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+        }
+
+        .exp-tag.guided {
+            background: rgba(74, 222, 128, 0.12);
+            color: var(--success);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+        }
+
+        .exp-tag.theory {
+            background: rgba(251, 191, 36, 0.12);
+            color: var(--warning);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .exp-link-row {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exp-link {
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .exp-link:hover {
+            background: var(--accent);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* ---- General Mapping Section ---- */
+        .mapping-section {
+            max-width: 1100px;
+            margin: 0 auto 60px;
+            padding: 0 32px;
+        }
+
+        .mapping-section h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .mapping-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+        }
+
+        .mapping-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .mapping-card:hover {
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        .mapping-card h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .mapping-card h4 i {
+            color: var(--accent-purple);
+        }
+
+        .mapping-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .mapping-card li {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .mapping-card li::before {
+            content: '→';
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        /* ---- Footer ---- */
+        .footer {
+            padding: 24px 32px;
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .exp-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mapping-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <a href="index.html" class="logo"><i class="fas fa-flask"></i> SimuPharma</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="index.html#instruments">Instruments</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="curriculum.html" style="color: var(--accent);">Curriculum</a>
+        </nav>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge"><i class="fas fa-graduation-cap"></i> PCI B.Pharm Curriculum</div>
+        <h1>Curriculum <span>Experiments</span> & Simulator Mapping</h1>
+        <p>Every PCI B.Pharm experiment mapped to SimuPharma virtual instruments. Click any experiment to launch the
+            guided simulation.</p>
+    </section>
+
+    <!-- Semester Tabs -->
+    <div class="semester-nav">
+        <button class="sem-tab active" data-sem="sem4">Semester 4</button>
+        <button class="sem-tab" data-sem="sem5">Semester 5</button>
+        <button class="sem-tab" data-sem="sem6">Semester 6</button>
+        <button class="sem-tab" data-sem="sem7">Semester 7</button>
+        <button class="sem-tab" data-sem="mapping">🗺️ Instrument Mapping</button>
+    </div>
+
+    <!-- Semester 4 -->
+    <section class="semester-section active" id="sem4">
+        <div class="semester-header">
+            <div class="sem-icon">4</div>
+            <div>
+                <h2>Semester 4 — Pharmaceutical Analysis I</h2>
+                <p>Fundamentals of instrumental analysis & titrimetry</p>
+            </div>
+        </div>
+        <div class="exp-grid">
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">01</div>
+                    <div>
+                        <div class="exp-title">Assay of Paracetamol by UV Spectrophotometry</div>
+                        <div class="exp-subject">Pharmaceutical Analysis I</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">UV-Vis</span>
+                    <span class="exp-tag guided">Guided</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="uv_vis_simulator.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">02</div>
+                    <div>
+                        <div class="exp-title">Determination of λmax and Calibration Curve</div>
+                        <div class="exp-subject">Pharmaceutical Analysis I</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">UV-Vis</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="uv_vis_simulator.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">03</div>
+                    <div>
+                        <div class="exp-title">IR Spectrum Interpretation of Aspirin</div>
+                        <div class="exp-subject">Pharmaceutical Analysis I</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">FTIR</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="ftir.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Semester 5 -->
+    <section class="semester-section" id="sem5">
+        <div class="semester-header">
+            <div class="sem-icon">5</div>
+            <div>
+                <h2>Semester 5 — Pharmaceutical Analysis II</h2>
+                <p>Chromatographic methods & advanced spectroscopy</p>
+            </div>
+        </div>
+        <div class="exp-grid">
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">04</div>
+                    <div>
+                        <div class="exp-title">Assay of Paracetamol Tablets by RP-HPLC</div>
+                        <div class="exp-subject">Pharmaceutical Analysis II</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">HPLC</span>
+                    <span class="exp-tag guided">Guided</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="hplc_simulator.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">05</div>
+                    <div>
+                        <div class="exp-title">Separation of Drug Mixture by GC</div>
+                        <div class="exp-subject">Pharmaceutical Analysis II</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">GC</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="gc_simulator.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">06</div>
+                    <div>
+                        <div class="exp-title">System Suitability Testing (SST) in HPLC</div>
+                        <div class="exp-subject">Pharmaceutical Analysis II</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">HPLC</span>
+                    <span class="exp-tag theory">Theory</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="hplc_simulator.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Semester 6 -->
+    <section class="semester-section" id="sem6">
+        <div class="semester-header">
+            <div class="sem-icon">6</div>
+            <div>
+                <h2>Semester 6 — Pharmaceutical Analysis III</h2>
+                <p>Stability studies, dissolution, and multi-component analysis</p>
+            </div>
+        </div>
+        <div class="exp-grid">
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">07</div>
+                    <div>
+                        <div class="exp-title">Stability-Indicating HPLC Method for Aspirin</div>
+                        <div class="exp-subject">Pharmaceutical Analysis III</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">HPLC</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="hplc_simulator.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">08</div>
+                    <div>
+                        <div class="exp-title">Dissolution Profile of Ibuprofen Tablets</div>
+                        <div class="exp-subject">Pharmaceutical Analysis III</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">UV-Vis</span>
+                    <span class="exp-tag instrument">Dissolution</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="uv_vis_simulator.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">09</div>
+                    <div>
+                        <div class="exp-title">Multi-Component Analysis by Simultaneous UV</div>
+                        <div class="exp-subject">Pharmaceutical Analysis III</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">UV-Vis</span>
+                    <span class="exp-tag theory">Theory</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="uv_vis_simulator.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Semester 7 -->
+    <section class="semester-section" id="sem7">
+        <div class="semester-header">
+            <div class="sem-icon">7</div>
+            <div>
+                <h2>Semester 7 — Quality Assurance & Advanced Methods</h2>
+                <p>Polarimetry, mass spectrometry, and quality control methods</p>
+            </div>
+        </div>
+        <div class="exp-grid">
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">10</div>
+                    <div>
+                        <div class="exp-title">Specific Rotation of Dextrose by Polarimetry</div>
+                        <div class="exp-subject">Pharmaceutical Quality Assurance</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">Polarimeter</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="polarimeter.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">11</div>
+                    <div>
+                        <div class="exp-title">Mass Fragmentation Pattern of Caffeine</div>
+                        <div class="exp-subject">Pharmaceutical Quality Assurance</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">Mass Spec</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="mass_spec_simulator.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+            <div class="exp-card">
+                <div class="exp-card-header">
+                    <div class="exp-num">12</div>
+                    <div>
+                        <div class="exp-title">Particle Size Analysis using Laser Diffraction</div>
+                        <div class="exp-subject">Pharmaceutical Quality Assurance</div>
+                    </div>
+                </div>
+                <div class="exp-tags">
+                    <span class="exp-tag instrument">PSA</span>
+                </div>
+                <div class="exp-link-row">
+                    <a href="particle_size.html" class="exp-link"><i class="fas fa-play"></i> Launch Simulator</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instrument Mapping -->
+    <section class="semester-section" id="mapping">
+        <div class="mapping-section" style="margin: 0; padding: 0;">
+            <h2>🗺️ Instrument → Topic Mapping</h2>
+            <div class="mapping-grid">
+                <div class="mapping-card">
+                    <h4><i class="fas fa-sun"></i> UV-Vis Spectrophotometer</h4>
+                    <ul>
+                        <li>Drug assay (Beer-Lambert Law)</li>
+                        <li>λmax determination</li>
+                        <li>Calibration curves</li>
+                        <li>Multi-component analysis</li>
+                        <li>Dissolution testing</li>
+                    </ul>
+                </div>
+                <div class="mapping-card">
+                    <h4><i class="fas fa-flask"></i> HPLC</h4>
+                    <ul>
+                        <li>Drug assay (RP-HPLC)</li>
+                        <li>Stability-indicating methods</li>
+                        <li>System suitability testing</li>
+                        <li>Related substances / Impurity profiling</li>
+                        <li>Method validation</li>
+                    </ul>
+                </div>
+                <div class="mapping-card">
+                    <h4><i class="fas fa-fire"></i> Gas Chromatography</h4>
+                    <ul>
+                        <li>Residual solvent analysis</li>
+                        <li>Volatile compound separation</li>
+                        <li>Essential oil analysis</li>
+                        <li>Headspace GC</li>
+                    </ul>
+                </div>
+                <div class="mapping-card">
+                    <h4><i class="fas fa-wave-square"></i> FTIR Spectroscopy</h4>
+                    <ul>
+                        <li>Functional group identification</li>
+                        <li>Drug identification (fingerprint region)</li>
+                        <li>Polymorph screening</li>
+                        <li>Raw material verification</li>
+                    </ul>
+                </div>
+                <div class="mapping-card">
+                    <h4><i class="fas fa-atom"></i> Mass Spectrometry</h4>
+                    <ul>
+                        <li>Molecular weight determination</li>
+                        <li>Fragmentation pattern analysis</li>
+                        <li>Isotope patterns</li>
+                        <li>Structure elucidation</li>
+                    </ul>
+                </div>
+                <div class="mapping-card">
+                    <h4><i class="fas fa-sync"></i> Polarimeter</h4>
+                    <ul>
+                        <li>Specific rotation measurement</li>
+                        <li>Enantiomeric purity</li>
+                        <li>Sugar analysis</li>
+                        <li>Chiral drug testing</li>
+                    </ul>
+                </div>
+                <div class="mapping-card">
+                    <h4><i class="fas fa-circle-nodes"></i> Particle Size Analyzer</h4>
+                    <ul>
+                        <li>Particle size distribution</li>
+                        <li>D10, D50, D90 values</li>
+                        <li>Span calculation</li>
+                        <li>Formulation optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 SimuPharma — PCI B.Pharm Curriculum Mapping. All experiments are based on PCI syllabus
+            guidelines.</p>
+    </div>
+
+    <script>
+        // Semester tab switching
+        document.querySelectorAll('.sem-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.sem-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                document.querySelectorAll('.semester-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(tab.dataset.sem).classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

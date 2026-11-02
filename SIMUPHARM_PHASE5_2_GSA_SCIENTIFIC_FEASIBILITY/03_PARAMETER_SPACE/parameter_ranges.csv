@@ -1,0 +1,7 @@
+Parameter,Symbol,Units,Baseline,Wide_Low,Wide_High,Narrow_Low,Narrow_High,Engine_Role,Scientific_Justification
+L (Column Length),L,cm,15.0,5.0,25.0,12.0,18.0,"Active (t0, N)",Standard analytical column lengths (USP)
+F (Flow Rate),F,mL/min,1.0,0.5,2.0,0.9,1.1,"Active (H, t0)",Standard analytical HPLC flow range
+dp (Particle Size),dp,um,3.5,1.8,5.0,3.0,4.0,Active (H),Standard sub-2 um to 5 um packings
+pctB (% Organic),pctB,% v/v,50.0,30.0,80.0,45.0,55.0,Active (k_adj),Reverse phase gradient/isocratic range
+T (Temperature),T,°C,25.0,20.0,60.0,22.0,28.0,Inactive (Schema only),Standard thermostatted column range
+dc (Internal Diameter),dc,mm,4.6,2.1,4.6,4.0,4.6,Inactive (Schema only),Narrow-bore to standard-bore columns

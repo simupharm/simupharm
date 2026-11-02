@@ -1,0 +1,2756 @@
+[
+  {
+    "run_id": "ISO_B30_F1.0_T30",
+    "type": "isocratic",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 30,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 6.5412581224114295,
+        "peakWidth": 0.12871542993630755,
+        "height": 40.09552542019391,
+        "area": 5.4940162938458155,
+        "sigma": 0.05465623351860193,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 5.618744135532676,
+        "peakWidth": 0.11056268588902297,
+        "height": 53.644902262642255,
+        "area": 6.31394015599937,
+        "sigma": 0.046948061948629716,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 15.994206422216557,
+        "peakWidth": 0.3194464481241443,
+        "height": 27.448433601385517,
+        "area": 9.334241903897574,
+        "sigma": 0.13564605015887232,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 31.689021674763577,
+        "peakWidth": 0.6422666636878146,
+        "height": 13.994844244885943,
+        "area": 9.568566351778227,
+        "sigma": 0.2727246979566092,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 2.148721270700128,
+        "peakWidth": 0.04481828902261195,
+        "height": 19.258549762321557,
+        "area": 0.9188450404484223,
+        "sigma": 0.01903112060408151,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 4.135069574844591,
+        "peakWidth": 0.08136771981510699,
+        "height": 20.91747417339989,
+        "area": 1.8118607196164813,
+        "sigma": 0.03455104875376093,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 22.82953293281329,
+        "peakWidth": 0.46944275563326543,
+        "height": 0.032684859000627606,
+        "area": 0.01633400483387923,
+        "sigma": 0.19933874973811697,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 15.494850176063267,
+        "peakWidth": 0.31221708350974237,
+        "height": 15.047378700526865,
+        "area": 5.001277312827687,
+        "sigma": 0.13257625626740652,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 9.765467907124368,
+        "peakWidth": 0.19504212680836955,
+        "height": 48.434140772815184,
+        "area": 10.056420998280197,
+        "sigma": 0.08282043601204651,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 27.108223678672605,
+        "peakWidth": 0.5526245070786595,
+        "height": 33.350712831485055,
+        "area": 19.619985582474705,
+        "sigma": 0.23466008793149024,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "ISO_B40_F1.0_T30",
+    "type": "isocratic",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 40,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 4.757202645779771,
+        "peakWidth": 0.0936097265062443,
+        "height": 40.09552542019391,
+        "area": 3.9955843906379003,
+        "sigma": 0.03974935308120777,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 3.931196804574921,
+        "peakWidth": 0.0773560188874737,
+        "height": 53.644902262642255,
+        "area": 4.417595955041447,
+        "sigma": 0.03284756640657058,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 9.897711242990729,
+        "peakWidth": 0.19768337469622463,
+        "height": 27.448433601385517,
+        "area": 5.77631853673417,
+        "sigma": 0.08394198500901258,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 16.782097046618116,
+        "peakWidth": 0.340136138958192,
+        "height": 13.994844244885943,
+        "area": 5.067389292122882,
+        "sigma": 0.14443148151090957,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.7840254166877414,
+        "peakWidth": 0.03721141864190889,
+        "height": 19.258549762321557,
+        "area": 0.7628922971583646,
+        "sigma": 0.015801027024165134,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 2.985883802038182,
+        "peakWidth": 0.05875464782568746,
+        "height": 20.91747417339989,
+        "area": 1.3083227443532,
+        "sigma": 0.02494889504275476,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 13.002269015250512,
+        "peakWidth": 0.26736512805442003,
+        "height": 0.032684859000627606,
+        "area": 0.009302823915475017,
+        "sigma": 0.11353083993818261,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 9.414746543404096,
+        "peakWidth": 0.18970462278531505,
+        "height": 15.047378700526865,
+        "area": 3.038800489099839,
+        "sigma": 0.08055397995130151,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 6.587846222474535,
+        "peakWidth": 0.13157664850657244,
+        "height": 48.434140772815184,
+        "area": 6.784125012258879,
+        "sigma": 0.05587118832550847,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 14.813745922216832,
+        "peakWidth": 0.3019909801280805,
+        "height": 33.350712831485055,
+        "area": 10.721671949497859,
+        "sigma": 0.12823396183782612,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "ISO_B50_F1.0_T30",
+    "type": "isocratic",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 3.5,
+        "peakWidth": 0.06887115541788136,
+        "height": 40.09552542019391,
+        "area": 2.9396572751927383,
+        "sigma": 0.029244651982115226,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 2.8,
+        "peakWidth": 0.05509692433430509,
+        "height": 53.644902262642255,
+        "area": 3.146438422955917,
+        "sigma": 0.023395721585692184,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 6.2,
+        "peakWidth": 0.12383033744135072,
+        "height": 27.448433601385517,
+        "area": 3.6183289296415575,
+        "sigma": 0.05258188426384319,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 9,
+        "peakWidth": 0.1824101744925029,
+        "height": 13.994844244885943,
+        "area": 2.717568817676241,
+        "sigma": 0.07745654967834519,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.5,
+        "peakWidth": 0.03128718203269468,
+        "height": 19.258549762321557,
+        "area": 0.6414361785619341,
+        "sigma": 0.013285427614732347,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 2.2,
+        "peakWidth": 0.043290440548382575,
+        "height": 20.91747417339989,
+        "area": 0.9639725549977158,
+        "sigma": 0.01838235267447243,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 7.5,
+        "peakWidth": 0.1542221944536129,
+        "height": 0.032684859000627606,
+        "area": 0.0053660772042346755,
+        "sigma": 0.06548713140280803,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 5.8,
+        "peakWidth": 0.11686844750225171,
+        "height": 15.047378700526865,
+        "area": 1.8720676924783546,
+        "sigma": 0.04962566772919393,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 4.5,
+        "peakWidth": 0.08987685782033518,
+        "height": 48.434140772815184,
+        "area": 4.634073341149997,
+        "sigma": 0.03816427083666037,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 8.2,
+        "peakWidth": 0.16716406843028161,
+        "height": 33.350712831485055,
+        "area": 5.934873626665107,
+        "sigma": 0.07098261929099008,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "ISO_B60_F1.0_T30",
+    "type": "isocratic",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 60,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 2.6140642691561404,
+        "peakWidth": 0.051438179015252286,
+        "height": 40.09552542019391,
+        "area": 2.1955580133274966,
+        "sigma": 0.021842114231529635,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 2.04173610588197,
+        "peakWidth": 0.04017620704871344,
+        "height": 53.644902262642255,
+        "area": 2.294356047529793,
+        "sigma": 0.017059960530239254,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 3.957224760362011,
+        "peakWidth": 0.07903620603337033,
+        "height": 27.448433601385517,
+        "area": 2.3094420695986684,
+        "sigma": 0.033561021670220945,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 4.937389102468637,
+        "peakWidth": 0.10007000085763183,
+        "height": 13.994844244885943,
+        "area": 1.490854962844806,
+        "sigma": 0.04249256936629802,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.278800783071405,
+        "peakWidth": 0.026673381922338365,
+        "height": 19.258549762321557,
+        "area": 0.5468460582902206,
+        "sigma": 0.011326276824772129,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 1.6625643956610052,
+        "peakWidth": 0.032715065967372885,
+        "height": 20.91747417339989,
+        "area": 0.728484749242533,
+        "sigma": 0.013891747756846236,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 4.419288565957816,
+        "peakWidth": 0.09087365074210325,
+        "height": 0.032684859000627606,
+        "area": 0.003161899151029492,
+        "sigma": 0.03858753747010754,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 3.6509589042420303,
+        "peakWidth": 0.07356584466091175,
+        "height": 15.047378700526865,
+        "area": 1.1784210708961516,
+        "sigma": 0.03123815059911327,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 3.1281872792602274,
+        "peakWidth": 0.06247814296298947,
+        "height": 48.434140772815184,
+        "area": 3.2213887282098583,
+        "sigma": 0.026529997011885128,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 4.642172169478994,
+        "peakWidth": 0.09463468124438239,
+        "height": 33.350712831485055,
+        "area": 3.3598420950097108,
+        "sigma": 0.04018457802309231,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "ISO_B70_F1.0_T30",
+    "type": "isocratic",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 70,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 1.9897559113742287,
+        "peakWidth": 0.039153368175972196,
+        "height": 40.09552542019391,
+        "area": 1.6712001259225744,
+        "sigma": 0.01662563404499881,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 1.5334566174696098,
+        "peakWidth": 0.0301745511509509,
+        "height": 53.644902262642255,
+        "area": 1.7231881504079976,
+        "sigma": 0.01281297288787724,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 2.596912814677222,
+        "peakWidth": 0.05186719195923358,
+        "height": 27.448433601385517,
+        "area": 1.5155620588876573,
+        "sigma": 0.02202428533300789,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 2.8165202407891075,
+        "peakWidth": 0.05708466095377861,
+        "height": 13.994844244885943,
+        "area": 0.8504541756358286,
+        "sigma": 0.024239771105638474,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.1065306597126336,
+        "peakWidth": 0.02308015078345793,
+        "height": 19.258549762321557,
+        "area": 0.47317919855179164,
+        "sigma": 0.009800488655396148,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 1.2950329259168458,
+        "peakWidth": 0.025482975403455066,
+        "height": 20.91747417339989,
+        "area": 0.567443726546468,
+        "sigma": 0.010820796349662449,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 2.6944032661782376,
+        "peakWidth": 0.05540490459373198,
+        "height": 0.032684859000627606,
+        "area": 0.0019277834594205994,
+        "sigma": 0.023526498765915914,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 2.373309814381535,
+        "peakWidth": 0.04782155749114261,
+        "height": 15.047378700526865,
+        "area": 0.7660339013354261,
+        "sigma": 0.020306393839126375,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 2.2268420937163187,
+        "peakWidth": 0.04447590449895091,
+        "height": 48.434140772815184,
+        "area": 2.2931887958758748,
+        "sigma": 0.018885734394458988,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 2.7282584781306904,
+        "peakWidth": 0.05561790084557741,
+        "height": 33.350712831485055,
+        "area": 1.9746182059247948,
+        "sigma": 0.02361694303421546,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "FLOW_F0.5_B50_T30",
+    "type": "flow_variation",
+    "flowRate": 0.5,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 7,
+        "peakWidth": 0.18594084796411,
+        "height": 40.09552542019391,
+        "area": 7.936593529709911,
+        "sigma": 0.07895577408242463,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 5.6,
+        "peakWidth": 0.148752678371288,
+        "height": 53.644902262642255,
+        "area": 8.494868786234713,
+        "sigma": 0.0631646192659397,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 12.4,
+        "peakWidth": 0.33432164463946984,
+        "height": 27.448433601385517,
+        "area": 9.768895923240756,
+        "sigma": 0.14196248180019952,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 18,
+        "peakWidth": 0.49247761732208567,
+        "height": 13.994844244885943,
+        "area": 7.336991042092331,
+        "sigma": 0.2091200073554504,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 3,
+        "peakWidth": 0.08447027093226711,
+        "height": 19.258549762321557,
+        "area": 1.731772702708249,
+        "sigma": 0.035868480226015756,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 4.4,
+        "peakWidth": 0.11687710443458345,
+        "height": 20.91747417339989,
+        "area": 2.602568131793931,
+        "sigma": 0.04962934370895263,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 15,
+        "peakWidth": 0.4163746845482034,
+        "height": 0.032684859000627606,
+        "area": 0.014487530222808192,
+        "sigma": 0.17680453696314372,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 11.6,
+        "peakWidth": 0.31552568120812635,
+        "height": 15.047378700526865,
+        "area": 5.054276381360993,
+        "sigma": 0.13398118098009612,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 9,
+        "peakWidth": 0.2426528065931636,
+        "height": 48.434140772815184,
+        "area": 12.511239594473087,
+        "sigma": 0.10303728517756416,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 16.4,
+        "peakWidth": 0.4513156261784878,
+        "height": 33.350712831485055,
+        "area": 16.023187472406285,
+        "sigma": 0.19164145485286108,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "FLOW_F0.8_B50_T30",
+    "type": "flow_variation",
+    "flowRate": 0.8,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 4.375,
+        "peakWidth": 0.09449938386602579,
+        "height": 40.09552542019391,
+        "area": 4.033558020007728,
+        "sigma": 0.04012712690701732,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 3.5,
+        "peakWidth": 0.07559950709282062,
+        "height": 53.644902262642255,
+        "area": 4.317286250500815,
+        "sigma": 0.032101701525613854,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 7.75,
+        "peakWidth": 0.16990989219111438,
+        "height": 27.448433601385517,
+        "area": 4.9647759268892235,
+        "sigma": 0.07214857417881715,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 11.25,
+        "peakWidth": 0.25028836812515975,
+        "height": 13.994844244885943,
+        "area": 3.7288263471945835,
+        "sigma": 0.10627956183658588,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.875,
+        "peakWidth": 0.04292972009913743,
+        "height": 19.258549762321557,
+        "area": 0.8801264229660799,
+        "sigma": 0.01822918050918787,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 2.75,
+        "peakWidth": 0.059399612715787635,
+        "height": 20.91747417339989,
+        "area": 1.3226845398239304,
+        "sigma": 0.025222765484410884,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 9.375,
+        "peakWidth": 0.21161112029999343,
+        "height": 0.032684859000627606,
+        "area": 0.007362893601840816,
+        "sigma": 0.08985610203821377,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 7.25,
+        "peakWidth": 0.16035735447345723,
+        "height": 15.047378700526865,
+        "area": 2.5686986434492907,
+        "sigma": 0.06809229489318779,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 5.625,
+        "peakWidth": 0.12332169594516366,
+        "height": 48.434140772815184,
+        "area": 6.358497586856974,
+        "sigma": 0.05236590061365761,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 10.25,
+        "peakWidth": 0.2293689045196178,
+        "height": 33.350712831485055,
+        "area": 8.143349674324826,
+        "sigma": 0.09739656242871245,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "FLOW_F1.2_B50_T30",
+    "type": "flow_variation",
+    "flowRate": 1.2,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 2.916666666666667,
+        "peakWidth": 0.053344238445795764,
+        "height": 40.09552542019391,
+        "area": 2.276915171312566,
+        "sigma": 0.022651481293331534,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 2.3333333333333335,
+        "peakWidth": 0.042675390756636615,
+        "height": 53.644902262642255,
+        "area": 2.4370777645701547,
+        "sigma": 0.01812118503466523,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 5.166666666666667,
+        "peakWidth": 0.0959129407255408,
+        "height": 27.448433601385517,
+        "area": 2.8025811390410658,
+        "sigma": 0.04072736336541011,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 7.5,
+        "peakWidth": 0.1412860258264362,
+        "height": 13.994844244885943,
+        "area": 2.104896282389685,
+        "sigma": 0.05999406616833809,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.25,
+        "peakWidth": 0.024233525465375792,
+        "height": 19.258549762321557,
+        "area": 0.4968251839155864,
+        "sigma": 0.010290244358970612,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 1.8333333333333335,
+        "peakWidth": 0.033530664165928765,
+        "height": 20.91747417339989,
+        "area": 0.7466461324336963,
+        "sigma": 0.014238073955808393,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 6.25,
+        "peakWidth": 0.11945299109112122,
+        "height": 0.032684859000627606,
+        "area": 0.004156301722606549,
+        "sigma": 0.050723138467567395,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 4.833333333333333,
+        "peakWidth": 0.09052060027922006,
+        "height": 15.047378700526865,
+        "area": 1.4500123421525728,
+        "sigma": 0.03843762219924419,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 3.75,
+        "peakWidth": 0.06961423117176348,
+        "height": 48.434140772815184,
+        "area": 3.589327226844068,
+        "sigma": 0.029560183087797655,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 6.833333333333333,
+        "peakWidth": 0.12947713555563548,
+        "height": 33.350712831485055,
+        "area": 4.596863693741516,
+        "sigma": 0.0549796753951743,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "FLOW_F1.5_B50_T30",
+    "type": "flow_variation",
+    "flowRate": 1.5,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 2.333333333333333,
+        "peakWidth": 0.039192514160849214,
+        "height": 40.09552542019391,
+        "area": 1.6728710109039584,
+        "sigma": 0.016642256543885018,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 1.8666666666666665,
+        "peakWidth": 0.03135401132867937,
+        "height": 53.644902262642255,
+        "area": 1.7905439759171289,
+        "sigma": 0.013313805235108013,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 4.133333333333333,
+        "peakWidth": 0.07046814046120689,
+        "height": 27.448433601385517,
+        "area": 2.0590827459352874,
+        "sigma": 0.02992277726590526,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 6,
+        "peakWidth": 0.10380417322030636,
+        "height": 13.994844244885943,
+        "area": 1.5464871138520941,
+        "sigma": 0.044078205189089746,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1,
+        "peakWidth": 0.01780459929021436,
+        "height": 19.258549762321557,
+        "area": 0.36502213966113484,
+        "sigma": 0.007560339401364909,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 1.4666666666666668,
+        "peakWidth": 0.024635294615390938,
+        "height": 20.91747417339989,
+        "area": 0.548567942314626,
+        "sigma": 0.010460846970442013,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 5,
+        "peakWidth": 0.0877632370673302,
+        "height": 0.032684859000627606,
+        "area": 0.003053674002404988,
+        "sigma": 0.03726676733219966,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 3.8666666666666663,
+        "peakWidth": 0.06650633717260447,
+        "height": 15.047378700526865,
+        "area": 1.0653377179799213,
+        "sigma": 0.02824048287584054,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 3,
+        "peakWidth": 0.05114623097990823,
+        "height": 48.434140772815184,
+        "area": 2.6371125029547553,
+        "sigma": 0.02171814478976995,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 5.466666666666666,
+        "peakWidth": 0.09512807037121321,
+        "height": 33.350712831485055,
+        "area": 3.3773590299826877,
+        "sigma": 0.04039408508331771,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "FLOW_F2.0_B50_T30",
+    "type": "flow_variation",
+    "flowRate": 2,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 1.75,
+        "peakWidth": 0.026563217347845905,
+        "height": 40.09552542019391,
+        "area": 1.133809279883914,
+        "sigma": 0.011279497812248792,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 1.4,
+        "peakWidth": 0.021250573878276724,
+        "height": 53.644902262642255,
+        "area": 1.213563605742722,
+        "sigma": 0.009023598249799033,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 3.1,
+        "peakWidth": 0.047760664791426946,
+        "height": 27.448433601385517,
+        "area": 1.395569120495874,
+        "sigma": 0.020280537066423333,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 4.5,
+        "peakWidth": 0.07035457851843759,
+        "height": 13.994844244885943,
+        "area": 1.048151010733882,
+        "sigma": 0.029874555634156086,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 0.75,
+        "peakWidth": 0.012067290166592855,
+        "height": 19.258549762321557,
+        "area": 0.24739832695602684,
+        "sigma": 0.005124114720421595,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 1.1,
+        "peakWidth": 0.016696879475788858,
+        "height": 20.91747417339989,
+        "area": 0.37179879356451745,
+        "sigma": 0.007089970053413528,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 3.75,
+        "peakWidth": 0.05948263313249779,
+        "height": 0.032684859000627606,
+        "area": 0.0020696658015468485,
+        "sigma": 0.025258018315285687,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 2.9,
+        "peakWidth": 0.04507550299209326,
+        "height": 15.047378700526865,
+        "area": 0.722045981419265,
+        "sigma": 0.019140340973288008,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 2.25,
+        "peakWidth": 0.03466499863893891,
+        "height": 48.434140772815184,
+        "area": 1.787336027977626,
+        "sigma": 0.014719744644984675,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 4.1,
+        "peakWidth": 0.06447424114669158,
+        "height": 33.350712831485055,
+        "area": 2.2890473830525053,
+        "sigma": 0.027377597089890265,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "TEMP_T25_B50_F1.0",
+    "type": "temp_variation",
+    "flowRate": 1,
+    "columnTemp": 25,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 3.9660195857338922,
+        "peakWidth": 0.07804124322269725,
+        "height": 40.09552542019391,
+        "area": 3.3310680939312944,
+        "sigma": 0.03313853215401157,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 3.1728156685871136,
+        "peakWidth": 0.06243299457815779,
+        "height": 53.644902262642255,
+        "area": 3.5653818316425214,
+        "sigma": 0.026510825723209255,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 7.025520409014323,
+        "peakWidth": 0.14031815531440964,
+        "height": 27.448433601385517,
+        "area": 4.100103829310275,
+        "sigma": 0.059583080812912796,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 10.198336077601438,
+        "peakWidth": 0.20669780704982957,
+        "height": 13.994844244885943,
+        "area": 3.0794089018524775,
+        "sigma": 0.08776976944791065,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.6997226796002396,
+        "peakWidth": 0.03545302192116818,
+        "height": 19.258549762321557,
+        "area": 0.7268424134785522,
+        "sigma": 0.015054361749965255,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 2.492926596747018,
+        "peakWidth": 0.04905449573998113,
+        "height": 20.91747417339989,
+        "area": 1.0923240094945381,
+        "sigma": 0.020829934496807274,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 8.498613398001197,
+        "peakWidth": 0.17475664107368272,
+        "height": 0.032684859000627606,
+        "area": 0.006080562083015683,
+        "sigma": 0.07420664164487589,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 6.572261027787593,
+        "peakWidth": 0.13242930049949814,
+        "height": 15.047378700526865,
+        "area": 2.1213306097682305,
+        "sigma": 0.05623324861974443,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 5.099168038800719,
+        "peakWidth": 0.10184382240561991,
+        "height": 48.434140772815184,
+        "area": 5.251093037922338,
+        "sigma": 0.0432457844609851,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 9.291817315147975,
+        "peakWidth": 0.18942170555013074,
+        "height": 33.350712831485055,
+        "area": 6.725092869202672,
+        "sigma": 0.08043384524421687,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "TEMP_T35_B50_F1.0",
+    "type": "temp_variation",
+    "flowRate": 1,
+    "columnTemp": 35,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 3.088739159046084,
+        "peakWidth": 0.060778581333702585,
+        "height": 40.09552542019391,
+        "area": 2.5942384400178637,
+        "sigma": 0.02580831479138114,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 2.470991327236867,
+        "peakWidth": 0.04862286506696206,
+        "height": 53.644902262642255,
+        "area": 2.776722162431755,
+        "sigma": 0.02064665183310491,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 5.471480796024492,
+        "peakWidth": 0.10927988923799727,
+        "height": 27.448433601385517,
+        "area": 3.193164072940909,
+        "sigma": 0.046403349994903295,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 7.942472123261359,
+        "peakWidth": 0.1609764139895494,
+        "height": 13.994844244885943,
+        "area": 2.398246064159764,
+        "sigma": 0.06835516517602946,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.3237453538768933,
+        "peakWidth": 0.027610841234453464,
+        "height": 19.258549762321557,
+        "area": 0.5660654407866064,
+        "sigma": 0.011724348719513148,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 1.9414931856861102,
+        "peakWidth": 0.0382036796954702,
+        "height": 20.91747417339989,
+        "area": 0.850702793962043,
+        "sigma": 0.016222369297439577,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 6.618726769384466,
+        "peakWidth": 0.13610060891511255,
+        "height": 0.032684859000627606,
+        "area": 0.004735546511766907,
+        "sigma": 0.057792190622128474,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 5.118482034990653,
+        "peakWidth": 0.10313604293060753,
+        "height": 15.047378700526865,
+        "area": 1.6520939400408385,
+        "sigma": 0.04379449805970596,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 3.9712360616306794,
+        "peakWidth": 0.07931604864048188,
+        "height": 48.434140772815184,
+        "area": 4.08955536991472,
+        "sigma": 0.03367985080275239,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 7.236474601193682,
+        "peakWidth": 0.14752177261316288,
+        "height": 33.350712831485055,
+        "area": 5.237507592762961,
+        "sigma": 0.06264194166164029,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "TEMP_T40_B50_F1.0",
+    "type": "temp_variation",
+    "flowRate": 1,
+    "columnTemp": 40,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 2.7258027407499172,
+        "peakWidth": 0.053636909770478435,
+        "height": 40.09552542019391,
+        "area": 2.289407387881657,
+        "sigma": 0.022775757864322052,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 2.1806421925999335,
+        "peakWidth": 0.04290952781638274,
+        "height": 53.644902262642255,
+        "area": 2.4504487076840236,
+        "sigma": 0.01822060629145764,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 4.8285648550427105,
+        "peakWidth": 0.09643916376732023,
+        "height": 27.448433601385517,
+        "area": 2.8179574038147623,
+        "sigma": 0.04095081264005105,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 7.009207047642644,
+        "peakWidth": 0.14206118673495288,
+        "height": 13.994844244885943,
+        "area": 2.1164447232566888,
+        "sigma": 0.06032322154350441,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.1682011746071073,
+        "peakWidth": 0.024366481867160204,
+        "height": 19.258549762321557,
+        "area": 0.4995509981543637,
+        "sigma": 0.010346701429792018,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 1.713361722757091,
+        "peakWidth": 0.033714628998586446,
+        "height": 20.91747417339989,
+        "area": 0.7507425806915641,
+        "sigma": 0.014316190657573863,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 5.841005873035536,
+        "peakWidth": 0.12010836580746419,
+        "height": 0.032684859000627606,
+        "area": 0.004179105128679581,
+        "sigma": 0.05100142921760687,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 4.5170445418141485,
+        "peakWidth": 0.09101723843109301,
+        "height": 15.047378700526865,
+        "area": 1.4579677848648205,
+        "sigma": 0.03864850888793758,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 3.504603523821322,
+        "peakWidth": 0.06999616725047436,
+        "height": 48.434140772815184,
+        "area": 3.609019946897939,
+        "sigma": 0.029722364012940282,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 6.38616642118552,
+        "peakWidth": 0.13018750739490526,
+        "height": 33.350712831485055,
+        "area": 4.6220842278766145,
+        "sigma": 0.055281319488282486,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "TEMP_T50_B50_F1.0",
+    "type": "temp_variation",
+    "flowRate": 1,
+    "columnTemp": 50,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 2.122857308994217,
+        "peakWidth": 0.04177246733077889,
+        "height": 40.09552542019391,
+        "area": 1.7829922664516944,
+        "sigma": 0.017737778059778723,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 1.6982858471953735,
+        "peakWidth": 0.033417973864623106,
+        "height": 53.644902262642255,
+        "area": 1.9084113724206295,
+        "sigma": 0.014190222447822975,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 3.7604900902183274,
+        "peakWidth": 0.07510689626074045,
+        "height": 27.448433601385517,
+        "area": 2.1946274327528004,
+        "sigma": 0.03189252495148214,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 5.458775937413701,
+        "peakWidth": 0.11063736347323437,
+        "height": 13.994844244885943,
+        "area": 1.648288807799652,
+        "sigma": 0.04697977217547107,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 0.9097959895689501,
+        "peakWidth": 0.018976635158839555,
+        "height": 19.258549762321557,
+        "area": 0.38905070854672036,
+        "sigma": 0.008058019175728048,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 1.3343674513677937,
+        "peakWidth": 0.02625697946506102,
+        "height": 20.91747417339989,
+        "area": 0.5846789097276375,
+        "sigma": 0.011149460494718056,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 4.54897994784475,
+        "peakWidth": 0.09354048934427986,
+        "height": 0.032684859000627606,
+        "area": 0.0032546903467533814,
+        "sigma": 0.039719953012433064,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 3.5178778263332737,
+        "peakWidth": 0.070884296563132,
+        "height": 15.047378700526865,
+        "area": 1.1354664525456037,
+        "sigma": 0.03009948898646794,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 2.7293879687068503,
+        "peakWidth": 0.05451306986666645,
+        "height": 48.434140772815184,
+        "area": 2.8107075607644347,
+        "sigma": 0.023147800368011232,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 4.973551409643593,
+        "peakWidth": 0.10139013270526652,
+        "height": 33.350712831485055,
+        "area": 3.5996828160922965,
+        "sigma": 0.04305313490669491,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "GRAD_10to70_tG8_F1.0_T30",
+    "type": "gradient",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 10,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 5.039999999999937,
+        "peakWidth": 0.05085984460683219,
+        "height": 40.09552542019391,
+        "area": 2.1708727159647485,
+        "sigma": 0.021596536988039147,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 4.589999999999947,
+        "peakWidth": 0.04558277858628949,
+        "height": 53.644902262642255,
+        "area": 2.6031109304533984,
+        "sigma": 0.01935574462262823,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 6.449999999999907,
+        "peakWidth": 0.043428875018696286,
+        "height": 27.448433601385517,
+        "area": 1.2689939970192032,
+        "sigma": 0.01844113588904301,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 6.909999999999897,
+        "peakWidth": 0.036120977335957066,
+        "height": 13.994844244885943,
+        "area": 0.5381346843469063,
+        "sigma": 0.015337994622487076,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 2.4699999999999913,
+        "peakWidth": 0.04100591676684555,
+        "height": 19.258549762321557,
+        "area": 0.8406854449808936,
+        "sigma": 0.017412278881887705,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 3.92999999999996,
+        "peakWidth": 0.04419219605473308,
+        "height": 20.91747417339989,
+        "area": 0.9840524513542439,
+        "sigma": 0.01876526371750874,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 6.719999999999901,
+        "peakWidth": 0.040000923643733914,
+        "height": 0.032684859000627606,
+        "area": 0.0013918103375032346,
+        "sigma": 0.016985530209653467,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 6.29999999999991,
+        "peakWidth": 0.042369394835034525,
+        "height": 15.047378700526865,
+        "area": 0.6786979455596787,
+        "sigma": 0.01799125046073653,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 5.769999999999921,
+        "peakWidth": 0.047973828669214576,
+        "height": 48.434140772815184,
+        "area": 2.4735426437950614,
+        "sigma": 0.020371052513466912,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 6.809999999999899,
+        "peakWidth": 0.03768402095344719,
+        "height": 33.350712831485055,
+        "area": 1.3379065501542615,
+        "sigma": 0.016001707411230227,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "GRAD_10to70_tG10_F1.0_T30",
+    "type": "gradient",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 10,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 5.039999999999937,
+        "peakWidth": 0.05085984460683219,
+        "height": 40.09552542019391,
+        "area": 2.1708727159647485,
+        "sigma": 0.021596536988039147,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 4.589999999999947,
+        "peakWidth": 0.04558277858628949,
+        "height": 53.644902262642255,
+        "area": 2.6031109304533984,
+        "sigma": 0.01935574462262823,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 6.449999999999907,
+        "peakWidth": 0.043428875018696286,
+        "height": 27.448433601385517,
+        "area": 1.2689939970192032,
+        "sigma": 0.01844113588904301,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 6.909999999999897,
+        "peakWidth": 0.036120977335957066,
+        "height": 13.994844244885943,
+        "area": 0.5381346843469063,
+        "sigma": 0.015337994622487076,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 2.4699999999999913,
+        "peakWidth": 0.04100591676684555,
+        "height": 19.258549762321557,
+        "area": 0.8406854449808936,
+        "sigma": 0.017412278881887705,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 3.92999999999996,
+        "peakWidth": 0.04419219605473308,
+        "height": 20.91747417339989,
+        "area": 0.9840524513542439,
+        "sigma": 0.01876526371750874,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 6.719999999999901,
+        "peakWidth": 0.040000923643733914,
+        "height": 0.032684859000627606,
+        "area": 0.0013918103375032346,
+        "sigma": 0.016985530209653467,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 6.29999999999991,
+        "peakWidth": 0.042369394835034525,
+        "height": 15.047378700526865,
+        "area": 0.6786979455596787,
+        "sigma": 0.01799125046073653,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 5.769999999999921,
+        "peakWidth": 0.047973828669214576,
+        "height": 48.434140772815184,
+        "area": 2.4735426437950614,
+        "sigma": 0.020371052513466912,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 6.809999999999899,
+        "peakWidth": 0.03768402095344719,
+        "height": 33.350712831485055,
+        "area": 1.3379065501542615,
+        "sigma": 0.016001707411230227,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "GRAD_10to70_tG12_F1.0_T30",
+    "type": "gradient",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 10,
+    "fault": "none",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 5.039999999999937,
+        "peakWidth": 0.05085984460683219,
+        "height": 40.09552542019391,
+        "area": 2.1708727159647485,
+        "sigma": 0.021596536988039147,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 4.589999999999947,
+        "peakWidth": 0.04558277858628949,
+        "height": 53.644902262642255,
+        "area": 2.6031109304533984,
+        "sigma": 0.01935574462262823,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 6.449999999999907,
+        "peakWidth": 0.043428875018696286,
+        "height": 27.448433601385517,
+        "area": 1.2689939970192032,
+        "sigma": 0.01844113588904301,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 6.909999999999897,
+        "peakWidth": 0.036120977335957066,
+        "height": 13.994844244885943,
+        "area": 0.5381346843469063,
+        "sigma": 0.015337994622487076,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 2.4699999999999913,
+        "peakWidth": 0.04100591676684555,
+        "height": 19.258549762321557,
+        "area": 0.8406854449808936,
+        "sigma": 0.017412278881887705,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 3.92999999999996,
+        "peakWidth": 0.04419219605473308,
+        "height": 20.91747417339989,
+        "area": 0.9840524513542439,
+        "sigma": 0.01876526371750874,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 6.719999999999901,
+        "peakWidth": 0.040000923643733914,
+        "height": 0.032684859000627606,
+        "area": 0.0013918103375032346,
+        "sigma": 0.016985530209653467,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 6.29999999999991,
+        "peakWidth": 0.042369394835034525,
+        "height": 15.047378700526865,
+        "area": 0.6786979455596787,
+        "sigma": 0.01799125046073653,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 5.769999999999921,
+        "peakWidth": 0.047973828669214576,
+        "height": 48.434140772815184,
+        "area": 2.4735426437950614,
+        "sigma": 0.020371052513466912,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 6.809999999999899,
+        "peakWidth": 0.03768402095344719,
+        "height": 33.350712831485055,
+        "area": 1.3379065501542615,
+        "sigma": 0.016001707411230227,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "FAULT_AIR_BUBBLE_ISO50",
+    "type": "fault",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "air_bubble",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 3.8500000000000005,
+        "peakWidth": 0.10865814341364477,
+        "height": 40.09552542019391,
+        "area": 4.637902469571824,
+        "sigma": 0.046139339029148525,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 3.08,
+        "peakWidth": 0.0869265147309158,
+        "height": 53.644902262642255,
+        "area": 4.964141451226191,
+        "sigma": 0.03691147122331881,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 6.820000000000001,
+        "peakWidth": 0.1953673418577333,
+        "height": 27.448433601385517,
+        "area": 5.708643936190647,
+        "sigma": 0.08295853157440905,
+        "asymmetry": 1.26
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 9.9,
+        "peakWidth": 0.28778885412699623,
+        "height": 13.994844244885943,
+        "area": 4.287513118312626,
+        "sigma": 0.12220333508577334,
+        "asymmetry": 1.32
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.6500000000000001,
+        "peakWidth": 0.049361842293627195,
+        "height": 19.258549762321557,
+        "area": 1.0119949906167398,
+        "sigma": 0.02096044258752747,
+        "asymmetry": 1.44
+      },
+      {
+        "name": "Atenolol",
+        "rt": 2.4200000000000004,
+        "peakWidth": 0.06829940443143384,
+        "height": 20.91747417339989,
+        "area": 1.5208612007773037,
+        "sigma": 0.029001870246893352,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 8.25,
+        "peakWidth": 0.24331662828698306,
+        "height": 0.032684859000627606,
+        "area": 0.008466069472605893,
+        "sigma": 0.10331916275455756,
+        "asymmetry": 1.38
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 6.38,
+        "peakWidth": 0.1843835558178054,
+        "height": 15.047378700526865,
+        "area": 2.953564501352192,
+        "sigma": 0.07829450353197683,
+        "asymmetry": 1.296
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 4.95,
+        "peakWidth": 0.1417988771548064,
+        "height": 48.434140772815184,
+        "area": 7.311185686327115,
+        "sigma": 0.06021183743303882,
+        "asymmetry": 1.26
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 9.02,
+        "peakWidth": 0.2637350456935985,
+        "height": 33.350712831485055,
+        "area": 9.363460591814084,
+        "sigma": 0.11198940369154926,
+        "asymmetry": 1.344
+      }
+    ]
+  },
+  {
+    "run_id": "FAULT_AIR_BUBBLE_GRAD10",
+    "type": "fault",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 10,
+    "fault": "air_bubble",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 5.543999999999931,
+        "peakWidth": 0.06343224208607222,
+        "height": 40.09552542019391,
+        "area": 2.707505788144442,
+        "sigma": 0.026935134643767396,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 5.048999999999942,
+        "peakWidth": 0.05677916578714824,
+        "height": 53.644902262642255,
+        "area": 3.242506746330897,
+        "sigma": 0.0241100491665173,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 7.0949999999998985,
+        "peakWidth": 0.04906647262282664,
+        "height": 27.448433601385517,
+        "area": 1.4337248935522446,
+        "sigma": 0.020835020222007065,
+        "asymmetry": 1.26
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 7.600999999999887,
+        "peakWidth": 0.03832105939369539,
+        "height": 13.994844244885943,
+        "area": 0.5709117726484384,
+        "sigma": 0.016272212056770867,
+        "asymmetry": 1.32
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 2.7169999999999908,
+        "peakWidth": 0.056187567857122395,
+        "height": 19.258549762321557,
+        "area": 1.151933043100522,
+        "sigma": 0.023858839854404415,
+        "asymmetry": 1.44
+      },
+      {
+        "name": "Atenolol",
+        "rt": 4.322999999999957,
+        "peakWidth": 0.05654849533391438,
+        "height": 20.91747417339989,
+        "area": 1.2591971076706108,
+        "sigma": 0.02401209992947532,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 7.391999999999892,
+        "peakWidth": 0.04361350466180205,
+        "height": 0.032684859000627606,
+        "area": 0.001517508125154266,
+        "sigma": 0.01851953488823866,
+        "asymmetry": 1.38
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 6.929999999999902,
+        "peakWidth": 0.047830119773639,
+        "height": 15.047378700526865,
+        "area": 0.7661710570243904,
+        "sigma": 0.020310029627872185,
+        "asymmetry": 1.296
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 6.346999999999914,
+        "peakWidth": 0.0570819812443553,
+        "height": 48.434140772815184,
+        "area": 2.9431612759902395,
+        "sigma": 0.02423863322477932,
+        "asymmetry": 1.26
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 7.4909999999998895,
+        "peakWidth": 0.0404692105738772,
+        "height": 33.350712831485055,
+        "area": 1.4367899320841855,
+        "sigma": 0.017184378163005182,
+        "asymmetry": 1.344
+      }
+    ]
+  },
+  {
+    "run_id": "FAULT_COLUMN_DEGRADATION_ISO50",
+    "type": "fault",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "column_degradation",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 2.8000000000000003,
+        "peakWidth": 0.1947970440965462,
+        "height": 40.09552542019391,
+        "area": 8.31460637461262,
+        "sigma": 0.08271636691997715,
+        "asymmetry": 2.5
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 2.2399999999999998,
+        "peakWidth": 0.15583763527723693,
+        "height": 53.644902262642255,
+        "area": 8.899471781832137,
+        "sigma": 0.0661730935359817,
+        "asymmetry": 2.5
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 4.960000000000001,
+        "peakWidth": 0.3502450852855902,
+        "height": 27.448433601385517,
+        "area": 10.234179690852034,
+        "sigma": 0.14872402772211898,
+        "asymmetry": 2.625
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 7.2,
+        "peakWidth": 0.515933885364281,
+        "height": 13.994844244885943,
+        "area": 7.686445357279917,
+        "sigma": 0.21908020609948237,
+        "asymmetry": 2.75
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.2000000000000002,
+        "peakWidth": 0.08849351431814528,
+        "height": 19.258549762321557,
+        "area": 1.8142554862381153,
+        "sigma": 0.037576863829361054,
+        "asymmetry": 3
+      },
+      {
+        "name": "Atenolol",
+        "rt": 1.7600000000000002,
+        "peakWidth": 0.12244385628925762,
+        "height": 20.91747417339989,
+        "area": 2.7265261220664287,
+        "sigma": 0.051993144921128505,
+        "asymmetry": 2.5
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 6,
+        "peakWidth": 0.43620623803048014,
+        "height": 0.032684859000627606,
+        "area": 0.01517755831793956,
+        "sigma": 0.18522557878152024,
+        "asymmetry": 2.875
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 4.64,
+        "peakWidth": 0.3305538869423449,
+        "height": 15.047378700526865,
+        "area": 5.295007040766786,
+        "sigma": 0.1403625846888938,
+        "asymmetry": 2.7
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 3.6,
+        "peakWidth": 0.25421014254599283,
+        "height": 48.434140772815184,
+        "area": 13.10713873617186,
+        "sigma": 0.1079448588305702,
+        "asymmetry": 2.625
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 6.56,
+        "peakWidth": 0.47281138543113693,
+        "height": 33.350712831485055,
+        "area": 16.786357547600385,
+        "sigma": 0.20076916578816856,
+        "asymmetry": 2.8000000000000003
+      }
+    ]
+  },
+  {
+    "run_id": "FAULT_COLUMN_DEGRADATION_GRAD10",
+    "type": "fault",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 10,
+    "fault": "column_degradation",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 4.031999999999949,
+        "peakWidth": 0.2087111186748709,
+        "height": 40.09552542019391,
+        "area": 8.908506829942091,
+        "sigma": 0.08862467884283266,
+        "asymmetry": 2.5
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 3.6719999999999575,
+        "peakWidth": 0.2087111186748709,
+        "height": 53.644902262642255,
+        "area": 11.918935422096615,
+        "sigma": 0.08862467884283266,
+        "asymmetry": 2.5
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 5.1599999999999255,
+        "peakWidth": 0.211841785454994,
+        "height": 27.448433601385517,
+        "area": 6.190028038821792,
+        "sigma": 0.08995404902547516,
+        "asymmetry": 2.625
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 5.527999999999918,
+        "peakWidth": 0.21497245223511705,
+        "height": 13.994844244885943,
+        "area": 3.2026855655332978,
+        "sigma": 0.09128341920811764,
+        "asymmetry": 2.75
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.975999999999993,
+        "peakWidth": 0.15918827904291272,
+        "height": 19.258549762321557,
+        "area": 3.2636087607517394,
+        "sigma": 0.06759587220505849,
+        "asymmetry": 3
+      },
+      {
+        "name": "Atenolol",
+        "rt": 3.143999999999968,
+        "peakWidth": 0.1985198235547421,
+        "height": 20.91747417339989,
+        "area": 4.420552415397177,
+        "sigma": 0.08429716499139792,
+        "asymmetry": 2.5
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 5.375999999999921,
+        "peakWidth": 0.21810311901524007,
+        "height": 0.032684859000627606,
+        "area": 0.00758877915896978,
+        "sigma": 0.09261278939076012,
+        "asymmetry": 2.875
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 5.039999999999928,
+        "peakWidth": 0.2137201855230678,
+        "height": 15.047378700526865,
+        "area": 3.4234959315302502,
+        "sigma": 0.09075167113506064,
+        "asymmetry": 2.7
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 4.6159999999999375,
+        "peakWidth": 0.211841785454994,
+        "height": 48.434140772815184,
+        "area": 10.922615613476548,
+        "sigma": 0.08995404902547516,
+        "asymmetry": 2.625
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 5.44799999999992,
+        "peakWidth": 0.21622471894716627,
+        "height": 33.350712831485055,
+        "area": 7.67668790286603,
+        "sigma": 0.09181516728117464,
+        "asymmetry": 2.8000000000000003
+      }
+    ]
+  },
+  {
+    "run_id": "FAULT_LEAK_ISO50",
+    "type": "fault",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "leak",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 4.55,
+        "peakWidth": 0.11011041842038502,
+        "height": 40.09552542019391,
+        "area": 4.699890550986181,
+        "sigma": 0.04675601631438854,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 3.6399999999999997,
+        "peakWidth": 0.088088334736308,
+        "height": 53.644902262642255,
+        "area": 5.030489893533865,
+        "sigma": 0.03740481305151083,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 8.06,
+        "peakWidth": 0.19797853231985227,
+        "height": 27.448433601385517,
+        "area": 5.784943057917293,
+        "sigma": 0.08406731733327061,
+        "asymmetry": 1.1550000000000002
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 11.700000000000001,
+        "peakWidth": 0.2916353082162769,
+        "height": 13.994844244885943,
+        "area": 4.344818056048334,
+        "sigma": 0.1238366489241091,
+        "asymmetry": 1.2100000000000002
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.9500000000000002,
+        "peakWidth": 0.050021590082403485,
+        "height": 19.258549762321557,
+        "area": 1.0255208524219075,
+        "sigma": 0.021240590268536513,
+        "asymmetry": 1.32
+      },
+      {
+        "name": "Atenolol",
+        "rt": 2.8600000000000003,
+        "peakWidth": 0.06921226300709916,
+        "height": 20.91747417339989,
+        "area": 1.5411883354146194,
+        "sigma": 0.029389495969044232,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 9.75,
+        "peakWidth": 0.2465686869627907,
+        "height": 0.032684859000627606,
+        "area": 0.008579223081844242,
+        "sigma": 0.10470007938972004,
+        "asymmetry": 1.265
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 7.54,
+        "peakWidth": 0.18684794202352875,
+        "height": 15.047378700526865,
+        "area": 2.9930404924868825,
+        "sigma": 0.07934095202697612,
+        "asymmetry": 1.1880000000000002
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 5.8500000000000005,
+        "peakWidth": 0.14369409603860248,
+        "height": 48.434140772815184,
+        "area": 7.408903647524644,
+        "sigma": 0.06101660129027706,
+        "asymmetry": 1.1550000000000002
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 10.66,
+        "peakWidth": 0.2672600075899585,
+        "height": 33.350712831485055,
+        "area": 9.488608319972132,
+        "sigma": 0.11348620279828386,
+        "asymmetry": 1.2320000000000002
+      }
+    ]
+  },
+  {
+    "run_id": "FAULT_LEAK_GRAD10",
+    "type": "fault",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 10,
+    "fault": "leak",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 6.551999999999918,
+        "peakWidth": 0.04181851549898183,
+        "height": 40.09552542019391,
+        "area": 1.7849577603053361,
+        "sigma": 0.017757331422072965,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 5.96699999999993,
+        "peakWidth": 0.037442108264271565,
+        "height": 53.644902262642255,
+        "area": 2.138218956912401,
+        "sigma": 0.015898984400964572,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 8.384999999999879,
+        "peakWidth": 0.031229789877630254,
+        "height": 27.448433601385517,
+        "area": 0.912536091847252,
+        "sigma": 0.013261057272879089,
+        "asymmetry": 1.1550000000000002
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 8.982999999999867,
+        "peakWidth": 0.02819952444824564,
+        "height": 13.994844244885943,
+        "area": 0.4201199221866916,
+        "sigma": 0.011974320360189231,
+        "asymmetry": 1.2100000000000002
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 3.2109999999999888,
+        "peakWidth": 0.04407154797317702,
+        "height": 19.258549762321557,
+        "area": 0.9035356807040918,
+        "sigma": 0.018714033109629307,
+        "asymmetry": 1.32
+      },
+      {
+        "name": "Atenolol",
+        "rt": 5.1089999999999485,
+        "peakWidth": 0.03909269807263411,
+        "height": 20.91747417339989,
+        "area": 0.8704990655088022,
+        "sigma": 0.01659987179305058,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 8.735999999999871,
+        "peakWidth": 0.030041299101594383,
+        "height": 0.032684859000627606,
+        "area": 0.0010452706295989605,
+        "sigma": 0.012756390276685512,
+        "asymmetry": 1.265
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 8.189999999999884,
+        "peakWidth": 0.028798623627966067,
+        "height": 15.047378700526865,
+        "area": 0.4613133316477085,
+        "sigma": 0.012228714916333787,
+        "asymmetry": 1.1880000000000002
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 7.500999999999898,
+        "peakWidth": 0.03486278517333412,
+        "height": 48.434140772815184,
+        "area": 1.7975339513197115,
+        "sigma": 0.014803730434536781,
+        "asymmetry": 1.1550000000000002
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 8.85299999999987,
+        "peakWidth": 0.02870219138103086,
+        "height": 33.350712831485055,
+        "area": 1.0190220916154547,
+        "sigma": 0.012187767040777436,
+        "asymmetry": 1.2320000000000002
+      }
+    ]
+  },
+  {
+    "run_id": "FAULT_CONTAMINATION_ISO50",
+    "type": "fault",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "contamination",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 3.5,
+        "peakWidth": 0.10010038038216819,
+        "height": 40.09552542019391,
+        "area": 4.272627773623801,
+        "sigma": 0.042505469376716856,
+        "asymmetry": 1.3
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 2.8,
+        "peakWidth": 0.08008030430573454,
+        "height": 53.644902262642255,
+        "area": 4.573172630485331,
+        "sigma": 0.03400437550137348,
+        "asymmetry": 1.3
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 6.2,
+        "peakWidth": 0.17998048392713847,
+        "height": 27.448433601385517,
+        "area": 5.259039143561176,
+        "sigma": 0.07642483393933693,
+        "asymmetry": 1.3650000000000002
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 9,
+        "peakWidth": 0.2651230074693426,
+        "height": 13.994844244885943,
+        "area": 3.949834596407576,
+        "sigma": 0.11257877174919007,
+        "asymmetry": 1.4300000000000002
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.5,
+        "peakWidth": 0.045474172802184985,
+        "height": 19.258549762321557,
+        "area": 0.9322916840199159,
+        "sigma": 0.019309627516851374,
+        "asymmetry": 1.56
+      },
+      {
+        "name": "Atenolol",
+        "rt": 2.2,
+        "peakWidth": 0.06292023909736287,
+        "height": 20.91747417339989,
+        "area": 1.401080304922381,
+        "sigma": 0.026717723608222027,
+        "asymmetry": 1.3
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 7.5,
+        "peakWidth": 0.22415335178435516,
+        "height": 0.032684859000627606,
+        "area": 0.007799293710767492,
+        "sigma": 0.09518189035429094,
+        "asymmetry": 1.4949999999999999
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 5.8,
+        "peakWidth": 0.16986176547593526,
+        "height": 15.047378700526865,
+        "area": 2.720945902260803,
+        "sigma": 0.07212813820634194,
+        "asymmetry": 1.4040000000000001
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 4.5,
+        "peakWidth": 0.1306309963987295,
+        "height": 48.434140772815184,
+        "area": 6.73536695229513,
+        "sigma": 0.0554696375366155,
+        "asymmetry": 1.3650000000000002
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 8.2,
+        "peakWidth": 0.24296364326359862,
+        "height": 33.350712831485055,
+        "area": 8.626007563611028,
+        "sigma": 0.10316927527116715,
+        "asymmetry": 1.4560000000000002
+      }
+    ]
+  },
+  {
+    "run_id": "FAULT_CONTAMINATION_GRAD10",
+    "type": "fault",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 10,
+    "fault": "contamination",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 5.039999999999937,
+        "peakWidth": 0.07392194541286935,
+        "height": 40.09552542019391,
+        "area": 3.1552423262079015,
+        "sigma": 0.031389361109498665,
+        "asymmetry": 1.3
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 4.589999999999947,
+        "peakWidth": 0.06625202448947229,
+        "height": 53.644902262642255,
+        "area": 3.783476445753242,
+        "sigma": 0.028132494475359784,
+        "asymmetry": 1.3
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 6.449999999999907,
+        "peakWidth": 0.06312144587329578,
+        "height": 27.448433601385517,
+        "area": 1.8444119462431672,
+        "sigma": 0.026803161729637273,
+        "asymmetry": 1.3650000000000002
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 6.909999999999897,
+        "peakWidth": 0.052499824479004024,
+        "height": 13.994844244885943,
+        "area": 0.7821487279125486,
+        "sigma": 0.022292919099364768,
+        "asymmetry": 1.4300000000000002
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 2.4699999999999913,
+        "peakWidth": 0.05959981129073729,
+        "height": 19.258549762321557,
+        "area": 1.2218893717367598,
+        "sigma": 0.02530777549500522,
+        "asymmetry": 1.56
+      },
+      {
+        "name": "Atenolol",
+        "rt": 3.92999999999996,
+        "peakWidth": 0.06423089039469779,
+        "height": 20.91747417339989,
+        "area": 1.4302653135247063,
+        "sigma": 0.027274263437238974,
+        "asymmetry": 1.3
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 6.719999999999901,
+        "peakWidth": 0.05813910987960895,
+        "height": 0.032684859000627606,
+        "area": 0.0020229186421887022,
+        "sigma": 0.024687520118729916,
+        "asymmetry": 1.4949999999999999
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 6.29999999999991,
+        "peakWidth": 0.061581550560832705,
+        "height": 15.047378700526865,
+        "area": 0.9864495825995807,
+        "sigma": 0.026149278369780343,
+        "asymmetry": 1.4040000000000001
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 5.769999999999921,
+        "peakWidth": 0.06972728232943985,
+        "height": 48.434140772815184,
+        "area": 3.5951561729006993,
+        "sigma": 0.029608187825664482,
+        "asymmetry": 1.3650000000000002
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 6.809999999999899,
+        "peakWidth": 0.05477162113633233,
+        "height": 33.350712831485055,
+        "area": 1.9445724958966544,
+        "sigma": 0.023257588592922433,
+        "asymmetry": 1.4560000000000002
+      }
+    ]
+  },
+  {
+    "run_id": "FAULT_LAMP_FAILURE_ISO50",
+    "type": "fault",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 50,
+    "fault": "lamp_failure",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 3.5,
+        "peakWidth": 0.06887115541788136,
+        "height": 20.047762710096954,
+        "area": 1.4698286375963692,
+        "sigma": 0.029244651982115226,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 2.8,
+        "peakWidth": 0.05509692433430509,
+        "height": 26.822451131321127,
+        "area": 1.5732192114779584,
+        "sigma": 0.023395721585692184,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 6.2,
+        "peakWidth": 0.12383033744135072,
+        "height": 13.724216800692759,
+        "area": 1.8091644648207788,
+        "sigma": 0.05258188426384319,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 9,
+        "peakWidth": 0.1824101744925029,
+        "height": 6.997422122442972,
+        "area": 1.3587844088381205,
+        "sigma": 0.07745654967834519,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 1.5,
+        "peakWidth": 0.03128718203269468,
+        "height": 9.629274881160779,
+        "area": 0.32071808928096707,
+        "sigma": 0.013285427614732347,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 2.2,
+        "peakWidth": 0.043290440548382575,
+        "height": 10.458737086699944,
+        "area": 0.4819862774988579,
+        "sigma": 0.01838235267447243,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 7.5,
+        "peakWidth": 0.1542221944536129,
+        "height": 0.016342429500313803,
+        "area": 0.0026830386021173378,
+        "sigma": 0.06548713140280803,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 5.8,
+        "peakWidth": 0.11686844750225171,
+        "height": 7.5236893502634326,
+        "area": 0.9360338462391773,
+        "sigma": 0.04962566772919393,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 4.5,
+        "peakWidth": 0.08987685782033518,
+        "height": 24.217070386407592,
+        "area": 2.3170366705749985,
+        "sigma": 0.03816427083666037,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 8.2,
+        "peakWidth": 0.16716406843028161,
+        "height": 16.675356415742527,
+        "area": 2.9674368133325535,
+        "sigma": 0.07098261929099008,
+        "asymmetry": 1.12
+      }
+    ]
+  },
+  {
+    "run_id": "FAULT_LAMP_FAILURE_GRAD10",
+    "type": "fault",
+    "flowRate": 1,
+    "columnTemp": 30,
+    "columnType": "C18",
+    "percentB": 10,
+    "fault": "lamp_failure",
+    "pressure_bar": 0,
+    "peaks": [
+      {
+        "name": "Caffeine",
+        "rt": 5.039999999999937,
+        "peakWidth": 0.05085984460683219,
+        "height": 20.047762710096954,
+        "area": 1.0854363579823743,
+        "sigma": 0.021596536988039147,
+        "asymmetry": 1
+      },
+      {
+        "name": "Paracetamol (Acetaminophen)",
+        "rt": 4.589999999999947,
+        "peakWidth": 0.04558277858628949,
+        "height": 26.822451131321127,
+        "area": 1.3015554652266992,
+        "sigma": 0.01935574462262823,
+        "asymmetry": 1
+      },
+      {
+        "name": "Aspirin (Acetylsalicylic Acid)",
+        "rt": 6.449999999999907,
+        "peakWidth": 0.043428875018696286,
+        "height": 13.724216800692759,
+        "area": 0.6344969985096016,
+        "sigma": 0.01844113588904301,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Ibuprofen",
+        "rt": 6.909999999999897,
+        "peakWidth": 0.036120977335957066,
+        "height": 6.997422122442972,
+        "area": 0.26906734217345313,
+        "sigma": 0.015337994622487076,
+        "asymmetry": 1.1
+      },
+      {
+        "name": "Metformin HCl",
+        "rt": 2.4699999999999913,
+        "peakWidth": 0.04100591676684555,
+        "height": 9.629274881160779,
+        "area": 0.4203427224904468,
+        "sigma": 0.017412278881887705,
+        "asymmetry": 1.2
+      },
+      {
+        "name": "Atenolol",
+        "rt": 3.92999999999996,
+        "peakWidth": 0.04419219605473308,
+        "height": 10.458737086699944,
+        "area": 0.49202622567712195,
+        "sigma": 0.01876526371750874,
+        "asymmetry": 1
+      },
+      {
+        "name": "Amlodipine Besylate",
+        "rt": 6.719999999999901,
+        "peakWidth": 0.040000923643733914,
+        "height": 0.016342429500313803,
+        "area": 0.0006959051687516173,
+        "sigma": 0.016985530209653467,
+        "asymmetry": 1.15
+      },
+      {
+        "name": "Omeprazole",
+        "rt": 6.29999999999991,
+        "peakWidth": 0.042369394835034525,
+        "height": 7.5236893502634326,
+        "area": 0.33934897277983933,
+        "sigma": 0.01799125046073653,
+        "asymmetry": 1.08
+      },
+      {
+        "name": "Ciprofloxacin HCl",
+        "rt": 5.769999999999921,
+        "peakWidth": 0.047973828669214576,
+        "height": 24.217070386407592,
+        "area": 1.2367713218975307,
+        "sigma": 0.020371052513466912,
+        "asymmetry": 1.05
+      },
+      {
+        "name": "Losartan Potassium",
+        "rt": 6.809999999999899,
+        "peakWidth": 0.03768402095344719,
+        "height": 16.675356415742527,
+        "area": 0.6689532750771308,
+        "sigma": 0.016001707411230227,
+        "asymmetry": 1.12
+      }
+    ]
+  }
+]

@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimuPharma — Virtual Pharmaceutical Laboratory</title>
+    <meta name="description"
+        content="Bridge theory and practice with interactive, scientifically accurate simulations of advanced analytical instruments.">
+
+    <!-- Preconnect for Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="simupharma-logo.png">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=402">
+</head>
+
+<body>
+
+    <!-- ============================================================
+         PRELOADER — Clean molecule-spin + progress bar
+         ============================================================ -->
+    <div id="preloader" aria-hidden="true">
+        <div class="preloader-inner">
+            <!-- Animated molecule made of 3 orbiting atoms -->
+            <div class="preloader-molecule">
+                <div class="molecule-nucleus"></div>
+                <div class="molecule-orbit orbit-1">
+                    <div class="molecule-electron"></div>
+                </div>
+                <div class="molecule-orbit orbit-2">
+                    <div class="molecule-electron"></div>
+                </div>
+                <div class="molecule-orbit orbit-3">
+                    <div class="molecule-electron"></div>
+                </div>
+            </div>
+            <div class="preloader-brand">SimuPharma</div>
+            <div class="preloader-bar">
+                <div class="preloader-bar-fill"></div>
+            </div>
+            <div class="preloader-status">Initializing virtual laboratory…</div>
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+         SCROLL PROGRESS — Thin accent bar at very top
+         ============================================================ -->
+    <div id="scroll-progress" aria-hidden="true">
+        <div class="progress-fill"></div>
+    </div>
+
+
+    <!-- ============================================================
+         3D PARTICLE CANVAS — Subtle floating molecules (Three.js)
+         Sits behind all content, pointer-events:none
+         ============================================================ -->
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+
+    <!-- ============================================================
+         SIDE DOT NAV — Fixed right-side section indicators
+         ============================================================ -->
+    <nav id="dot-nav" aria-label="Section Navigation">
+        <ul>
+            <li><a href="#hero" class="dot active" data-tooltip="Home"><span></span></a></li>
+            <li><a href="#about" class="dot" data-tooltip="About"><span></span></a></li>
+            <li><a href="#how-it-works" class="dot" data-tooltip="Process"><span></span></a></li>
+            <li><a href="#features" class="dot" data-tooltip="Features"><span></span></a></li>
+            <li><a href="#instruments" class="dot" data-tooltip="Instruments"><span></span></a></li>
+            <li><a href="#quiz" class="dot" data-tooltip="Quiz"><span></span></a></li>
+            <li><a href="#dashboard-cert" class="dot" data-tooltip="Dashboard"><span></span></a></li>
+            <li><a href="#contact" class="dot" data-tooltip="Contact"><span></span></a></li>
+        </ul>
+    </nav>
+
+
+    <!-- ============================================================
+         HEADER — Glassmorphism nav, transparent → solid on scroll
+         ============================================================ -->
+    <header id="main-header">
+        <div class="header-inner container">
+            <!-- Logo -->
+            <a href="#hero" class="logo" aria-label="SimuPharma Home">
+                <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="17" stroke="url(#hLogoG)" stroke-width="2" />
+                    <path d="M14 12V28M26 12V28M14 20H26" stroke="url(#hLogoG)" stroke-width="2.5"
+                        stroke-linecap="round" />
+                    <defs>
+                        <linearGradient id="hLogoG" x1="0" y1="0" x2="40" y2="40">
+                            <stop stop-color="#2563EB" />
+                            <stop offset="1" stop-color="#7C3AED" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text">SimuPharma</span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav id="main-nav">
+                <ul class="nav-list">
+                    <li><a href="#hero" class="nav-link active">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#instruments" class="nav-link">Instruments</a></li>
+                    <li><a href="#quiz" class="nav-link">Quiz</a></li>
+                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="curriculum.html" class="nav-link">Curriculum</a></li>
+                    <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                    <li><a href="neurolab_agent.html" class="nav-link" style="color:#818cf8;font-weight:600;">🧠 NeuroLab AI</a></li>
+                </ul>
+                <!-- Active link underline (animated via JS) -->
+                <div class="nav-indicator"></div>
+            </nav>
+
+            <!-- CTA button in header -->
+            <a href="#instruments" class="btn btn-primary btn-sm header-cta">
+                Get Started <i class="fas fa-arrow-right"></i>
+            </a>
+
+            <!-- Mobile hamburger -->
+            <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+
+    <!-- ============================================================
+         MOBILE MENU — Full-screen overlay
+         ============================================================ -->
+    <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-bg"></div>
+        <nav class="mobile-menu-inner">
+            <ul class="mobile-nav-list">
+                <li style="--i:0"><a href="#hero">Home</a></li>
+                <li style="--i:1"><a href="#about">About</a></li>
+                <li style="--i:2"><a href="#how-it-works">How It Works</a></li>
+                <li style="--i:3"><a href="#features">Features</a></li>
+                <li style="--i:4"><a href="#instruments">Instruments</a></li>
+                <li style="--i:5"><a href="#quiz">Quiz</a></li>
+                <li style="--i:6"><a href="dashboard.html">Dashboard</a></li>
+                <li style="--i:7"><a href="curriculum.html">Curriculum</a></li>
+                <li style="--i:8"><a href="pricing.html">Pricing</a></li>
+                <li style="--i:9"><a href="#contact">Contact</a></li>
+                <li style="--i:10"><a href="neurolab_agent.html" style="color:#818cf8;font-weight:700;">🧠 NeuroLab AI</a></li>
+            </ul>
+        </nav>
+    </div>
+
+
+    <!-- ============================================================
+         MAIN CONTENT — All sections in scroll-story order
+         ============================================================ -->
+    <main id="main-content">
+
+        <!-- =====================================================
+             SECTION 1 — HERO
+             Full viewport, interactive lab experience
+             ===================================================== -->
+        <section id="hero" class="section section-hero">
+
+            <!-- Interactive molecule canvas (behind content) -->
+            <canvas id="hero-molecule-canvas" aria-hidden="true"></canvas>
+
+            <div class="container hero-grid">
+
+                <!-- Left: Text content -->
+                <div class="hero-content">
+                    <div class="hero-badge" data-anim="fade-up" data-delay="0.15">
+                        <span class="badge-pulse"></span>
+                        <span class="badge-text">🏆 Award-Winning Research Platform</span>
+                    </div>
+
+                    <h1 class="hero-title" data-anim="split-lines">
+                        The Future of
+                        <span class="text-gradient">Pharmaceutical</span>
+                        Education is Here
+                    </h1>
+
+                    <p class="hero-desc" data-anim="fade-up" data-delay="0.35">
+                        Bridge the gap between theory and practice with interactive,
+                        scientifically accurate simulations of advanced analytical
+                        instruments. Built for students, educators, and researchers.
+                    </p>
+
+                    <!-- Typewriter tagline -->
+                    <div class="hero-typewriter" data-anim="fade-up" data-delay="0.42">
+                        <span class="tw-prefix">Simulate:</span>
+                        <span class="tw-text" id="hero-typewriter"></span>
+                        <span class="tw-cursor">|</span>
+                    </div>
+
+                    <div class="hero-actions" data-anim="fade-up" data-delay="0.5">
+                        <a href="#instruments" class="btn btn-primary btn-lg">
+                            <span>Explore Instruments</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="#how-it-works" class="btn btn-ghost btn-lg">
+                            <i class="fas fa-play-circle"></i>
+                            <span>See How It Works</span>
+                        </a>
+                    </div>
+
+                    <div class="hero-metrics" data-anim="fade-up" data-delay="0.65">
+                        <div class="metric">
+                            <span class="metric-number" data-count="15">0</span>
+                            <span class="metric-label">Instruments</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Lab Visual -->
+                <div class="hero-visual" data-anim="scale-in" data-delay="0.2">
+                    <div class="hero-visual-wrapper">
+                        <!-- Live instrument mockup -->
+                        <div class="mockup-browser" id="live-mockup">
+                            <div class="browser-bar">
+                                <div class="browser-dots">
+                                    <span class="bdot red"></span>
+                                    <span class="bdot yellow"></span>
+                                    <span class="bdot green"></span>
+                                </div>
+                                <div class="browser-url">
+                                    <i class="fas fa-lock"></i>
+                                    <span id="mockup-url">simupharma.com/hplc</span>
+                                </div>
+                            </div>
+                            <div class="browser-body">
+                                <div class="browser-sidebar">
+                                    <div class="sb-item active" data-instr="0"></div>
+                                    <div class="sb-item" data-instr="1"></div>
+                                    <div class="sb-item" data-instr="2"></div>
+                                    <div class="sb-item" data-instr="3"></div>
+                                </div>
+                                <div class="browser-main">
+                                    <!-- Live animated spectrum -->
+                                    <canvas id="live-spectrum-canvas" width="320" height="120"></canvas>
+                                    <!-- Instrument label -->
+                                    <div class="mockup-instr-label" id="mockup-instr-label">
+                                        <i class="fas fa-vial"></i> HPLC Chromatogram
+                                    </div>
+                                    <!-- Live readouts -->
+                                    <div class="readouts" id="live-readouts">
+                                        <div class="ro"><span class="ro-label">λ</span><span class="ro-value"
+                                                id="ro-lambda">254 nm</span></div>
+                                        <div class="ro"><span class="ro-label">Abs</span><span class="ro-value"
+                                                id="ro-abs">0.847</span></div>
+                                        <div class="ro"><span class="ro-label">Flow</span><span class="ro-value"
+                                                id="ro-flow">1.0 mL/min</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Live status bar -->
+                            <div class="mockup-status-bar">
+                                <div class="status-indicator">
+                                    <span class="status-dot"></span>
+                                    <span id="status-text">Analysis Running</span>
+                                </div>
+                                <div class="status-progress">
+                                    <div class="status-progress-fill" id="status-progress-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating info cards with live updates -->
+                        <div class="float-card fc-1" data-anim="float" data-delay="0.9">
+                            <div class="fc-icon-wrap"><i class="fas fa-flask"></i></div>
+                            <div>
+                                <strong id="fc1-title">HPLC Analysis</strong>
+                                <small id="fc1-sub">Running…</small>
+                            </div>
+                            <div class="fc-progress-ring">
+                                <svg viewBox="0 0 36 36">
+                                    <circle cx="18" cy="18" r="15.9" class="fc-ring-bg" />
+                                    <circle cx="18" cy="18" r="15.9" class="fc-ring-fill" id="fc1-ring" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="float-card fc-2" data-anim="float" data-delay="1.05">
+                            <div class="fc-icon-wrap purple"><i class="fas fa-chart-area"></i></div>
+                            <div>
+                                <strong id="fc2-title">Peak Detected</strong>
+                                <small id="fc2-sub">RT 4.2 min</small>
+                            </div>
+                        </div>
+                        <div class="float-card fc-3" data-anim="float" data-delay="1.2">
+                            <div class="fc-icon-wrap green"><i class="fas fa-check-circle"></i></div>
+                            <div>
+                                <strong id="fc3-title">98.7% Purity</strong>
+                                <small id="fc3-sub">Validated ✓</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll-down indicator -->
+            <div class="scroll-hint" data-anim="fade-up" data-delay="1.6">
+                <div class="scroll-mouse"><span class="scroll-dot"></span></div>
+                <p>Scroll to explore</p>
+            </div>
+
+            <!-- BG decoration -->
+            <div class="hero-bg" aria-hidden="true">
+                <div class="gradient-orb orb-1"></div>
+                <div class="gradient-orb orb-2"></div>
+                <div class="gradient-orb orb-3"></div>
+                <div class="dot-grid"></div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 2 — ABOUT
+             Split: stacked visuals left / text right
+             ===================================================== -->
+        <section id="about" class="section section-about">
+            <div class="container about-grid">
+
+                <!-- Visual side -->
+                <div class="about-visual" data-anim="reveal-left">
+                    <div class="av-stack">
+                        <!-- Card A: molecule -->
+                        <div class="av-card av-card-1">
+                            <svg class="mol-svg" viewBox="0 0 180 180">
+                                <circle cx="90" cy="50" r="14" fill="#2563EB" opacity="0.85" />
+                                <circle cx="50" cy="130" r="11" fill="#7C3AED" opacity="0.85" />
+                                <circle cx="130" cy="130" r="11" fill="#06B6D4" opacity="0.85" />
+                                <line x1="90" y1="50" x2="50" y2="130" stroke="#CBD5E1" stroke-width="2" />
+                                <line x1="90" y1="50" x2="130" y2="130" stroke="#CBD5E1" stroke-width="2" />
+                                <line x1="50" y1="130" x2="130" y2="130" stroke="#CBD5E1" stroke-width="2" />
+                            </svg>
+                            <span>Molecular Analysis</span>
+                        </div>
+                        <!-- Card B: mini bar chart -->
+                        <div class="av-card av-card-2">
+                            <div class="mini-bars">
+                                <div class="mb" style="--h:65%"></div>
+                                <div class="mb" style="--h:88%"></div>
+                                <div class="mb" style="--h:42%"></div>
+                                <div class="mb" style="--h:76%"></div>
+                                <div class="mb" style="--h:55%"></div>
+                            </div>
+                            <span>Data Accuracy · 99.2 %</span>
+                        </div>
+                        <!-- Card C: award -->
+                        <div class="av-card av-card-3">
+                            <i class="fas fa-award"></i>
+                            <span>Competition Winner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text side -->
+                <div class="about-content" data-anim="reveal-right">
+                    <span class="section-label">About SimuPharma</span>
+                    <h2 class="section-title">Redefining How Pharmacy Students Learn</h2>
+                    <p>
+                        SimuPharma was born from a simple observation: pharmacy students rarely
+                        get hands-on experience with expensive analytical instruments before
+                        entering the workforce.
+                    </p>
+                    <p>
+                        Our platform provides scientifically accurate, interactive simulations
+                        that let students operate virtual versions of instruments like HPLC,
+                        FTIR, UV-Vis and more — building confidence and competence before they
+                        ever touch a real machine.
+                    </p>
+
+                    <div class="about-highlights">
+                        <div class="ah-item">
+                            <div class="ah-icon"><i class="fas fa-bullseye"></i></div>
+                            <div>
+                                <h4>Our Mission</h4>
+                                <p>Make pharmaceutical instrumentation education accessible to every student,
+                                    everywhere.</p>
+                            </div>
+                        </div>
+                        <div class="ah-item">
+                            <div class="ah-icon"><i class="fas fa-lightbulb"></i></div>
+                            <div>
+                                <h4>Our Vision</h4>
+                                <p>A world where no pharmacy graduate faces an instrument they haven't already mastered
+                                    virtually.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 3 — HOW IT WORKS (3-Step Process)
+             ===================================================== -->
+        <section id="how-it-works" class="section section-process">
+            <div class="container">
+                <div class="section-header center" data-anim="fade-up">
+                    <span class="section-label">How It Works</span>
+                    <h2 class="section-title">From Theory to Practice<br>in Three Steps</h2>
+                    <p class="section-desc">
+                        Our platform transforms complex pharmaceutical instrumentation
+                        into accessible, interactive learning experiences.
+                    </p>
+                </div>
+
+                <div class="steps-wrapper">
+                    <!-- Step 01 -->
+                    <div class="step-card" data-anim="step-reveal">
+                        <div class="step-top">
+                            <span class="step-num">01</span>
+                            <div class="step-icon-ring">
+                                <i class="fas fa-book-open"></i>
+                                <svg class="ring-svg" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" />
+                                    <circle cx="50" cy="50" r="45" class="ring-progress" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>Learn the Theory</h3>
+                        <p>
+                            Start with comprehensive guides explaining the principles behind each
+                            instrument. Understand the science before you experiment.
+                        </p>
+                        <ul class="check-list">
+                            <li><i class="fas fa-check-circle"></i> Detailed documentation</li>
+                            <li><i class="fas fa-check-circle"></i> Video tutorials</li>
+                            <li><i class="fas fa-check-circle"></i> Interactive diagrams</li>
+                        </ul>
+                    </div>
+
+                    <!-- Connector arrow -->
+                    <div class="step-connector" data-anim="draw-line">
+                        <svg viewBox="0 0 120 40" preserveAspectRatio="none">
+                            <line x1="0" y1="20" x2="100" y2="20" class="conn-line" />
+                            <polygon points="100,12 120,20 100,28" class="conn-arrow" />
+                        </svg>
+                    </div>
+
+                    <!-- Step 02 -->
+                    <div class="step-card" data-anim="step-reveal">
+                        <div class="step-top">
+                            <span class="step-num">02</span>
+                            <div class="step-icon-ring purple">
+                                <i class="fas fa-sliders-h"></i>
+                                <svg class="ring-svg" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" />
+                                    <circle cx="50" cy="50" r="45" class="ring-progress" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>Run Simulations</h3>
+                        <p>
+                            Interact with realistic instrument interfaces. Adjust parameters,
+                            run experiments, and observe results in real-time.
+                        </p>
+                        <ul class="check-list">
+                            <li><i class="fas fa-check-circle"></i> Realistic controls</li>
+                            <li><i class="fas fa-check-circle"></i> Live feedback</li>
+                            <li><i class="fas fa-check-circle"></i> Safe to experiment</li>
+                        </ul>
+                    </div>
+
+                    <!-- Connector arrow -->
+                    <div class="step-connector" data-anim="draw-line">
+                        <svg viewBox="0 0 120 40" preserveAspectRatio="none">
+                            <line x1="0" y1="20" x2="100" y2="20" class="conn-line" />
+                            <polygon points="100,12 120,20 100,28" class="conn-arrow" />
+                        </svg>
+                    </div>
+
+                    <!-- Step 03 -->
+                    <div class="step-card" data-anim="step-reveal">
+                        <div class="step-top">
+                            <span class="step-num">03</span>
+                            <div class="step-icon-ring cyan">
+                                <i class="fas fa-chart-bar"></i>
+                                <svg class="ring-svg" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" />
+                                    <circle cx="50" cy="50" r="45" class="ring-progress" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>Analyze &amp; Master</h3>
+                        <p>
+                            Interpret results, identify peaks, and validate your understanding
+                            with integrated quizzes and assessments.
+                        </p>
+                        <ul class="check-list">
+                            <li><i class="fas fa-check-circle"></i> Data interpretation</li>
+                            <li><i class="fas fa-check-circle"></i> Report generation</li>
+                            <li><i class="fas fa-check-circle"></i> Knowledge testing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 4 — FEATURES (6 cards in 3×2 grid)
+             ===================================================== -->
+        <section id="features" class="section section-features">
+            <div class="container">
+                <div class="section-header center" data-anim="fade-up">
+                    <span class="section-label">Features</span>
+                    <h2 class="section-title">Why SimuPharma Stands Out</h2>
+                    <p class="section-desc">Built with precision and designed for learning excellence.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feat-card" data-anim="card-up" data-tilt>
+                        <div class="feat-inner">
+                            <div class="feat-icon blue"><i class="fas fa-microscope"></i></div>
+                            <h3>Scientific Accuracy</h3>
+                            <p>All simulations based on real pharmaceutical data and validated scientific principles.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="feat-card" data-anim="card-up" data-tilt>
+                        <div class="feat-inner">
+                            <div class="feat-icon purple"><i class="fas fa-hand-pointer"></i></div>
+                            <h3>Interactive Controls</h3>
+                            <p>Adjust flow rates, wavelengths, temperatures and see how parameters affect results.</p>
+                        </div>
+                    </div>
+                    <div class="feat-card" data-anim="card-up" data-tilt>
+                        <div class="feat-inner">
+                            <div class="feat-icon cyan"><i class="fas fa-tasks"></i></div>
+                            <h3>Problem-Based Learning</h3>
+                            <p>Tackle real-world analytical challenges like identifying unknowns or troubleshooting.</p>
+                        </div>
+                    </div>
+                    <div class="feat-card" data-anim="card-up" data-tilt>
+                        <div class="feat-inner">
+                            <div class="feat-icon green"><i class="fas fa-graduation-cap"></i></div>
+                            <h3>Guided Tutorials</h3>
+                            <p>Step-by-step guidance for beginners; advanced users explore freely.</p>
+                        </div>
+                    </div>
+                    <div class="feat-card" data-anim="card-up" data-tilt>
+                        <div class="feat-inner">
+                            <div class="feat-icon orange"><i class="fas fa-clipboard-check"></i></div>
+                            <h3>Assessment Tools</h3>
+                            <p>Built-in quizzes and practical assessments reinforce learning and track progress.</p>
+                        </div>
+                    </div>
+                    <div class="feat-card" data-anim="card-up" data-tilt>
+                        <div class="feat-inner">
+                            <div class="feat-icon rose"><i class="fas fa-globe"></i></div>
+                            <h3>Access Anywhere</h3>
+                            <p>Web-based — works on any device. No installations, no special hardware needed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 5 — INSTRUMENTS SHOWCASE
+             ===================================================== -->
+        <section id="instruments" class="section section-instruments">
+            <div class="container">
+                <div class="section-header center" data-anim="fade-up">
+                    <span class="section-label">Virtual Laboratory</span>
+                    <h2 class="section-title">Explore Our Instruments</h2>
+                    <p class="section-desc">A comprehensive suite of analytical instruments at your fingertips.</p>
+                </div>
+
+                <div class="instr-grid">
+                    <!-- HPLC -->
+                    <div class="instr-card" data-anim="instr-reveal" data-tilt>
+                        <div class="instr-card-inner">
+                            <div class="instr-visual">
+                                <div class="instr-icon blue"><i class="fas fa-vial"></i></div>
+                                <svg class="instr-wave" viewBox="0 0 200 50">
+                                    <path d="M0,25 Q25,5 50,25 T100,25 T150,25 T200,25" fill="none" stroke="#2563EB"
+                                        stroke-width="1.5" opacity="0.3" />
+                                </svg>
+                            </div>
+                            <h3>HPLC</h3>
+                            <p>High Performance Liquid Chromatography for separation and quantitative analysis.</p>
+                            <div class="instr-tags">
+                                <span class="tag blue">Separation</span>
+                                <span class="tag blue">Quantitative</span>
+                            </div>
+                            <a href="instruments.html#hplc" class="instr-link blue">
+                                Launch Simulation <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- FTIR -->
+                    <div class="instr-card" data-anim="instr-reveal" data-tilt>
+                        <div class="instr-card-inner">
+                            <div class="instr-visual">
+                                <div class="instr-icon purple"><i class="fas fa-wave-square"></i></div>
+                                <svg class="instr-wave" viewBox="0 0 200 50">
+                                    <path d="M0,25 Q25,5 50,25 T100,25 T150,25 T200,25" fill="none" stroke="#7C3AED"
+                                        stroke-width="1.5" opacity="0.3" />
+                                </svg>
+                            </div>
+                            <h3>FTIR</h3>
+                            <p>Fourier Transform Infrared Spectroscopy for molecular identification.</p>
+                            <div class="instr-tags">
+                                <span class="tag purple">Identification</span>
+                                <span class="tag purple">Structural</span>
+                            </div>
+                            <a href="instruments.html#ftir" class="instr-link purple">
+                                Launch Simulation <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- UV-Vis -->
+                    <div class="instr-card" data-anim="instr-reveal" data-tilt>
+                        <div class="instr-card-inner">
+                            <div class="instr-visual">
+                                <div class="instr-icon cyan"><i class="fas fa-sun"></i></div>
+                                <svg class="instr-wave" viewBox="0 0 200 50">
+                                    <path d="M0,25 Q25,5 50,25 T100,25 T150,25 T200,25" fill="none" stroke="#06B6D4"
+                                        stroke-width="1.5" opacity="0.3" />
+                                </svg>
+                            </div>
+                            <h3>UV-Vis</h3>
+                            <p>Ultraviolet-Visible Spectroscopy for quantitative and concentration analysis.</p>
+                            <div class="instr-tags">
+                                <span class="tag cyan">Quantitative</span>
+                                <span class="tag cyan">Absorption</span>
+                            </div>
+                            <a href="instruments.html#uv-vis" class="instr-link cyan">
+                                Launch Simulation <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- GC -->
+                    <div class="instr-card" data-anim="instr-reveal" data-tilt>
+                        <div class="instr-card-inner">
+                            <div class="instr-visual">
+                                <div class="instr-icon orange"><i class="fas fa-fire"></i></div>
+                                <svg class="instr-wave" viewBox="0 0 200 50">
+                                    <path d="M0,25 Q25,5 50,25 T100,25 T150,25 T200,25" fill="none" stroke="#F59E0B"
+                                        stroke-width="1.5" opacity="0.3" />
+                                </svg>
+                            </div>
+                            <h3>GC</h3>
+                            <p>Gas Chromatography for volatile compound separation and analysis.</p>
+                            <div class="instr-tags">
+                                <span class="tag orange">Volatile</span>
+                                <span class="tag orange">Separation</span>
+                            </div>
+                            <a href="instruments.html#gc" class="instr-link orange">
+                                Launch Simulation <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="center-cta" data-anim="fade-up">
+                    <a href="instruments.html" class="btn btn-primary btn-lg">
+                        View All 15 Instruments <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+        <!-- =====================================================
+             SECTION 7 — QUIZ / ASSESSMENT
+             Split layout: text left, mockup right
+             ===================================================== -->
+        <section id="quiz" class="section section-quiz">
+            <div class="container quiz-grid">
+
+                <div class="quiz-content" data-anim="reveal-left">
+                    <span class="section-label">Test Your Knowledge</span>
+                    <h2 class="section-title">Interactive Assessments</h2>
+                    <p>
+                        Put your understanding to the test with our comprehensive quiz system.
+                        Covering all instruments and analytical techniques, our assessments
+                        help reinforce learning and identify areas for improvement.
+                    </p>
+                    <ul class="quiz-features">
+                        <li>
+                            <div class="qf-icon"><i class="fas fa-layer-group"></i></div>
+                            <div>
+                                <h4>Multiple Difficulty Levels</h4>
+                                <p>From basics to advanced analytical problem-solving</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="qf-icon"><i class="fas fa-sync-alt"></i></div>
+                            <div>
+                                <h4>Instant Feedback</h4>
+                                <p>Learn from mistakes with detailed explanations</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="qf-icon"><i class="fas fa-trophy"></i></div>
+                            <div>
+                                <h4>Track Progress</h4>
+                                <p>Monitor your improvement over time</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="quiz.html" class="btn btn-primary btn-lg">
+                        Start Quiz <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Quiz card mockup -->
+                <div class="quiz-visual" data-anim="reveal-right">
+                    <div class="quiz-mockup">
+                        <div class="qm-header">
+                            <span class="qm-badge">Question 3 of 10</span>
+                            <span class="qm-timer"><i class="fas fa-clock"></i> 2:45</span>
+                        </div>
+                        <p class="qm-question">
+                            In HPLC, increasing the mobile phase flow rate will primarily affect:
+                        </p>
+                        <div class="qm-options">
+                            <label class="qm-opt">
+                                <span class="qm-radio"></span> Column temperature
+                            </label>
+                            <label class="qm-opt correct">
+                                <span class="qm-radio checked"></span> Retention time
+                            </label>
+                            <label class="qm-opt">
+                                <span class="qm-radio"></span> Detector wavelength
+                            </label>
+                            <label class="qm-opt">
+                                <span class="qm-radio"></span> Sample concentration
+                            </label>
+                        </div>
+                        <div class="qm-progress-bar">
+                            <div class="qm-progress-fill" style="width:30%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             SECTION — DASHBOARD & CERTIFICATE
+             ===================================================== -->
+        <section id="dashboard-cert" class="section section-dashboard-cert">
+            <div class="container">
+                <div class="section-header center" data-anim="fade-up">
+                    <span class="section-label">Your Progress</span>
+                    <h2 class="section-title">Track &amp; Certify<br>Your Learning</h2>
+                    <p class="section-desc">
+                        Monitor your progress across all instruments and earn certificates
+                        to showcase your pharmaceutical instrumentation skills.
+                    </p>
+                </div>
+
+                <div class="dc-grid">
+                    <!-- Dashboard Card -->
+                    <div class="dc-card">
+                        <div class="dc-card-inner">
+                            <div class="dc-icon blue"><i class="fas fa-chart-line"></i></div>
+                            <h3>Student Dashboard</h3>
+                            <p>
+                                View your learning analytics — instruments explored, quiz scores,
+                                study time, and mastery progress — all in one place.
+                            </p>
+                            <ul class="dc-features">
+                                <li><i class="fas fa-check-circle"></i> Instruments explored tracker</li>
+                                <li><i class="fas fa-check-circle"></i> Quiz score history</li>
+                                <li><i class="fas fa-check-circle"></i> Learning progress charts</li>
+                                <li><i class="fas fa-check-circle"></i> Instrument mastery grid</li>
+                            </ul>
+                            <a href="dashboard.html" class="btn btn-primary btn-lg">
+                                Open Dashboard <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Certificate Card -->
+                    <div class="dc-card">
+                        <div class="dc-card-inner">
+                            <div class="dc-icon purple"><i class="fas fa-certificate"></i></div>
+                            <h3>Certificate Generator</h3>
+                            <p>
+                                Complete quizzes and earn a professionally designed PDF certificate
+                                validating your analytical instrumentation knowledge.
+                            </p>
+                            <ul class="dc-features">
+                                <li><i class="fas fa-check-circle"></i> Branded PDF certificates</li>
+                                <li><i class="fas fa-check-circle"></i> Auto-generated on quiz completion</li>
+                                <li><i class="fas fa-check-circle"></i> Includes score &amp; instruments</li>
+                                <li><i class="fas fa-check-circle"></i> Downloadable &amp; shareable</li>
+                            </ul>
+                            <a href="quiz.html" class="btn btn-primary btn-lg"
+                                style="background:linear-gradient(135deg,#7C3AED,#a855f7)">
+                                Take Quiz &amp; Earn Certificate <i class="fas fa-award"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 8 — CTA (Call To Action)
+             ===================================================== -->
+        <section id="cta" class="section section-cta">
+            <div class="container">
+                <div class="cta-card" data-anim="scale-in">
+                    <div class="cta-text">
+                        <h2>Ready to Transform<br>Your Learning?</h2>
+                        <p>
+                            Join thousands of students and educators using SimuPharma
+                            to master pharmaceutical instrumentation.
+                        </p>
+                        <div class="cta-btns">
+                            <a href="#instruments" class="btn btn-white btn-lg">
+                                Start Exploring <i class="fas fa-arrow-right"></i>
+                            </a>
+                            <a href="#contact" class="btn btn-outline-white btn-lg">
+                                Get In Touch
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Decorative orbs -->
+                    <div class="cta-orbs" aria-hidden="true">
+                        <span class="co co-1"></span>
+                        <span class="co co-2"></span>
+                        <span class="co co-3"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             SECTION 9 — CONTACT
+             ===================================================== -->
+        <section id="contact" class="section section-contact">
+            <div class="container">
+                <div class="section-header center" data-anim="fade-up">
+                    <span class="section-label">Get In Touch</span>
+                    <h2 class="section-title">Let's Connect</h2>
+                    <p class="section-desc">
+                        Have questions, feedback, or collaboration ideas? We'd love to hear from you.
+                    </p>
+                </div>
+
+                <div class="contact-grid">
+                    <!-- Info cards -->
+                    <div class="contact-info" data-anim="fade-up">
+                        <div class="ci-card">
+                            <div class="ci-icon"><i class="fas fa-envelope"></i></div>
+                            <h4>Email</h4>
+                            <p>contact@simupharma.com</p>
+                        </div>
+                        <div class="ci-card">
+                            <div class="ci-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <h4>Location</h4>
+                            <p>Pharmacy Research Laboratory</p>
+                        </div>
+                        <div class="ci-card">
+                            <div class="ci-icon"><i class="fas fa-clock"></i></div>
+                            <h4>Availability</h4>
+                            <p>24/7 — It's a virtual lab!</p>
+                        </div>
+                    </div>
+
+                    <!-- Form -->
+                    <form class="contact-form" data-anim="fade-up" data-delay="0.15" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="c-name">Name</label>
+                                <input type="text" id="c-name" placeholder="Your name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="c-email">Email</label>
+                                <input type="email" id="c-email" placeholder="you@example.com" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="c-subject">Subject</label>
+                            <input type="text" id="c-subject" placeholder="What's this about?">
+                        </div>
+                        <div class="form-group">
+                            <label for="c-message">Message</label>
+                            <textarea id="c-message" rows="5" placeholder="Tell us more…" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg btn-full">
+                            <span>Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             SECTION — COMPETITIVE COMPARISON
+             ===================================================== -->
+        <section class="section" style="padding:60px 0;">
+            <div class="container">
+                <div class="section-header center" data-anim="fade-up">
+                    <span class="section-label">Why SimuPharma</span>
+                    <h2 class="section-title">How We Compare</h2>
+                    <p class="section-desc">See how SimuPharma stacks up against alternatives.</p>
+                </div>
+                <div style="overflow-x:auto; margin-top:30px;">
+                    <table style="width:100%; border-collapse:collapse; font-size:0.82rem; background:rgba(17,24,39,0.6); border-radius:14px; overflow:hidden;">
+                        <thead>
+                            <tr style="background:rgba(99,102,241,0.12);">
+                                <th style="padding:14px 18px; text-align:left; color:#94a3b8; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em;">Feature</th>
+                                <th style="padding:14px 18px; text-align:center; color:#a5b4fc; font-weight:800;">SimuPharma</th>
+                                <th style="padding:14px 18px; text-align:center; color:#94a3b8;">Labster</th>
+                                <th style="padding:14px 18px; text-align:center; color:#94a3b8;">PraxiLabs</th>
+                                <th style="padding:14px 18px; text-align:center; color:#94a3b8;">Physical Lab</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                                <td style="padding:12px 18px; color:#e2e8f0;">Pharma-Specific Instruments</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7; font-weight:700;">7 ✓</td>
+                                <td style="padding:12px 18px; text-align:center; color:#f87171;">General only</td>
+                                <td style="padding:12px 18px; text-align:center; color:#fcd34d;">2</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7;">7+</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                                <td style="padding:12px 18px; color:#e2e8f0;">Real Physics Engines</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7; font-weight:700;">✓</td>
+                                <td style="padding:12px 18px; text-align:center; color:#f87171;">✗ (animations)</td>
+                                <td style="padding:12px 18px; text-align:center; color:#f87171;">✗</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7;">✓</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                                <td style="padding:12px 18px; color:#e2e8f0;">AI Lab Agent</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7; font-weight:700;">✓</td>
+                                <td style="padding:12px 18px; text-align:center; color:#f87171;">✗</td>
+                                <td style="padding:12px 18px; text-align:center; color:#f87171;">✗</td>
+                                <td style="padding:12px 18px; text-align:center; color:#f87171;">✗</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                                <td style="padding:12px 18px; color:#e2e8f0;">Cost per Student/Year</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7; font-weight:700;">₹1,299</td>
+                                <td style="padding:12px 18px; text-align:center; color:#fcd34d;">~₹48,000</td>
+                                <td style="padding:12px 18px; text-align:center; color:#fcd34d;">~₹14,400</td>
+                                <td style="padding:12px 18px; text-align:center; color:#f87171;">~₹22,000</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+                                <td style="padding:12px 18px; color:#e2e8f0;">24/7 Access</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7; font-weight:700;">✓</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7;">✓</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7;">✓</td>
+                                <td style="padding:12px 18px; text-align:center; color:#f87171;">✗</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px 18px; color:#e2e8f0;">Maintenance Cost</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7; font-weight:700;">₹0</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7;">₹0</td>
+                                <td style="padding:12px 18px; text-align:center; color:#6ee7b7;">₹0</td>
+                                <td style="padding:12px 18px; text-align:center; color:#f87171;">₹5L+/yr</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =====================================================
+             SECTION — PILOT PROGRAM CTA
+             ===================================================== -->
+        <section class="section" style="padding:60px 0;">
+            <div class="container" style="max-width:800px;">
+                <div style="background:linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.12)); border:1px solid rgba(99,102,241,0.2); border-radius:20px; padding:48px 40px; text-align:center;">
+                    <div style="display:inline-flex; align-items:center; gap:8px; padding:4px 14px; border-radius:20px; background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.2); font-size:0.72rem; color:#a5b4fc; font-weight:600; margin-bottom:20px;">
+                        <span style="width:8px; height:8px; border-radius:50%; background:#6366f1; animation:pulse 2s infinite;"></span>
+                        Now Accepting Applications
+                    </div>
+                    <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:12px; font-family:'Plus Jakarta Sans','Inter',system-ui,sans-serif;">
+                        🏫 Institution Pilot Program
+                    </h2>
+                    <p style="color:#94a3b8; font-size:0.95rem; max-width:550px; margin:0 auto 24px; line-height:1.6;">
+                        Get <strong style="color:#a5b4fc;">6 months free access</strong> for your pharmacy department.
+                        Be one of our first 10 institution partners and help shape the future of pharmaceutical education.
+                    </p>
+                    <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+                        <a href="mailto:pilot@simupharma.com?subject=Pilot%20Program%20Interest" class="btn btn-primary btn-lg" style="padding:14px 32px;">
+                            <i class="fas fa-envelope"></i> Apply for Pilot
+                        </a>
+                        <a href="pricing.html" class="btn btn-ghost btn-lg" style="padding:14px 32px;">
+                            View Institution Plans <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div style="display:flex; justify-content:center; gap:24px; margin-top:24px; font-size:0.75rem; color:#64748b;">
+                        <span><i class="fas fa-check-circle" style="color:#6366f1;"></i> All 7 instruments</span>
+                        <span><i class="fas fa-check-circle" style="color:#6366f1;"></i> AI Lab Agent included</span>
+                        <span><i class="fas fa-check-circle" style="color:#6366f1;"></i> Faculty Dashboard</span>
+                        <span><i class="fas fa-check-circle" style="color:#6366f1;"></i> NAAC Reports</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer id="main-footer">
+        <div class="container">
+            <div class="footer-top">
+                <!-- Brand -->
+                <div class="footer-brand">
+                    <a href="#hero" class="footer-logo">
+                        <svg viewBox="0 0 40 40" fill="none">
+                            <circle cx="20" cy="20" r="17" stroke="rgba(255,255,255,0.35)" stroke-width="2" />
+                            <path d="M14 12V28M26 12V28M14 20H26" stroke="#fff" stroke-width="2.5"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span>SimuPharma</span>
+                    </a>
+                    <p>Transforming pharmaceutical education through innovative virtual simulations.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <!-- Link columns -->
+                <div class="footer-links-wrap">
+                    <div class="footer-col">
+                        <h4>Platform</h4>
+                        <ul>
+                            <li><a href="#instruments">Instruments</a></li>
+                            <li><a href="#quiz">Assessments</a></li>
+                            <li><a href="dashboard.html">Dashboard</a></li>
+                            <li><a href="#features">Features</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#how-it-works">How It Works</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="mailto:contact@simupharma.com">Email Us</a></li>
+                            <li><a href="#">Research Lab</a></li>
+                            <li><a href="#">Collaborate</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 SimuPharma. All rights reserved.</p>
+                <p>Built with <i class="fas fa-heart"></i> for pharmaceutical education.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ============================================================
+         SCRIPTS (loaded at end for performance)
+         ============================================================ -->
+    <!-- GSAP Core + ScrollTrigger + ScrollTo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+
+    <!-- Three.js — 3D particle background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Lenis — butter-smooth scrolling -->
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+    <!-- Chart.js — Inline spectrum rendering in AI chat -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+    <!-- Main App -->
+    <script src="script.js?v=400"></script>
+
+    <!-- jsPDF — Certificate & Report Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Feature Modules -->
+    <link rel="stylesheet" href="assistant.css?v=402">
+    <link rel="stylesheet" href="a11y.css">
+    <script src="api_client.js?v=401"></script>
+    <script src="assistant.js?v=500"></script>
+    <script src="a11y.js"></script>
+    <script src="i18n.js"></script>
+    <script src="certificate.js"></script>
+    <script src="voice_engine.js"></script>
+    <script src="ai_teacher.js?v=100"></script>
+    <script src="edtech.js?v=402"></script>
+    <script src="viewer3d.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('✅ SW registered'))
+                    .catch(err => console.log('SW registration failed:', err));
+            });
+        }
+    </script>
+    <!-- ═══════════════════════════════════════════════════════
+         CHART INTERCEPTOR — Inline, Never Cached
+         Runs the tool + renders spectrum whenever user sends
+         an instrument keyword message. Patches sendMessage().
+         ═══════════════════════════════════════════════════════ -->
+    <script>
+    (function patchNeuroLabCharts() {
+        // Wait for the NeuroLab chat to initialise
+        function tryPatch() {
+            // Find the AI chat input — proves the assistant is loaded
+            const input = document.getElementById('assistant-input');
+            const msgs  = document.getElementById('assistant-msgs');
+            if (!input || !msgs) { setTimeout(tryPatch, 500); return; }
+
+            const BACKEND = 'http://localhost:8000';
+
+            const COMPOUNDS = ['paracetamol','aspirin','ibuprofen','amoxicillin','ciprofloxacin',
+                'metformin','ranitidine','caffeine','diclofenac','atorvastatin','omeprazole',
+                'amlodipine','losartan','ascorbic_acid','ascorbic acid','chloramphenicol',
+                'sulfamethoxazole','phenol','benzocaine','lidocaine','dextrose','sucrose'];
+
+            const INSTRUMENT_MAP = [
+                { keys:['uv-vis','uv vis','uvvis','ultraviolet','spectrophotom','absorbance'], tool:'run_uvvis', label:'UV-Vis Spectrum', color:'#f59e0b' },
+                { keys:['ftir','infrared','ir spectrum','wavenumber','transmittance'],         tool:'run_ftir',  label:'FTIR Spectrum',  color:'#3b82f6' },
+                { keys:['hplc','high performance liquid','chromatogram','retention time'],     tool:'run_hplc',  label:'HPLC Chromatogram', color:'#06b6d4' },
+                { keys:['gas chrom','gas chromat'],                                            tool:'run_gc',    label:'GC Chromatogram', color:'#ef4444' },
+                { keys:['mass spec','mass spect','fragmentation','m/z'],                       tool:'run_mass_spec', label:'Mass Spectrum', color:'#8b5cf6' },
+                { keys:['psa','particle size','size distribution'],                            tool:'run_psa',   label:'Particle Size', color:'#ec4899' },
+            ];
+
+            const SIM_LINKS = {
+                run_uvvis:'uv_vis_simulator.html', run_ftir:'ftir_simulator.html',
+                run_hplc:'hplc_simulator.html',    run_gc:'gc_simulator.html',
+                run_mass_spec:'mass_spec_simulator.html', run_psa:'psa_simulator.html'
+            };
+
+            // ---- SVG Chart Renderer (zero dependencies) ----
+            function buildSVGChart(toolName, data) {
+                if (!data || data.error) return null;
+
+                let pts = [], title = '', xLabel = '', yLabel = '', color = '#f59e0b', isBar = false, reverseX = false;
+
+                try {
+                    if (toolName === 'run_uvvis') {
+                        const peaks = data.peaks_found || [];
+                        title = 'UV-Vis — λmax ' + (data.lambda_max || '?') + ' nm';
+                        xLabel = 'Wavelength (nm)'; yLabel = 'Absorbance'; color = '#f59e0b';
+                        for (let wl = 200; wl <= 400; wl += 2) {
+                            let abs = 0;
+                            peaks.forEach(p => { const s=15; abs += ((p.molar_absorptivity||10000)*(data.concentration||0.001)*(data.path_length||1))*Math.exp(-((wl-(p.wavelength_nm||250))**2)/(2*s*s)); });
+                            pts.push({x:wl, y:abs});
+                        }
+                    } else if (toolName === 'run_ftir') {
+                        const groups = data.functional_groups || [];
+                        title = 'FTIR — ' + groups.length + ' groups';
+                        xLabel = 'Wavenumber (cm⁻¹)'; yLabel = 'Transmittance (%)'; color = '#3b82f6'; reverseX = true;
+                        for (let wn = 4000; wn >= 400; wn -= 10) {
+                            let t = 95;
+                            groups.forEach(g => { const d=g.intensity==='strong'?70:g.intensity==='medium'?45:25; t -= d*Math.exp(-((wn-(g.wavenumber_cm1||1700))**2)/(2*30*30)); });
+                            pts.push({x:wn, y:Math.max(0,t)});
+                        }
+                    } else if (toolName === 'run_hplc') {
+                        const peaks = (data.result||data).peaks || (data.result||data).chromatogram_peaks || [];
+                        title = 'HPLC — ' + (data.compound||''); xLabel = 'Retention Time (min)'; yLabel = 'mAU'; color = '#06b6d4';
+                        const maxT = Math.max(15, ...peaks.map(p=>(p.retention_time||p.rt||5)+3));
+                        for (let t=0; t<=maxT; t+=0.1) { let s=0; peaks.forEach(p=>{const rt=p.retention_time||p.rt||5,w=p.width||0.3; s+=(p.height||p.area||1000)*Math.exp(-((t-rt)**2)/(2*(w/2.354)**2));}); pts.push({x:+t.toFixed(1),y:+s.toFixed(1)}); }
+                    } else if (toolName === 'run_gc') {
+                        const peaks = (data.result||data).peaks || [];
+                        title = 'GC — ' + (data.compound||''); xLabel = 'Retention Time (min)'; yLabel = 'Signal'; color = '#ef4444';
+                        const maxT = Math.max(20, ...peaks.map(p=>(p.retention_time||p.rt||8)+3));
+                        for (let t=0; t<=maxT; t+=0.15) { let s=0; peaks.forEach(p=>{const rt=p.retention_time||p.rt||8,w=p.width||0.25; s+=(p.height||500)*Math.exp(-((t-rt)**2)/(2*(w/2.354)**2));}); pts.push({x:+t.toFixed(1),y:+s.toFixed(1)}); }
+                    } else if (toolName === 'run_mass_spec') {
+                        const frags = (data.result||data).fragments || data.fragments || [];
+                        title = 'Mass Spec — ' + (data.compound||''); xLabel = 'm/z'; yLabel = 'Intensity (%)'; color = '#8b5cf6'; isBar = true;
+                        frags.forEach(f => pts.push({x:f.mz||f.mass||0, y:f.relative_intensity||f.intensity||0}));
+                    } else if (toolName === 'run_psa') {
+                        const d50 = (data.result||data).d50 || data.d50 || 50;
+                        title = 'PSA — D50: '+d50+' μm'; xLabel = 'Size (μm)'; yLabel = 'Volume (%)'; color = '#ec4899';
+                        for (let s=0.1; s<=d50*4; s+=d50*0.05) { pts.push({x:+s.toFixed(1), y:Math.max(0, 100*Math.exp(-((Math.log(s/d50))**2)/(2*(0.5)**2)))}); }
+                    }
+                } catch(e) { console.warn('[ChartPatch]', e); return null; }
+
+                if (!pts.length && !isBar) return null;
+
+                const W=380, H=160, PX=34, PY=20, PB=28;
+                const plotW = W-PX-10, plotH = H-PY-PB;
+                let svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" style="width:100%;height:100%;display:block;position:absolute;inset:0;">';
+                svg += '<rect width="'+W+'" height="'+H+'" rx="4" fill="#0f172a"/>';
+                // title
+                svg += '<text x="'+(W/2)+'" y="14" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter,system-ui,sans-serif" font-weight="600">'+title+'</text>';
+                // axes
+                svg += '<line x1="'+PX+'" y1="'+(H-PB)+'" x2="'+(W-10)+'" y2="'+(H-PB)+'" stroke="#334155" stroke-width="1"/>';
+                svg += '<line x1="'+PX+'" y1="'+PY+'" x2="'+PX+'" y2="'+(H-PB)+'" stroke="#334155" stroke-width="1"/>';
+                svg += '<text x="'+(W/2)+'" y="'+(H-4)+'" text-anchor="middle" font-size="8" fill="#64748b" font-family="Inter,system-ui,sans-serif">'+xLabel+'</text>';
+                svg += '<text x="9" y="'+(H/2)+'" text-anchor="middle" font-size="8" fill="#64748b" font-family="Inter,system-ui,sans-serif" transform="rotate(-90,9,'+(H/2)+')">'+yLabel+'</text>';
+
+                if (isBar && pts.length) {
+                    const maxY = Math.max(...pts.map(p=>p.y), 1);
+                    const bw = Math.max(2, plotW/pts.length - 1);
+                    pts.forEach((p,i) => {
+                        const bx = PX + (i/pts.length)*plotW;
+                        const bh = (p.y/maxY)*plotH;
+                        svg += '<rect x="'+bx.toFixed(1)+'" y="'+((H-PB-bh).toFixed(1))+'" width="'+bw.toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="'+color+'" opacity="0.8" rx="1"/>';
+                        if (pts.length<=20) svg += '<text x="'+(bx+bw/2).toFixed(1)+'" y="'+(H-PB+10)+'" font-size="6" fill="#64748b" text-anchor="middle">'+p.x+'</text>';
+                    });
+                } else if (pts.length) {
+                    const xs = pts.map(p=>p.x), ys = pts.map(p=>p.y);
+                    const minX=Math.min(...xs), maxX=Math.max(...xs);
+                    const maxY=Math.max(...ys,0.001);
+                    const sx = v => PX + ((v-minX)/(maxX-minX||1))*plotW;
+                    const sy = v => (H-PB) - (v/maxY)*plotH;
+                    const mapped = reverseX ? [...pts].reverse() : pts;
+                    let path = mapped.map((p,i)=>(i===0?'M':'L')+sx(p.x).toFixed(1)+','+sy(p.y).toFixed(1)).join(' ');
+                    const f0 = mapped[0], fN = mapped[mapped.length-1];
+                    svg += '<path d="'+path+' L'+sx(fN.x).toFixed(1)+','+(H-PB)+' L'+sx(f0.x).toFixed(1)+','+(H-PB)+' Z" fill="'+color+'" opacity="0.12"/>';
+                    svg += '<path d="'+path+'" fill="none" stroke="'+color+'" stroke-width="1.8"/>';
+                    // x-ticks
+                    for(let i=0;i<=4;i++){
+                        const v=reverseX ? maxX-(i/4)*(maxX-minX) : minX+(i/4)*(maxX-minX);
+                        const tx=PX+(i/4)*plotW;
+                        svg += '<text x="'+tx.toFixed(1)+'" y="'+(H-PB+11)+'" font-size="7" fill="#475569" text-anchor="middle">'+Math.round(v)+'</text>';
+                    }
+                    // y-ticks
+                    for(let i=0;i<=2;i++){
+                        const v=i/2*maxY; const ty=sy(v);
+                        svg += '<line x1="'+PX+'" y1="'+ty.toFixed(1)+'" x2="'+(PX+plotW)+'" y2="'+ty.toFixed(1)+'" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="3"/>';
+                        svg += '<text x="'+(PX-3)+'" y="'+(ty+3).toFixed(1)+'" font-size="7" fill="#475569" text-anchor="end">'+(v<10?v.toFixed(2):Math.round(v))+'</text>';
+                    }
+                }
+                svg += '</svg>';
+                // Return an object with svg + metadata for maximize support
+                return { svg, title, color };
+            }
+
+            // ---- Intercept the send button ----
+            function handleInstrumentMessage(msgText) {
+                const lower = msgText.toLowerCase();
+
+                // Detect instrument
+                let detected = null;
+                for (const inst of INSTRUMENT_MAP) {
+                    if (inst.keys.some(k => lower.includes(k))) { detected = inst; break; }
+                }
+                // Generic "analyze/run/test" + compound
+                let compound = null;
+                for (const c of COMPOUNDS) { if (lower.includes(c.toLowerCase())) { compound = c.replace(/ /g,'_'); break; } }
+
+                if (!detected && compound && (lower.includes('analyz') || lower.includes('run') || lower.includes('test'))) {
+                    detected = INSTRUMENT_MAP[0]; // default UV-Vis
+                }
+
+                // Full analysis: UV + FTIR + HPLC
+                const fullAnalysis = lower.includes('full') || lower.includes('complete') ||
+                    (lower.includes('analyz') && !INSTRUMENT_MAP.some(i=>i.keys.some(k=>lower.includes(k))));
+
+                if (!detected || !compound) return;
+
+                const tools = fullAnalysis ? ['run_uvvis','run_ftir','run_hplc'] : [detected.tool];
+
+                const wrap = document.createElement('div');
+                wrap.className = 'agent-actions';
+                wrap.style.cssText = 'padding:4px 8px;';
+                msgs.appendChild(wrap);
+                msgs.scrollTop = msgs.scrollHeight;
+
+                tools.forEach(toolName => {
+                    // Action card
+                    const inst = INSTRUMENT_MAP.find(i=>i.tool===toolName) || detected;
+                    const card = document.createElement('div');
+                    card.className = 'agent-action-card';
+                    card.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);margin:4px 0;font-size:12px;color:#94a3b8;font-family:Inter,system-ui,sans-serif;';
+                    card.innerHTML = '<span class="spinner" style="width:12px;height:12px;border:2px solid rgba(255,255,255,0.1);border-top-color:'+inst.color+';border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block"></span> Running '+inst.label+'…';
+                    wrap.appendChild(card);
+                    msgs.scrollTop = msgs.scrollHeight;
+
+                    fetch(BACKEND+'/api/neural/agent/execute-tool', {
+                        method:'POST',
+                        headers:{'Content-Type':'application/json'},
+                        body: JSON.stringify({tool_name:toolName, arguments:{compound_id:compound}})
+                    })
+                    .then(r=>r.ok?r.json():Promise.reject(r.status))
+                    .then(data => {
+                        card.innerHTML = '✅ '+inst.label+' complete';
+                        card.style.borderColor = inst.color+'40';
+
+                        const chartResult = buildSVGChart(toolName, data);
+                        if (chartResult) {
+                            const { svg: svgHtml, title: chartTitle, color: chartColor } = chartResult;
+                            const chartDiv = document.createElement('div');
+                            chartDiv.style.cssText = 'position:relative;margin:6px 0;border-radius:10px;overflow:hidden;background:#0f172a;border:1px solid rgba(255,255,255,0.08);width:100%;aspect-ratio:380/160;display:block;';
+                            chartDiv.innerHTML = svgHtml;
+                            // ⛶ Maximize button
+                            const maxBtn = document.createElement('button');
+                            maxBtn.title = 'Expand chart';
+                            maxBtn.style.cssText = 'position:absolute;top:6px;right:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:6px;color:#94a3b8;font-size:13px;width:26px;height:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background 0.2s;z-index:10;';
+                            maxBtn.innerHTML = '⛶';
+                            maxBtn.onmouseenter = () => maxBtn.style.background = 'rgba(255,255,255,0.18)';
+                            maxBtn.onmouseleave = () => maxBtn.style.background = 'rgba(255,255,255,0.08)';
+                            maxBtn.onclick = () => {
+                                // Build fullscreen modal
+                                const overlay = document.createElement('div');
+                                overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(2,6,23,0.92);backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center;justify-content:center;animation:spFadeIn 0.18s ease;';
+                                const modalBox = document.createElement('div');
+                                modalBox.style.cssText = 'background:#0f172a;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;width:90vw;max-width:820px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,0.7);';
+                                // Title bar
+                                const titleBar = document.createElement('div');
+                                titleBar.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;';
+                                titleBar.innerHTML = '<span style="color:#e2e8f0;font-weight:700;font-size:15px;font-family:Inter,system-ui,sans-serif">'+chartTitle+'</span>';
+                                const closeBtn = document.createElement('button');
+                                closeBtn.innerHTML = '✕';
+                                closeBtn.style.cssText = 'background:none;border:none;color:#64748b;font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px;transition:color 0.2s;';
+                                closeBtn.onmouseenter = () => closeBtn.style.color = '#e2e8f0';
+                                closeBtn.onmouseleave = () => closeBtn.style.color = '#64748b';
+                                closeBtn.onclick = () => overlay.remove();
+                                titleBar.appendChild(closeBtn);
+                                modalBox.appendChild(titleBar);
+                                // Full-size SVG (rebuild with bigger dimensions)
+                                const fullSvg = document.createElement('div');
+                                fullSvg.style.cssText = 'border-radius:8px;overflow:hidden;background:#070d1a;';
+                                fullSvg.innerHTML = svgHtml.replace('max-height:170px', 'max-height:420px');
+                                modalBox.appendChild(fullSvg);
+                                // Simulator link
+                                if (SIM_LINKS[toolName]) {
+                                    const simLink = document.createElement('a');
+                                    simLink.href = SIM_LINKS[toolName];
+                                    simLink.style.cssText = 'display:inline-block;margin-top:14px;padding:8px 20px;background:linear-gradient(135deg,'+chartColor+'22,'+chartColor+'11);border:1px solid '+chartColor+'44;border-radius:8px;color:'+chartColor+';font-size:13px;text-decoration:none;font-family:Inter,system-ui,sans-serif;font-weight:600;transition:all 0.2s;';
+                                    simLink.innerHTML = '🔬 Open Full Simulator →';
+                                    modalBox.appendChild(simLink);
+                                }
+                                overlay.appendChild(modalBox);
+                                overlay.onclick = (e) => { if(e.target===overlay) overlay.remove(); };
+                                document.body.appendChild(overlay);
+                            };
+                            chartDiv.appendChild(maxBtn);
+                            wrap.appendChild(chartDiv);
+                            // "Open in simulator" link below chart
+                            if (SIM_LINKS[toolName]) {
+                                const a = document.createElement('a');
+                                a.href = SIM_LINKS[toolName];
+                                a.style.cssText = 'display:block;text-align:right;padding:3px 10px 6px;font-size:10px;color:#60a5fa;text-decoration:none;font-family:Inter,system-ui,sans-serif;';
+                                a.innerHTML = '↗ Open in full simulator';
+                                wrap.appendChild(a);
+                            }
+                        }
+                        msgs.scrollTop = msgs.scrollHeight;
+                    })
+                    .catch(err => {
+                        card.innerHTML = '⚠️ Tool error — backend may be offline';
+                    });
+                });
+            }
+
+            // Patch: intercept send button click and Enter key
+            const sendBtn = document.getElementById('assistant-send');
+            const chatInput = document.getElementById('assistant-input');
+
+            function onSend() {
+                const txt = chatInput.value.trim();
+                if (txt) { handleInstrumentMessage(txt); }
+            }
+
+            if (sendBtn) { sendBtn.addEventListener('mousedown', onSend, true); }
+            if (chatInput) {
+                chatInput.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' && !e.shiftKey) { onSend(); }
+                }, true);
+            }
+
+            // Also patch suggestion chips
+            const observer = new MutationObserver(() => {
+                document.querySelectorAll('.suggestion-chip:not([data-patched])').forEach(chip => {
+                    chip.dataset.patched = '1';
+                    chip.addEventListener('click', () => handleInstrumentMessage(chip.textContent), true);
+                });
+            });
+            observer.observe(document.getElementById('assistant-suggestions') || document.body, {childList:true, subtree:true});
+
+            // Add spin animation if missing
+            if (!document.getElementById('chart-patch-style')) {
+                const s = document.createElement('style');
+                s.id = 'chart-patch-style';
+                s.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+                document.head.appendChild(s);
+            }
+
+            console.log('[ChartPatch] ✅ Inline chart interceptor active');
+        }
+        // Start patching after DOM is fully ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => setTimeout(tryPatch, 800));
+        } else {
+            setTimeout(tryPatch, 800);
+        }
+    })();
+    </script>
+
+</body>
+</html>

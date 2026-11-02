@@ -1,0 +1,7 @@
+"comparison_domain","sample_size_n","mean_exp_tR","mean_sim_tR","MAE_min","RMSE_min","MAPE_pct","median_abs_error_min","max_abs_error_min","mean_bias_min","SD_differences_min","bland_altman_lower_LoA","bland_altman_upper_LoA","R_squared","tost_p_value","statistical_conclusion"
+"Isocratic 50% B Standard Conditions","4","5.463","5.375","0.138","0.205","2.07","0.05","0.4","-0.088","0.214","-0.506","0.331","0.9978","0.0116","EQUIVALENT (MAPE < 3.0%)"
+"Isocratic Flow Sweep (0.5 - 2.0 mL/min)","20","5.736","5.644","0.144","0.241","2.07","0.062","0.8","-0.092","0.229","-0.541","0.357","0.9985","0.0000","EQUIVALENT (MAPE < 3.0%)"
+"Isocratic Temp Sweep (25 - 50 C)","16","4.644","4.57","0.117","0.178","2.07","0.044","0.454","-0.074","0.167","-0.403","0.254","0.998","0.0000","EQUIVALENT (MAPE < 3.0%)"
+"Gradient Elution (10% to 70% B over 8-12 min)","12","5.75","5.747","1.243","1.542","25.5","1.09","2.49","-0.003","1.611","-3.159","3.154","0.8836","0.1219","DIVERGENT (MAPE >= 10.0%)"
+"All Nominal Baseline Runs (No Faults)","68","5.401","5.797","1.367","3.427","22.65","0.3","22.289","0.395","3.429","-6.326","7.117","0.4676","0.3645","DIVERGENT (MAPE >= 10.0%)"
+"Fault Injected Runs","40","5.463","5.784","1.202","1.562","26.07","0.883","3.872","0.321","1.548","-2.713","3.356","0.6526","0.1818","DIVERGENT (MAPE >= 10.0%)"

@@ -1,0 +1,567 @@
+/* ================================================================
+   SimuPharma Guided Teacher — Step-by-Step Overlay
+   Premium dark glass panel with spotlight highlighting
+   ================================================================ */
+
+/* ---- Teacher Panel (Left side) ---- */
+.guided-teacher-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 380px;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(59, 130, 246, 0.2);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.5);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #e2e8f0;
+}
+
+.guided-teacher-panel.active {
+    transform: translateX(0);
+}
+
+/* ---- Teacher Header ---- */
+.gt-header {
+    padding: 20px 24px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.15));
+    border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.gt-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #2563EB, #7C3AED);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.gt-avatar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.gt-avatar.speaking {
+    animation: gt-speaking 1s ease-in-out infinite;
+}
+
+@keyframes gt-speaking {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    }
+}
+
+.gt-header-info h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 0 0 2px;
+}
+
+.gt-header-info p {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.gt-header-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+}
+
+.gt-header-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.gt-header-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #f1f5f9;
+}
+
+.gt-header-btn.active {
+    background: rgba(59, 130, 246, 0.3);
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* ---- Progress Bar ---- */
+.gt-progress {
+    padding: 12px 24px;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gt-progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.gt-step-counter {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #3b82f6;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.gt-progress-pct {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+.gt-progress-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.gt-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2563EB, #7C3AED);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+/* ---- Step Content Area ---- */
+.gt-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.gt-step-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gt-step-title .step-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2563EB, #7C3AED);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.gt-instruction {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+}
+
+.gt-instruction strong {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+/* ---- Theory Card ---- */
+.gt-theory {
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gt-theory-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #60a5fa;
+}
+
+.gt-theory-header i {
+    transition: transform 0.3s ease;
+}
+
+.gt-theory.expanded .gt-theory-header i {
+    transform: rotate(90deg);
+}
+
+.gt-theory-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.gt-theory.expanded .gt-theory-content {
+    max-height: 300px;
+    margin-top: 10px;
+}
+
+.gt-theory-content p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #94a3b8;
+    margin: 0;
+}
+
+/* ---- Action Required Card ---- */
+.gt-action {
+    background: rgba(74, 222, 128, 0.08);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gt-action-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(74, 222, 128, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4ade80;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    animation: gt-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gt-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(74, 222, 128, 0);
+    }
+}
+
+.gt-action-text {
+    font-size: 0.82rem;
+    color: #4ade80;
+    font-weight: 500;
+}
+
+/* ---- Navigation Footer ---- */
+.gt-footer {
+    padding: 16px 24px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gt-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.gt-btn-prev {
+    background: rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gt-btn-prev:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #f1f5f9;
+}
+
+.gt-btn-next {
+    background: linear-gradient(135deg, #2563EB, #7C3AED);
+    color: white;
+    flex: 1;
+    justify-content: center;
+}
+
+.gt-btn-next:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+}
+
+.gt-btn-next:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ---- Spotlight Overlay ---- */
+.gt-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    opacity: 0;
+}
+
+.gt-overlay.active {
+    opacity: 1;
+}
+
+.gt-spotlight {
+    position: fixed;
+    border: 3px solid #3b82f6;
+    border-radius: 12px;
+    z-index: 9999;
+    pointer-events: none;
+    box-shadow:
+        0 0 0 4000px rgba(0, 0, 0, 0.55),
+        0 0 30px rgba(59, 130, 246, 0.4),
+        inset 0 0 20px rgba(59, 130, 246, 0.1);
+    animation: gt-spotlight-pulse 2s ease-in-out infinite;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes gt-spotlight-pulse {
+
+    0%,
+    100% {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.55), 0 0 30px rgba(59, 130, 246, 0.4);
+    }
+
+    50% {
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.55), 0 0 50px rgba(59, 130, 246, 0.6);
+    }
+}
+
+/* ---- Teacher Launch Button (Compact top-right circle) ---- */
+.gt-launch-btn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563EB, #7C3AED);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+    font-weight: 600;
+    font-family: 'Inter', system-ui, sans-serif;
+    z-index: 9000;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.gt-launch-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 30px rgba(37, 99, 235, 0.5);
+}
+
+.gt-launch-btn:hover::after {
+    content: 'Guided Experiment';
+    position: absolute;
+    right: 52px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    color: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    pointer-events: none;
+}
+
+.gt-launch-btn i {
+    font-size: 1.1rem;
+}
+
+/* ---- Minimized Teacher State ---- */
+.guided-teacher-panel.minimized {
+    transform: translateX(calc(100% - 48px)) !important;
+    width: 48px;
+    border-radius: 12px 0 0 12px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.guided-teacher-panel.minimized .gt-header,
+.guided-teacher-panel.minimized .gt-progress,
+.guided-teacher-panel.minimized .gt-content,
+.guided-teacher-panel.minimized .gt-footer {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.guided-teacher-panel.minimized .gt-minimize-tab {
+    display: flex;
+}
+
+.gt-minimize-tab {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 80px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    z-index: 1;
+}
+
+.gt-minimize-tab i {
+    color: #60a5fa;
+    font-size: 1rem;
+}
+
+.gt-minimize-tab span {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 0.65rem;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Minimize button in header */
+.gt-minimize-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.gt-minimize-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #f1f5f9;
+}
+
+/* ---- Completion Card ---- */
+.gt-completion {
+    text-align: center;
+    padding: 20px;
+}
+
+.gt-completion-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(34, 197, 94, 0.2));
+    border: 2px solid rgba(74, 222, 128, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 16px;
+}
+
+.gt-completion h3 {
+    font-size: 1.2rem;
+    color: #4ade80;
+    margin: 0 0 8px;
+}
+
+.gt-completion p {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin: 0 0 16px;
+    line-height: 1.5;
+}
+
+.gt-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(74, 222, 128, 0.1);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4ade80;
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 640px) {
+    .guided-teacher-panel {
+        width: 100%;
+    }
+
+    .gt-launch-btn {
+        top: 12px;
+        right: 12px;
+    }
+}

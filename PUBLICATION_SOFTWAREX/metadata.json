@@ -1,0 +1,34 @@
+{
+  "code_metadata": {
+    "current_code_version": "v1.0.0",
+    "permanent_link_to_code": "https://github.com/simupharm/simupharm",
+    "legal_code_license": "MIT License",
+    "code_versioning_system": "Git",
+    "software_code_language": "Python 3.10+",
+    "compilation_requirements": "setuptools >= 61.0, wheel",
+    "dependencies": [
+      "numpy >= 1.22.0",
+      "scipy >= 1.8.0",
+      "pydantic >= 2.0.0"
+    ],
+    "optional_dependencies": {
+      "visualization": "matplotlib >= 3.5.0",
+      "testing": "pytest >= 7.0.0"
+    },
+    "operating_systems": [
+      "Linux (Ubuntu, Debian, CentOS, Fedora)",
+      "macOS (Intel and Apple Silicon)",
+      "Microsoft Windows 10/11"
+    ],
+    "support_contact": "info@simupharm.io",
+    "keywords": [
+      "Pharmaceutical Analysis",
+      "Chromatography Simulation",
+      "Spectroscopy Modeling",
+      "Van Deemter Equation",
+      "Chemometrics",
+      "Virtual Laboratory",
+      "Open Source Software"
+    ]
+  }
+}

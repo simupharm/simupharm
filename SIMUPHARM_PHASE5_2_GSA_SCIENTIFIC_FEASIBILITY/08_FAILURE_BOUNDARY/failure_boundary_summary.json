@@ -1,0 +1,5 @@
+{
+  "P_failure_Rs_lt_1_5": 0.4846,
+  "P_severe_failure_Rs_lt_1_0": 0.1126,
+  "Primary_Boundary_Rules": "|--- L <= 12.04\n|   |--- F <= 1.64\n|   |   |--- L <= 9.87\n|   |   |   |--- class: True\n|   |   |--- L >  9.87\n|   |   |   |--- class: True\n|   |--- F >  1.64\n|   |   |--- L <= 8.27\n|   |   |   |--- class: True\n|   |   |--- L >  8.27\n|   |   |   |--- class: False\n|--- L >  12.04\n|   |--- F <= 0.91\n|   |   |--- L <= 19.80\n|   |   |   |--- class: True\n|   |   |--- L >  19.80\n|   |   |   |--- class: True\n|   |--- F >  0.91\n|   |   |--- F <= 1.13\n|   |   |   |--- class: False\n|   |   |--- F >  1.13\n|   |   |   |--- class: False\n"
+}

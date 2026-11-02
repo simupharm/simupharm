@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use SimuPharm in your research or educational curriculum, please cite it as below."
+title: "SimuPharm: An Open-Source Multi-Instrument Analytical and Spectroscopic Simulation Suite for Pharmaceutical Research and Education"
+version: 1.0.0
+date-released: 2026-11-01
+url: "https://github.com/simupharm/simupharm"
+authors:
+  - family-names: "SimuPharm Development Team"
+keywords:
+  - "pharmaceutical analysis"
+  - "high-performance liquid chromatography"
+  - "uv-vis spectroscopy"
+  - "ftir spectroscopy"
+  - "mass spectrometry"
+  - "gas chromatography"
+  - "chemometrics"
+  - "van deemter kinetics"
+  - "scientific python"
+license: MIT

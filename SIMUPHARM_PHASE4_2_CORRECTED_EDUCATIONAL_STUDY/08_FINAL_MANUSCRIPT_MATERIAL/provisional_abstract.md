@@ -1,0 +1,13 @@
+# Provisional Abstract (Calibrated & Scrubbed)
+**Document ID:** P4.2-ABSTRACT-2026-REV2  
+**Target:** Submission to *Journal of Chemical Education*  
+
+---
+
+High-Performance Liquid Chromatography (HPLC) is a foundational analytical technique across chemical, pharmaceutical, and biological sciences; however, high instrument costs and risks of hardware damage severely limit opportunities for undergraduate students to practice troubleshooting operational faults. To address this educational bottleneck, we developed **SimuPharm**, an interactive, zero-install, browser-based HPLC simulator that couples deterministic retention modeling with interactive instrument fault injection (pump cavitation, fluidic fitting leaks, column bed voids, and mobile phase contamination). 
+
+In this exploratory pilot study, we evaluated the usability and short-term instructional utility of SimuPharm in an intact undergraduate laboratory cohort ($N = [N]$ third- and fourth-year students). Participants completed a 10-item isomorphic pre-test, explored instrument controls and fault symptomology under standardized neutral guided inquiry, diagnosed four blind simulated unknowns scored on an analytical 24-point rubric, and completed an isomorphic post-test and the canonical System Usability Scale (SUS).
+
+Preliminary pilot findings **suggest that** interactive simulation practice is **associated with measurable short-term gains** in diagnostic troubleshooting performance, with student scores increasing from a baseline mean of $[M_{	ext{pre}}] \pm [SD_{	ext{pre}}]$ to $[M_{	ext{post}}] \pm [SD_{	ext{post}}]$ (Hodges-Lehmann median difference: $+[HL]$ points; Wilcoxon Signed-Rank Test with Pratt's zero-difference handling: $W = [W]$, $p = [p]$, rank-biserial $r = [r]$). On practical unknown diagnostic tasks, participants demonstrated structured physical reasoning across fault modes (mean rubric score: $[M_{	ext{rubric}}] \pm [SD]$ out of 24 points; inter-rater agreement: $\kappa_w = [\kappa]$), with a median time-to-diagnosis of $[M_{	ext{lat}}]$ seconds. Usability evaluation indicated high student satisfaction and intuitive navigation (mean SUS score: $[M_{	ext{SUS}}] \pm [SD_{	ext{SUS}}]$, corresponding to an adjective rating of $[Grade]$). 
+
+These initial results **indicate that** SimuPharm provides an accessible, highly usable supplementary platform for developing conceptual HPLC troubleshooting competence in resource-constrained educational settings. Controlled multi-institutional trials measuring skill transfer to physical analytical hardware remain an important area for future investigation.

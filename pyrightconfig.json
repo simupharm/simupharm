@@ -1,0 +1,19 @@
+{
+  "include": ["backend"],
+  "exclude": ["backend/migrations"],
+  "pythonVersion": "3.11",
+  "pythonPlatform": "Windows",
+  "venvPath": ".",
+  "venv": ".venv",
+  "typeCheckingMode": "off",
+  "reportMissingImports": false,
+  "reportMissingModuleSource": false,
+  "reportOptionalMemberAccess": false,
+  "reportAttributeAccessIssue": false,
+  "reportReturnType": false,
+  "reportArgumentType": false,
+  "reportIndexIssue": false,
+  "reportOperatorIssue": false,
+  "useLibraryCodeForTypes": true,
+  "stubPath": "typestubs"
+}

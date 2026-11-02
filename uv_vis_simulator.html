@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimuPharma — Advanced UV-Vis Spectrophotometer Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css" />
+    <link rel="stylesheet" href="uv_vis_style.css">
+</head>
+
+<body>
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="hidden">
+        <div class="loader-content">
+            <div class="uv-loader">
+                <div class="beam"></div>
+                <div class="beam delay"></div>
+            </div>
+            <p id="loading-text">Initializing Spectrophotometer...</p>
+        </div>
+    </div>
+
+    <div id="app-container">
+        <!-- ============================================================
+             VIEW 1: INSTRUMENT OVERVIEW
+             ============================================================ -->
+        <div id="instrument-view" class="view active">
+
+            <!-- Top Header Bar -->
+            <div class="main-view-header">
+                <div class="logo-section">
+                    <div class="logo-icon"><i class="fas fa-sun"></i></div>
+                    <div class="logo-info">
+                        <h1>UV-Vis Spectrophotometer</h1>
+                        <span class="version-tag">SimuPharma v2.0</span>
+                    </div>
+                </div>
+                <div class="header-controls">
+                    <div class="difficulty-selector">
+                        <span>Difficulty:</span>
+                        <button class="difficulty-btn active" data-level="beginner">Beginner</button>
+                        <button class="difficulty-btn" data-level="intermediate">Intermediate</button>
+                        <button class="difficulty-btn" data-level="advanced">Advanced</button>
+                    </div>
+                    <button id="tutorial-btn" class="btn icon-btn" title="Start Tutorial"><i
+                            class="fas fa-graduation-cap"></i></button>
+                    <a href="uv_vis.html" class="btn icon-btn" title="Back to Info"><i
+                            class="fas fa-arrow-left"></i></a>
+                </div>
+            </div>
+
+            <!-- CSS-Drawn Instrument Schematic -->
+            <div class="instrument-container" id="instrument-schematic">
+
+                <!-- Instrument Body (CSS drawn) -->
+                <div class="instrument-body">
+                    <!-- Light Source Module -->
+                    <div class="instrument-module source-module">
+                        <div class="module-inner">
+                            <div class="lamp-glow" id="lamp-glow"></div>
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Light Source</span>
+                        </div>
+                        <div class="hotspot pulse-animate" id="hotspot-source" data-modal="source-modal">
+                            <div class="hotspot-ring"></div>
+                            <div class="hotspot-tooltip">
+                                <span class="tooltip-title">Light Source</span>
+                                <span class="tooltip-desc">Deuterium & Tungsten lamps</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Light Beam Path -->
+                    <div class="beam-path">
+                        <div class="beam-line" id="beam-line-1"></div>
+                        <div class="beam-arrow">→</div>
+                    </div>
+
+                    <!-- Monochromator Module -->
+                    <div class="instrument-module mono-module">
+                        <div class="module-inner">
+                            <div class="prism-icon">
+                                <div class="prism"></div>
+                                <div class="rainbow"></div>
+                            </div>
+                            <span>Monochromator</span>
+                        </div>
+                        <div class="hotspot pulse-animate" id="hotspot-mono" data-modal="mono-modal">
+                            <div class="hotspot-ring"></div>
+                            <div class="hotspot-tooltip">
+                                <span class="tooltip-title">Monochromator</span>
+                                <span class="tooltip-desc">Wavelength selection & slit width</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Beam Path -->
+                    <div class="beam-path">
+                        <div class="beam-line colored" id="beam-line-2"></div>
+                        <div class="beam-arrow">→</div>
+                    </div>
+
+                    <!-- Sample Compartment -->
+                    <div class="instrument-module sample-module">
+                        <div class="module-inner">
+                            <div class="cuvette-visual">
+                                <div class="cuvette" id="cuvette-visual">
+                                    <div class="cuvette-liquid" id="cuvette-liquid"></div>
+                                </div>
+                            </div>
+                            <span>Sample</span>
+                        </div>
+                        <div class="hotspot pulse-animate" id="hotspot-sample" data-modal="sample-modal">
+                            <div class="hotspot-ring"></div>
+                            <div class="hotspot-tooltip">
+                                <span class="tooltip-title">Sample Compartment</span>
+                                <span class="tooltip-desc">Cuvette holder & path length</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Beam Path (attenuated) -->
+                    <div class="beam-path">
+                        <div class="beam-line attenuated" id="beam-line-3"></div>
+                        <div class="beam-arrow">→</div>
+                    </div>
+
+                    <!-- Detector Module -->
+                    <div class="instrument-module detector-module">
+                        <div class="module-inner">
+                            <i class="fas fa-microchip"></i>
+                            <span>Detector</span>
+                        </div>
+                        <div class="hotspot pulse-animate" id="hotspot-detector" data-modal="detector-modal">
+                            <div class="hotspot-ring"></div>
+                            <div class="hotspot-tooltip">
+                                <span class="tooltip-title">Detector (PMT)</span>
+                                <span class="tooltip-desc">Sensitivity & integration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instrument Status Display -->
+                <div class="instrument-display" id="instrument-display">
+                    <div class="display-row">
+                        <span class="display-label">λ</span>
+                        <span class="display-value" id="disp-wavelength">254.0 nm</span>
+                    </div>
+                    <div class="display-row">
+                        <span class="display-label">Abs</span>
+                        <span class="display-value" id="disp-absorbance">0.000</span>
+                    </div>
+                    <div class="display-row">
+                        <span class="display-label">%T</span>
+                        <span class="display-value" id="disp-transmittance">100.0%</span>
+                    </div>
+                    <div class="display-row status-row">
+                        <span class="display-label"><i class="fas fa-circle" id="status-dot"></i></span>
+                        <span class="display-value" id="disp-status">Ready</span>
+                    </div>
+                </div>
+
+                <!-- Power / Enter Button -->
+                <div class="instrument-controls-bar">
+                    <button class="hw-btn" id="btn-power" title="Power"><i class="fas fa-power-off"></i></button>
+                    <button class="hw-btn primary" id="btn-enter-screen" title="Open Analysis Screen"><i
+                            class="fas fa-desktop"></i> Open Analysis</button>
+                    <button class="hw-btn" id="btn-autozero" title="Auto-Zero / Blank"><i
+                            class="fas fa-balance-scale"></i> Auto-Zero</button>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="quick-stats-panel">
+                <div class="stat-card"><i class="fas fa-sun"></i>
+                    <div class="stat-info"><span class="stat-value" id="qs-source">D₂ + W</span><span
+                            class="stat-label">Lamp</span></div>
+                </div>
+                <div class="stat-card"><i class="fas fa-ruler"></i>
+                    <div class="stat-info"><span class="stat-value" id="qs-path">1.0 cm</span><span
+                            class="stat-label">Path Length</span></div>
+                </div>
+                <div class="stat-card"><i class="fas fa-wave-square"></i>
+                    <div class="stat-info"><span class="stat-value" id="qs-wavelength">254 nm</span><span
+                            class="stat-label">Wavelength</span></div>
+                </div>
+                <div class="stat-card"><i class="fas fa-flask"></i>
+                    <div class="stat-info"><span class="stat-value" id="qs-compound">None</span><span
+                            class="stat-label">Compound</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             VIEW 2: ANALYSIS SCREEN
+             ============================================================ -->
+        <div id="analysis-view" class="view">
+            <!-- Screen Header -->
+            <div class="screen-header glass-panel">
+                <div class="header-left">
+                    <button id="back-to-instrument" class="btn icon-btn" title="Return to Instrument"><i
+                            class="fas fa-arrow-left"></i></button>
+                    <h2><i class="fas fa-chart-area"></i> UV-Vis Analysis</h2>
+                </div>
+                <div class="header-right">
+                    <span class="live-indicator"><span class="live-dot"></span> Live</span>
+                    <button id="btn-export-data" class="btn icon-btn" title="Export Data"><i
+                            class="fas fa-download"></i></button>
+                    <button id="btn-fullscreen" class="btn icon-btn" title="Fullscreen"><i
+                            class="fas fa-expand"></i></button>
+                </div>
+            </div>
+
+            <div class="screen-content">
+                <!-- Left Panel: Controls -->
+                <div class="left-panel glass-panel">
+                    <!-- Mode Selector -->
+                    <div class="panel-section">
+                        <h4><i class="fas fa-layer-group"></i> Analysis Mode</h4>
+                        <div class="mode-tabs">
+                            <button class="mode-tab active" data-mode="scan"><i class="fas fa-wave-square"></i>
+                                Scan</button>
+                            <button class="mode-tab" data-mode="fixed"><i class="fas fa-crosshairs"></i> Fixed
+                                λ</button>
+                            <button class="mode-tab" data-mode="kinetics"><i class="fas fa-clock"></i> Kinetics</button>
+                            <button class="mode-tab" data-mode="calibration"><i class="fas fa-chart-line"></i>
+                                Calibration</button>
+                        </div>
+                    </div>
+
+                    <!-- Compound Selection -->
+                    <div class="panel-section">
+                        <h4><i class="fas fa-flask"></i> Compound</h4>
+                        <select id="compound-select" class="sim-select">
+                            <option value="">— Select Compound —</option>
+                        </select>
+                        <div class="compound-info" id="compound-info" style="display:none">
+                            <div class="info-row"><span>MW:</span><span id="ci-mw">—</span></div>
+                            <div class="info-row"><span>Formula:</span><span id="ci-formula">—</span></div>
+                            <div class="info-row"><span>λmax:</span><span id="ci-lambda">—</span></div>
+                            <div class="info-row"><span>Category:</span><span id="ci-category">—</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Scan Parameters (Mode: Scan) -->
+                    <div class="panel-section mode-panel" data-for="scan">
+                        <h4><i class="fas fa-sliders-h"></i> Scan Parameters</h4>
+                        <div class="param-item">
+                            <label>Start λ (nm)</label>
+                            <input type="number" id="scan-start" value="190" min="190" max="800" class="sim-input">
+                        </div>
+                        <div class="param-item">
+                            <label>End λ (nm)</label>
+                            <input type="number" id="scan-end" value="400" min="190" max="800" class="sim-input">
+                        </div>
+                        <div class="param-item">
+                            <label>Scan Speed</label>
+                            <select id="scan-speed" class="sim-select">
+                                <option value="fast">Fast (1200 nm/min)</option>
+                                <option value="medium" selected>Medium (600 nm/min)</option>
+                                <option value="slow">Slow (120 nm/min)</option>
+                            </select>
+                        </div>
+                        <div class="param-item">
+                            <label>Concentration (mg/L)</label>
+                            <input type="number" id="scan-conc" value="10" min="0.1" max="100" step="0.1"
+                                class="sim-input">
+                        </div>
+                        <button class="action-btn primary" id="btn-run-scan"><i class="fas fa-play"></i> Run
+                            Scan</button>
+                        <button class="action-btn secondary" id="btn-clear-scan"><i class="fas fa-eraser"></i>
+                            Clear</button>
+                    </div>
+
+                    <!-- Fixed Wavelength (Mode: Fixed) -->
+                    <div class="panel-section mode-panel hidden" data-for="fixed">
+                        <h4><i class="fas fa-crosshairs"></i> Fixed λ Measurement</h4>
+                        <div class="param-item">
+                            <label>Wavelength (nm)</label>
+                            <input type="number" id="fixed-wavelength" value="254" min="190" max="800"
+                                class="sim-input">
+                        </div>
+                        <div class="param-item">
+                            <label>Concentration (mg/L)</label>
+                            <input type="number" id="fixed-conc" value="10" min="0.1" max="100" step="0.1"
+                                class="sim-input">
+                        </div>
+                        <button class="action-btn primary" id="btn-measure-fixed"><i class="fas fa-bullseye"></i>
+                            Measure</button>
+                        <div class="fixed-result" id="fixed-result" style="display:none">
+                            <div class="result-big" id="fixed-abs-value">0.000</div>
+                            <div class="result-sub" id="fixed-trans-value">100.0% T</div>
+                        </div>
+                    </div>
+
+                    <!-- Kinetics (Mode: Kinetics) -->
+                    <div class="panel-section mode-panel hidden" data-for="kinetics">
+                        <h4><i class="fas fa-clock"></i> Kinetics Mode</h4>
+                        <div class="param-item">
+                            <label>Wavelength (nm)</label>
+                            <input type="number" id="kin-wavelength" value="254" min="190" max="800" class="sim-input">
+                        </div>
+                        <div class="param-item">
+                            <label>Duration (sec)</label>
+                            <input type="number" id="kin-duration" value="60" min="10" max="300" step="10"
+                                class="sim-input">
+                        </div>
+                        <div class="param-item">
+                            <label>Reaction Rate</label>
+                            <select id="kin-rate" class="sim-select">
+                                <option value="slow">Slow (k = 0.01)</option>
+                                <option value="medium" selected>Medium (k = 0.05)</option>
+                                <option value="fast">Fast (k = 0.15)</option>
+                            </select>
+                        </div>
+                        <button class="action-btn primary" id="btn-start-kinetics"><i class="fas fa-play"></i> Start
+                            Monitoring</button>
+                        <button class="action-btn danger" id="btn-stop-kinetics" disabled><i class="fas fa-stop"></i>
+                            Stop</button>
+                    </div>
+
+                    <!-- Calibration (Mode: Calibration) -->
+                    <div class="panel-section mode-panel hidden" data-for="calibration">
+                        <h4><i class="fas fa-chart-line"></i> Calibration Curve</h4>
+                        <div class="param-item">
+                            <label>Wavelength (nm)</label>
+                            <input type="number" id="cal-wavelength" value="254" min="190" max="800" class="sim-input">
+                        </div>
+                        <div class="param-item">
+                            <label>Standards (mg/L)</label>
+                            <div class="standards-list" id="standards-list">
+                                <span class="std-chip">2</span>
+                                <span class="std-chip">4</span>
+                                <span class="std-chip">6</span>
+                                <span class="std-chip">8</span>
+                                <span class="std-chip">10</span>
+                            </div>
+                        </div>
+                        <button class="action-btn primary" id="btn-run-calibration"><i class="fas fa-chart-line"></i>
+                            Measure Standards</button>
+                        <hr class="divider">
+                        <div class="param-item">
+                            <label>Unknown Concentration (mg/L)</label>
+                            <input type="number" id="cal-unknown" value="5.5" min="0.1" max="15" step="0.1"
+                                class="sim-input">
+                        </div>
+                        <button class="action-btn secondary" id="btn-measure-unknown" disabled><i
+                                class="fas fa-question-circle"></i> Analyze Unknown</button>
+                        <div class="cal-results" id="cal-results" style="display:none"></div>
+                    </div>
+
+                    <!-- Fault Simulation (Advanced) -->
+                    <div class="panel-section fault-section" id="fault-section" style="display:none">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Fault Simulation</h4>
+                        <select id="fault-select" class="sim-select">
+                            <option value="none">Normal Operation</option>
+                            <option value="dirty_cuvette">Dirty Cuvette</option>
+                            <option value="air_bubble">Air Bubble in Cuvette</option>
+                            <option value="lamp_aging">Lamp Aging</option>
+                            <option value="stray_light">Stray Light Leakage</option>
+                            <option value="wrong_solvent">Wrong Reference Solvent</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Center: Spectrum Canvas -->
+                <div class="center-panel">
+                    <div class="canvas-toolbar">
+                        <div class="canvas-tabs">
+                            <button class="canvas-tab active" data-canvas="spectrum">Spectrum</button>
+                            <button class="canvas-tab" data-canvas="calibration">Calibration</button>
+                        </div>
+                        <div class="canvas-controls">
+                            <button class="btn icon-btn small" id="btn-toggle-axis" title="Toggle Abs/T"><i
+                                    class="fas fa-exchange-alt"></i></button>
+                            <button class="btn icon-btn small" id="btn-zoom-in" title="Zoom In"><i
+                                    class="fas fa-search-plus"></i></button>
+                            <button class="btn icon-btn small" id="btn-zoom-out" title="Zoom Out"><i
+                                    class="fas fa-search-minus"></i></button>
+                            <button class="btn icon-btn small" id="btn-reset-zoom" title="Reset"><i
+                                    class="fas fa-undo"></i></button>
+                        </div>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="spectrum-canvas" width="800" height="480"></canvas>
+                        <canvas id="calibration-canvas" width="800" height="480" style="display:none"></canvas>
+                        <!-- Scan progress bar -->
+                        <div class="scan-progress" id="scan-progress" style="display:none">
+                            <div class="scan-progress-fill" id="scan-progress-fill"></div>
+                            <span class="scan-progress-text" id="scan-progress-text">Scanning...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Results -->
+                <div class="right-panel glass-panel">
+                    <div class="panel-section">
+                        <h4><i class="fas fa-list"></i> Peak Table</h4>
+                        <div class="peak-table-container">
+                            <table class="peak-table" id="peak-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>λ (nm)</th>
+                                        <th>Abs</th>
+                                        <th>ε</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="peak-tbody">
+                                    <tr>
+                                        <td colspan="4" class="empty-msg">No peaks detected</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h4><i class="fas fa-calculator"></i> Calculations</h4>
+                        <div class="calc-display" id="calc-display">
+                            <p class="calc-placeholder">Run a measurement to see results</p>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h4><i class="fas fa-check-circle"></i> Validation</h4>
+                        <div class="validation-list" id="validation-list">
+                            <div class="val-item"><span>λ Accuracy</span><span class="val-status pending">—</span></div>
+                            <div class="val-item"><span>Abs Accuracy</span><span class="val-status pending">—</span>
+                            </div>
+                            <div class="val-item"><span>Linearity (R²)</span><span class="val-status pending">—</span>
+                            </div>
+                            <div class="val-item"><span>LOD</span><span class="val-status pending">—</span></div>
+                            <div class="val-item"><span>LOQ</span><span class="val-status pending">—</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         MODALS — Instrument Component Settings
+         ============================================================ -->
+
+    <!-- Source Modal -->
+    <div class="modal-overlay" id="source-modal">
+        <div class="modal glass-panel">
+            <div class="modal-header">
+                <h3><i class="fas fa-lightbulb"></i> Light Source Configuration</h3><button class="modal-close"
+                    data-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="param-item">
+                    <label>UV Source</label>
+                    <select id="uv-source" class="sim-select">
+                        <option value="deuterium" selected>Deuterium Lamp (190–370 nm)</option>
+                        <option value="xenon">Xenon Flash Lamp (190–800 nm)</option>
+                    </select>
+                    <small>Deuterium lamps produce continuous UV radiation by electrical discharge through D₂
+                        gas.</small>
+                </div>
+                <div class="param-item">
+                    <label>Visible Source</label>
+                    <select id="vis-source" class="sim-select">
+                        <option value="tungsten" selected>Tungsten-Halogen (330–800 nm)</option>
+                    </select>
+                    <small>Tungsten-halogen provides continuous visible & near-IR radiation via incandescence.</small>
+                </div>
+                <div class="param-item">
+                    <label>Source Switching</label>
+                    <select id="source-switch" class="sim-select">
+                        <option value="auto" selected>Automatic (at 370 nm)</option>
+                        <option value="uv">UV Only (D₂)</option>
+                        <option value="vis">Vis Only (W)</option>
+                    </select>
+                </div>
+                <div class="lamp-status">
+                    <div class="lamp-bar"><span>D₂ Lamp Life:</span>
+                        <div class="lamp-life-bar">
+                            <div class="lamp-life-fill" id="d2-life" style="width:85%"></div>
+                        </div><span id="d2-hours">850 hrs</span>
+                    </div>
+                    <div class="lamp-bar"><span>W Lamp Life:</span>
+                        <div class="lamp-life-bar">
+                            <div class="lamp-life-fill tungsten" id="w-life" style="width:92%"></div>
+                        </div><span id="w-hours">920 hrs</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="action-btn primary modal-apply" data-close>Apply</button></div>
+        </div>
+    </div>
+
+    <!-- Monochromator Modal -->
+    <div class="modal-overlay" id="mono-modal">
+        <div class="modal glass-panel">
+            <div class="modal-header">
+                <h3><i class="fas fa-prism"></i> Monochromator Settings</h3><button class="modal-close"
+                    data-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="param-item">
+                    <label>Grating Type</label>
+                    <select id="grating-type" class="sim-select">
+                        <option value="holographic" selected>Holographic (1200 lines/mm)</option>
+                        <option value="ruled">Ruled (600 lines/mm)</option>
+                    </select>
+                    <small>Holographic gratings produce less stray light and better resolution.</small>
+                </div>
+                <div class="param-item">
+                    <label>Slit Width (nm)</label>
+                    <div class="slider-group">
+                        <input type="range" id="slit-width" min="0.5" max="5" step="0.5" value="1">
+                        <span class="slider-value" id="slit-width-val">1.0 nm</span>
+                    </div>
+                    <small>Narrower slit = better resolution but lower light throughput (lower S/N).</small>
+                </div>
+                <div class="param-item">
+                    <label>Wavelength Accuracy</label>
+                    <div class="accuracy-display">± 0.3 nm (Holmium Oxide test)</div>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="action-btn primary modal-apply" data-close>Apply</button></div>
+        </div>
+    </div>
+
+    <!-- Sample Modal -->
+    <div class="modal-overlay" id="sample-modal">
+        <div class="modal glass-panel">
+            <div class="modal-header">
+                <h3><i class="fas fa-flask"></i> Sample Compartment</h3><button class="modal-close"
+                    data-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="param-item">
+                    <label>Cuvette Material</label>
+                    <select id="cuvette-material" class="sim-select">
+                        <option value="quartz" selected>Quartz (UV + Vis: 190–2500 nm)</option>
+                        <option value="glass">Glass (Vis only: 340–2500 nm)</option>
+                        <option value="plastic">Disposable Plastic (Vis: 380–780 nm)</option>
+                    </select>
+                    <small>Quartz is required for UV measurements below 340 nm.</small>
+                </div>
+                <div class="param-item">
+                    <label>Path Length (cm)</label>
+                    <select id="path-length" class="sim-select">
+                        <option value="0.1">0.1 cm (micro)</option>
+                        <option value="0.5">0.5 cm</option>
+                        <option value="1" selected>1.0 cm (standard)</option>
+                        <option value="2">2.0 cm</option>
+                        <option value="5">5.0 cm</option>
+                    </select>
+                    <small>Beer-Lambert: A = εlc. Longer path length → higher absorbance.</small>
+                </div>
+                <div class="param-item">
+                    <label>Reference Solvent</label>
+                    <select id="ref-solvent" class="sim-select">
+                        <option value="water" selected>Water (UV cutoff: 190 nm)</option>
+                        <option value="methanol">Methanol (UV cutoff: 210 nm)</option>
+                        <option value="ethanol">Ethanol (UV cutoff: 210 nm)</option>
+                        <option value="acetonitrile">Acetonitrile (UV cutoff: 190 nm)</option>
+                        <option value="hexane">n-Hexane (UV cutoff: 200 nm)</option>
+                        <option value="chloroform">Chloroform (UV cutoff: 245 nm)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="action-btn primary modal-apply" data-close>Apply</button></div>
+        </div>
+    </div>
+
+    <!-- Detector Modal -->
+    <div class="modal-overlay" id="detector-modal">
+        <div class="modal glass-panel">
+            <div class="modal-header">
+                <h3><i class="fas fa-microchip"></i> Detector Settings</h3><button class="modal-close"
+                    data-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="param-item">
+                    <label>Detector Type</label>
+                    <select id="detector-type" class="sim-select">
+                        <option value="pmt" selected>Photomultiplier Tube (PMT)</option>
+                        <option value="photodiode">Silicon Photodiode</option>
+                        <option value="pda">Photodiode Array (PDA)</option>
+                    </select>
+                    <small>PMT offers highest sensitivity; PDA enables full-spectrum simultaneous detection.</small>
+                </div>
+                <div class="param-item">
+                    <label>Integration Time (ms)</label>
+                    <div class="slider-group">
+                        <input type="range" id="integration-time" min="50" max="2000" step="50" value="200">
+                        <span class="slider-value" id="integration-time-val">200 ms</span>
+                    </div>
+                    <small>Longer integration = less noise but slower measurement.</small>
+                </div>
+                <div class="param-item">
+                    <label>Sensitivity</label>
+                    <select id="detector-sensitivity" class="sim-select">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="action-btn primary modal-apply" data-close>Apply</button></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
+    <script src="uv_vis_script.js"></script>
+</body>
+
+</html>

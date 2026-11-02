@@ -1,0 +1,26 @@
+{
+  "agent": "Agent 10 \u2014 Research Integrity & Reproducibility Auditor",
+  "role": "Independent Research Integrity Reviewer",
+  "findings": {
+    "critical_discrepancies": [
+      {
+        "issue": "Compound Database Inflation",
+        "claim": "Documentation and docstrings claim '300+ compounds with spectral data'.",
+        "reality": "backend/compounds/database.py contains exactly 21 compounds. Frontend scripts contain 10 compounds.",
+        "severity": "CRITICAL. Must be accurately reported as 21 curated model compounds in any manuscript."
+      },
+      {
+        "issue": "FTIR FFT Disconnect",
+        "claim": "Claims interferogram generation with Fourier transformation to spectrum.",
+        "reality": "backend/science/ftir.py bypasses FFT and directly computes Gaussian absorption bands in the frequency domain.",
+        "severity": "HIGH. Manuscript must describe the actual Gaussian summation mechanism rather than claiming optical FFT simulation."
+      },
+      {
+        "issue": "AI Terminology Inflation",
+        "claim": "Claims 'Bayesian Knowledge Tracing' and 'Machine Learning Analyzer'.",
+        "reality": "Implements basic exponential moving average and rule-based peak-count tolerance matching.",
+        "severity": "HIGH. Reframe as rule-based heuristics to prevent integrity challenges during review."
+      }
+    ]
+  }
+}

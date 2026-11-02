@@ -1,0 +1,53 @@
+# =====================================================
+# SimuPharma — Docker Compose (Development + Production)
+# =====================================================
+#
+# Development:  docker compose up
+# Production:   docker compose --profile production up
+#
+
+services:
+  # ---- Backend API ----
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app # Hot reload in dev
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ---- PostgreSQL Database ----
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: simupharma
+      POSTGRES_USER: simupharma
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-simupharma_dev}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U simupharma" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # ---- Frontend (static file server) ----
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "5500:80"
+    volumes:
+      - .:/usr/share/nginx/html:ro
+    restart: unless-stopped
+
+volumes:
+  pgdata:

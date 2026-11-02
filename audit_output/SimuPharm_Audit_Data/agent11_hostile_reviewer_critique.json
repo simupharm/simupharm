@@ -1,0 +1,11 @@
+{
+  "agent": "Agent 11 \u2014 Hostile Peer Reviewer",
+  "role": "Skeptical Editorial Reviewer",
+  "lethal_rejection_points": [
+    "1. 'The authors claim an AI-driven digital twin, but the codebase contains neither machine learning models nor physical sensor telemetry. What justifies this terminology?'",
+    "2. 'How does this work differ substantially from Boswell et al. (J. Chem. Educ. 2013), who already published an interactive web HPLC simulator with empirical calibration?'",
+    "3. 'Where are the experimental validation chromatograms? A simulation without rigorous comparison against certified reference standards is merely a mathematical demonstration.'",
+    "4. 'The retention time prediction relies on empirical logP correlations rather than experimentally measured k_w and S parameters. The claimed accuracy of +/-10-20% is untested.'",
+    "5. 'If this is an educational tool, where is the human-subjects educational outcome data (pre/post-test scores, cohort control vs experimental group, normalized gain g)?'"
+  ]
+}

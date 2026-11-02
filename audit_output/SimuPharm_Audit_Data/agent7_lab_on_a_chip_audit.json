@@ -1,0 +1,11 @@
+{
+  "agent": "Agent 7 \u2014 Lab on a Chip Specialist",
+  "role": "Senior Microfluidics & Miniaturized Systems Researcher",
+  "journal": "Lab on a Chip (Royal Society of Chemistry)",
+  "evaluation": {
+    "current_fit_score": "0 / 10",
+    "scope_analysis": "Lab on a Chip exclusively publishes research on physical miniaturization, microfluidics, nanofluidics, organ-on-a-chip, and micro-electromechanical systems (MEMS). SimuPharm models standard macro-scale benchtop analytical instruments (250 mm columns, 4.6 mm ID columns, 1 cm quartz spectrophotometer cuvettes, 30 m GC capillary coils).",
+    "verdict": "DO NOT SUBMIT. Submission to Lab on a Chip will result in a rapid desk rejection within 24\u201348 hours for complete scope mismatch.",
+    "desk_reject_probability": "99.9%"
+  }
+}

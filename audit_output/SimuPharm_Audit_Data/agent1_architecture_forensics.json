@@ -1,0 +1,79 @@
+{
+  "agent": "Agent 1 \u2014 Software / Architecture Forensics",
+  "role": "Senior Scientific Software Architect",
+  "findings": {
+    "architecture_type": "Dual-Layer Hybrid: Client-Side MPA Physics Visualization Engine + Python FastAPI Headless Microservices",
+    "frontend_stack": {
+      "paradigm": "Multi-Page Application (MPA) with self-contained vanilla ES6 JavaScript modules",
+      "rendering": "HTML5 2D Canvas Context + Three.js r128 (WebGL) for instrument 3D chassis visualization",
+      "state_management": "Vanilla DOM-bound state objects per simulator page; local web storage for settings",
+      "modules": {
+        "hplc_simulator_script.js": {
+          "lines": 4529,
+          "size_kb": 184.2,
+          "role": "Full chromatographic kinetic engine, LSS gradient integration, Darcy pressure, EMG peak synthesis"
+        },
+        "gc_script.js": {
+          "lines": 4291,
+          "size_kb": 153.1,
+          "role": "Capillary gas chromatography, Golay HETP, temperature programming, Kovats indices"
+        },
+        "ftir_script.js": {
+          "lines": 2840,
+          "size_kb": 107.1,
+          "role": "FTIR spectrum generator, functional group mapping, interactive ATR assembly"
+        },
+        "ftir_enhancements.js": {
+          "lines": 680,
+          "size_kb": 24.7,
+          "role": "Advanced FTIR spectrum comparison, baseline correction, spectral subtraction"
+        },
+        "polarimeter_script.js": {
+          "lines": 3120,
+          "size_kb": 114.7,
+          "role": "Biot law optical rotation, Drude wavelength dispersion, half-shade visualizer"
+        },
+        "uv_vis_script.js": {
+          "lines": 1250,
+          "size_kb": 46.0,
+          "role": "Beer-Lambert spectrophotometry, Gaussian absorption bands, calibration curves"
+        },
+        "mass_spec_script.js": {
+          "lines": 1640,
+          "size_kb": 61.9,
+          "role": "Nominal mass stick spectrum, isotopic distribution, common loss fragmentation"
+        },
+        "psa_script.js": {
+          "lines": 980,
+          "size_kb": 38.6,
+          "role": "Log-normal particle size distribution, D-value interpolation, Sauter mean D[3,2]"
+        },
+        "assistant.js": {
+          "lines": 2410,
+          "size_kb": 90.9,
+          "role": "Pedagogical conversational UI, tool-call orchestration, dynamic chart rendering"
+        },
+        "virtual_lab.js": {
+          "lines": 1780,
+          "size_kb": 66.8,
+          "role": "Unified laboratory shell, benchtop state, safety checklist, procedural tracking"
+        }
+      }
+    },
+    "backend_stack": {
+      "framework": "FastAPI 0.115.0 on Python 3.12 (ASGI uvicorn)",
+      "database": "SQLite (test_simupharma.db) with SQLAlchemy 2.0 ORM; Alembic migration scaffold present",
+      "science_package": "backend/science/ (7 standalone mathematical modules: hplc.py, gc.py, ftir.py, uvvis.py, mass_spec.py, polarimeter.py, psa.py)",
+      "neural_package": "backend/neural/ (adaptive_engine.py, knowledge_graph.py, lab_agent.py, router.py)",
+      "compounds_package": "backend/compounds/ (database.py containing 21 curated pharmaceutical compounds)",
+      "analytics_package": "backend/analytics/ (ml_analyzer.py, faculty_router.py, leaderboard_router.py, metrics_router.py)",
+      "ai_proxy": "backend/ai/router.py (Universal LLM gateway supporting Groq Llama-3.1, Gemini Flash, OpenRouter, OpenAI)"
+    },
+    "reproducibility_evaluation": {
+      "code_modularity": "High in backend science package; moderate in frontend due to monolithic script architecture",
+      "determinism": "Physics equations are deterministic; noise injection uses pseudorandom normal generators without explicit seeds",
+      "environment_coupling": "Backend requires Python 3.10+ with numpy, scipy, pydantic, fastapi; frontend runs in standard ECMAScript 2020 browser",
+      "test_suite": "90 automated tests in tests/ (smoke and route integration tests; 0 scientific accuracy validation tests)"
+    }
+  }
+}

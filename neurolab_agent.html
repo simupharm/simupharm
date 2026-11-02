@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>NeuroLab AI — SimuPharma Autonomous Agent v3</title>
+<meta name="description" content="NeuroLab AI: Your autonomous pharmaceutical lab intelligence. Run experiments, analyze compounds, and learn with a real agentic AI.">
+<link rel="stylesheet" href="neurolab_agent.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div id="nla-root">
+
+  <!-- ── Header ── -->
+  <header id="nla-header">
+    <div id="nla-logo">
+      <div id="nla-logo-icon">🧠</div>
+      <div>
+        <div id="nla-logo-text">NeuroLab AI</div>
+        <div id="nla-logo-sub">Autonomous Pharmaceutical Intelligence</div>
+      </div>
+    </div>
+    <div id="nla-status">
+      <span id="nla-status-dot"></span>
+      <span id="nla-status-text">Connecting…</span>
+      <span id="nla-mode-badge">Agentic Mode</span>
+    </div>
+    <div id="nla-header-actions">
+      <a href="index.html" class="nla-icon-btn" title="Back to SimuPharma"><i class="fas fa-home"></i></a>
+      <a href="instruments.html" class="nla-icon-btn" title="All Instruments"><i class="fas fa-flask"></i></a>
+      <button class="nla-icon-btn" id="nla-clear-btn" title="Clear conversation"><i class="fas fa-trash-alt"></i></button>
+      <button class="nla-icon-btn" id="nla-settings-btn" title="API Key Settings"><i class="fas fa-cog"></i></button>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <aside id="nla-sidebar">
+    <div id="nla-avatar-wrap">
+      <div id="nla-avatar">
+        🧬
+        <div id="nla-avatar-ring"></div>
+      </div>
+      <div id="nla-avatar-name">Dr. Neuro</div>
+      <div id="nla-avatar-role">AI Pharmaceutical Scientist</div>
+    </div>
+
+    <div id="nla-quick-label">Quick Experiments</div>
+    <ul id="nla-quick-list">
+      <li data-msg="Run UV-Vis spectroscopy for paracetamol"><span class="q-icon">🔆</span>UV-Vis — Paracetamol</li>
+      <li data-msg="Run FTIR spectroscopy for aspirin"><span class="q-icon">🔴</span>FTIR — Aspirin</li>
+      <li data-msg="Run HPLC chromatography for caffeine"><span class="q-icon">💧</span>HPLC — Caffeine</li>
+      <li data-msg="Run mass spectrometry for ibuprofen"><span class="q-icon">⚡</span>Mass Spec — Ibuprofen</li>
+      <li data-msg="Run full analysis for paracetamol"><span class="q-icon">🔬</span>Full Analysis — Paracetamol</li>
+      <li data-msg="Compare UV-Vis spectra of aspirin and paracetamol"><span class="q-icon">📊</span>Compare Aspirin vs Paracetamol</li>
+      <li data-msg="Explain Beer-Lambert Law with an example"><span class="q-icon">📚</span>Explain Beer-Lambert Law</li>
+      <li data-msg="What are the HPLC peaks of caffeine?"><span class="q-icon">❓</span>HPLC Peaks of Caffeine</li>
+      <li data-msg="Run particle size analysis for ibuprofen"><span class="q-icon">🔵</span>PSA — Ibuprofen</li>
+      <li data-msg="Identify unknown compound with mass 151"><span class="q-icon">🧪</span>Identify Unknown (MW 151)</li>
+    </ul>
+
+    <div id="nla-sidebar-footer">
+      <button class="nla-sidebar-btn" id="nla-voice-toggle"><i class="fas fa-volume-up" style="width:14px"></i> <span id="nla-voice-label">Voice On</span></button>
+      <button class="nla-sidebar-btn" id="nla-export-btn"><i class="fas fa-download" style="width:14px"></i> Export Session</button>
+    </div>
+  </aside>
+
+  <!-- ── Chat Messages ── -->
+  <main id="nla-msgs"></main>
+
+  <!-- ── Input Bar ── -->
+  <footer id="nla-input-bar">
+    <button id="nla-mic-btn" title="Voice input"><i class="fas fa-microphone"></i></button>
+    <textarea id="nla-input" rows="1" placeholder="Ask me to run an experiment, analyze a compound, or explain a concept…"></textarea>
+    <button id="nla-send"><i class="fas fa-arrow-up"></i></button>
+  </footer>
+
+</div>
+
+<!-- ── Fullscreen Chart Modal ── -->
+<div id="nla-modal-overlay">
+  <div id="nla-modal">
+    <div id="nla-modal-title-bar">
+      <span id="nla-modal-title">Spectrum</span>
+      <button id="nla-modal-close">✕</button>
+    </div>
+    <div id="nla-modal-content"></div>
+    <div id="nla-modal-link" style="margin-top:18px;"></div>
+  </div>
+</div>
+
+<!-- ── API Key Settings Panel ── -->
+<div id="nla-settings-panel" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(2,8,23,0.85);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;">
+  <div style="background:#0f172a;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px;width:440px;max-width:94vw;">
+    <h3 style="margin-bottom:6px;font-size:16px;">API Key Settings</h3>
+    <p style="font-size:12px;color:#64748b;margin-bottom:20px;">Your key is stored locally. Get one free at <a href="https://aistudio.google.com/" target="_blank" style="color:#818cf8">aistudio.google.com</a></p>
+    <input id="nla-key-input" type="password" placeholder="AIza…" style="width:100%;padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#e2e8f0;font-family:inherit;font-size:13px;outline:none;margin-bottom:12px;">
+    <div style="display:flex;gap:10px;">
+      <button id="nla-key-save" style="flex:1;padding:10px;border-radius:8px;border:none;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:600;cursor:pointer;font-family:inherit;">Save Key</button>
+      <button id="nla-settings-close" style="padding:10px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:none;color:#64748b;cursor:pointer;font-family:inherit;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+'use strict';
+
+const BACKEND = window.location.origin.includes('localhost') ? 'http://localhost:8000' : window.location.origin;
+const LS_KEY = 'simupharma_gemini_key';
+let history = [];
+let isBusy = false;
+let voiceOn = localStorage.getItem('nla_voice') !== 'off';
+
+// ── Elements ──
+const msgs      = document.getElementById('nla-msgs');
+const input     = document.getElementById('nla-input');
+const sendBtn   = document.getElementById('nla-send');
+const micBtn    = document.getElementById('nla-mic-btn');
+const avatar    = document.getElementById('nla-avatar');
+const statusTxt = document.getElementById('nla-status-text');
+const modalOverlay = document.getElementById('nla-modal-overlay');
+const modalContent = document.getElementById('nla-modal-content');
+const modalTitle   = document.getElementById('nla-modal-title');
+const modalLink    = document.getElementById('nla-modal-link');
+const settingsPanel = document.getElementById('nla-settings-panel');
+
+// ── Backend check ──
+let backendOk = false;
+async function checkBackend() {
+  try {
+    const r = await fetch(`${BACKEND}/api/v1/ai/status`, { signal: AbortSignal.timeout(6000) });
+    if (r.ok) {
+      const d = await r.json();
+      // Backend is available if we can reach it — keys in .env always work
+      backendOk = true;
+      const primary = d.primary || 'AI';
+      document.getElementById('nla-status-dot').style.background = '#22c55e';
+      statusTxt.textContent = `Connected · ${primary.charAt(0).toUpperCase()+primary.slice(1)} AI`;
+      return;
+    }
+  } catch(e) { console.warn('[NLA] Backend check failed:', e.message); }
+  // Backend unreachable — check for client-side key
+  backendOk = false;
+  document.getElementById('nla-status-dot').style.background = '#f59e0b';
+  statusTxt.textContent = 'Local Key Mode';
+  if (!localStorage.getItem(LS_KEY)) showOfflineBanner();
+}
+
+function showOfflineBanner() {
+  const b = addAIMessage('👋 Hi! I\'m <strong>Dr. Neuro</strong>, your autonomous pharmaceutical AI scientist. To get started, I need a <strong>Gemini API key</strong>. Click ⚙️ in the top-right to add one — it\'s free at <a href="https://aistudio.google.com/" target="_blank" style="color:#818cf8">aistudio.google.com</a>.');
+}
+
+// ── Time ──
+function now() { return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
+
+// ── Render Markdown (minimal) ──
+function md(t) {
+  return t
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code>$1</code>')
+    .replace(/### (.+)/g,'<h3>$1</h3>')
+    .replace(/## (.+)/g,'<h3>$1</h3>')
+    .replace(/^- (.+)/gm,'<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/\n/g,'<br>')
+    .replace(/^(.)/,'<p>$1').replace(/(.)$/,'$1</p>');
+}
+
+// ── Add message to chat ──
+function addAIMessage(htmlContent) {
+  const wrap = document.createElement('div');
+  wrap.className = 'nla-msg ai';
+  wrap.innerHTML = `
+    <div class="nla-msg-avatar">🧬</div>
+    <div class="nla-msg-body">
+      <div class="nla-msg-meta">Dr. Neuro · ${now()}</div>
+      <div class="nla-msg-bubble">${htmlContent}</div>
+    </div>`;
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+  return wrap;
+}
+
+function addUserMessage(text) {
+  const wrap = document.createElement('div');
+  wrap.className = 'nla-msg user';
+  wrap.innerHTML = `
+    <div class="nla-msg-avatar">👤</div>
+    <div class="nla-msg-body">
+      <div class="nla-msg-meta">${now()}</div>
+      <div class="nla-msg-bubble">${text.replace(/</g,'&lt;')}</div>
+    </div>`;
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ── Typing indicator ──
+let typingEl = null;
+function showTyping(text) {
+  if (!typingEl) {
+    typingEl = document.createElement('div');
+    typingEl.className = 'nla-msg ai';
+    typingEl.id = 'nla-typing-msg';
+    typingEl.innerHTML = `
+      <div class="nla-msg-avatar">🧬</div>
+      <div class="nla-msg-body">
+        <div class="nla-msg-bubble" style="display:flex;align-items:center;gap:10px;padding:12px 18px;">
+          <div class="nla-dot"></div><div class="nla-dot"></div><div class="nla-dot"></div>
+          <span id="nla-typing-label" style="font-size:12px;color:#64748b;margin-left:4px;">${text||'Thinking…'}</span>
+        </div>
+      </div>`;
+    msgs.appendChild(typingEl);
+  } else {
+    const lbl = document.getElementById('nla-typing-label');
+    if (lbl) lbl.textContent = text || 'Thinking…';
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+  avatar.classList.add('speaking');
+}
+function hideTyping() {
+  if (typingEl) { typingEl.remove(); typingEl = null; }
+  avatar.classList.remove('speaking');
+}
+
+// ── SVG Chart Builder ──
+const SIM_LINKS = { run_uvvis:'uv_vis_simulator.html', run_ftir:'ftir_simulator.html', run_hplc:'hplc_simulator.html', run_gc:'gc_simulator.html', run_mass_spec:'mass_spec_simulator.html', run_psa:'psa_simulator.html' };
+const TOOL_LABELS = { run_uvvis:'UV-Vis Spectrum', run_ftir:'FTIR Spectrum', run_hplc:'HPLC Chromatogram', run_gc:'GC Chromatogram', run_mass_spec:'Mass Spectrum', run_psa:'Particle Size' };
+const TOOL_COLORS = { run_uvvis:'#f59e0b', run_ftir:'#3b82f6', run_hplc:'#06b6d4', run_gc:'#ef4444', run_mass_spec:'#8b5cf6', run_psa:'#ec4899' };
+
+function buildSVG(toolName, data) {
+  if (!data || data.error) return null;
+  const W=600, H=200, PX=48, PY=24, PB=36;
+  const plotW=W-PX-16, plotH=H-PY-PB;
+  let pts=[], isBar=false, reverseX=false, xLbl='', yLbl='', title='';
+  const col = TOOL_COLORS[toolName]||'#6366f1';
+  try {
+    if (toolName==='run_uvvis') {
+      const peaks=data.peaks_found||[]; title='UV-Vis — λmax '+(data.lambda_max||'?')+' nm'; xLbl='Wavelength (nm)'; yLbl='Absorbance';
+      for (let w=200;w<=500;w+=2){let a=0; peaks.forEach(p=>{const s=15; a+=((p.molar_absorptivity||10000)*(data.concentration||0.001)*(data.path_length||1))*Math.exp(-((w-(p.wavelength_nm||243))**2)/(2*s*s));}); pts.push({x:w,y:a});}
+    } else if (toolName==='run_ftir') {
+      const g=data.functional_groups||[]; title='FTIR — '+g.length+' functional groups'; xLbl='Wavenumber (cm⁻¹)'; yLbl='Transmittance (%)'; reverseX=true;
+      for (let w=4000;w>=400;w-=8){let t=95; g.forEach(f=>{const d=f.intensity==='strong'?70:f.intensity==='medium'?45:25; t-=d*Math.exp(-((w-(f.wavenumber_cm1||1700))**2)/(2*30*30));}); pts.push({x:w,y:Math.max(0,t)});}
+    } else if (toolName==='run_hplc') {
+      const pk=(data.result||data).peaks||(data.result||data).chromatogram_peaks||[]; title='HPLC — '+(data.compound||''); xLbl='Retention Time (min)'; yLbl='mAU';
+      const maxT=Math.max(20,...pk.map(p=>(p.retention_time||p.rt||5)+4));
+      for (let t=0;t<=maxT;t+=0.08){let s=0; pk.forEach(p=>{const rt=p.retention_time||p.rt||5,w=p.width||0.3; s+=(p.height||p.area||1000)*Math.exp(-((t-rt)**2)/(2*(w/2.354)**2));}); pts.push({x:+t.toFixed(2),y:+s.toFixed(1)});}
+    } else if (toolName==='run_gc') {
+      const pk=(data.result||data).peaks||[]; title='GC — '+(data.compound||''); xLbl='Retention Time (min)'; yLbl='Signal';
+      const maxT=Math.max(25,...pk.map(p=>(p.retention_time||p.rt||8)+4));
+      for (let t=0;t<=maxT;t+=0.1){let s=0; pk.forEach(p=>{const rt=p.retention_time||p.rt||8,w=p.width||0.25; s+=(p.height||500)*Math.exp(-((t-rt)**2)/(2*(w/2.354)**2));}); pts.push({x:+t.toFixed(2),y:+s.toFixed(1)});}
+    } else if (toolName==='run_mass_spec') {
+      const fr=(data.result||data).fragments||data.fragments||[]; title='Mass Spectrum — '+(data.compound||''); xLbl='m/z'; yLbl='Intensity (%)'; isBar=true;
+      fr.forEach(f=>pts.push({x:f.mz||f.mass||0,y:f.relative_intensity||f.intensity||0}));
+    } else if (toolName==='run_psa') {
+      const d50=(data.result||data).d50||data.d50||50; title='PSA — D50: '+d50+' μm'; xLbl='Particle Size (μm)'; yLbl='Volume (%)';
+      for (let s=0.1;s<=d50*5;s+=d50*0.04){pts.push({x:+s.toFixed(1),y:Math.max(0,100*Math.exp(-((Math.log(s/d50))**2)/(2*(0.5)**2)))});}
+    }
+  } catch(e){ return null; }
+  if (!pts.length && !isBar) return null;
+
+  let svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;">`;
+  svg+=`<rect width="${W}" height="${H}" fill="#070d1a"/>`;
+  // Grid
+  for(let i=0;i<=4;i++){const x=PX+(i/4)*plotW; svg+=`<line x1="${x.toFixed(1)}" y1="${PY}" x2="${x.toFixed(1)}" y2="${H-PB}" stroke="#0f2040" stroke-width="1"/>`;}
+  for(let i=0;i<=4;i++){const y=PY+(i/4)*plotH; svg+=`<line x1="${PX}" y1="${y.toFixed(1)}" x2="${W-16}" y2="${y.toFixed(1)}" stroke="#0f2040" stroke-width="1"/>`;}
+  // Axes
+  svg+=`<line x1="${PX}" y1="${H-PB}" x2="${W-16}" y2="${H-PB}" stroke="#1e3a5f" stroke-width="1.5"/>`;
+  svg+=`<line x1="${PX}" y1="${PY}" x2="${PX}" y2="${H-PB}" stroke="#1e3a5f" stroke-width="1.5"/>`;
+  // Labels
+  svg+=`<text x="${W/2}" y="15" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="Inter,sans-serif" font-weight="600">${title}</text>`;
+  svg+=`<text x="${W/2}" y="${H-5}" text-anchor="middle" font-size="9" fill="#475569" font-family="Inter,sans-serif">${xLbl}</text>`;
+  svg+=`<text x="11" y="${H/2}" text-anchor="middle" font-size="9" fill="#475569" font-family="Inter,sans-serif" transform="rotate(-90,11,${H/2})">${yLbl}</text>`;
+
+  if (isBar && pts.length) {
+    const maxY=Math.max(...pts.map(p=>p.y),1);
+    const bw=Math.max(3, plotW/pts.length-1);
+    pts.forEach((p,i)=>{ const bx=PX+(i/pts.length)*plotW, bh=(p.y/maxY)*plotH;
+      svg+=`<rect x="${bx.toFixed(1)}" y="${(H-PB-bh).toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" fill="${col}" opacity="0.85" rx="1.5"/>`;
+      if(pts.length<=25) svg+=`<text x="${(bx+bw/2).toFixed(1)}" y="${H-PB+13}" font-size="7" fill="#475569" text-anchor="middle">${p.x}</text>`;
+    });
+  } else if (pts.length) {
+    const xs=pts.map(p=>p.x), ys=pts.map(p=>p.y);
+    const minX=Math.min(...xs), maxX=Math.max(...xs), maxY=Math.max(...ys,0.0001);
+    const sx=v=>PX+((v-minX)/(maxX-minX||1))*plotW;
+    const sy=v=>(H-PB)-(v/maxY)*plotH;
+    const mapped=reverseX?[...pts].reverse():pts;
+    const path=mapped.map((p,i)=>(i===0?'M':'L')+sx(p.x).toFixed(1)+','+sy(p.y).toFixed(1)).join(' ');
+    const f0=mapped[0], fN=mapped[mapped.length-1];
+    svg+=`<defs><linearGradient id="chartGrad${Date.now()%9999}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${col}" stop-opacity="0.3"/><stop offset="100%" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>`;
+    svg+=`<path d="${path} L${sx(fN.x).toFixed(1)},${H-PB} L${sx(f0.x).toFixed(1)},${H-PB} Z" fill="${col}" opacity="0.15"/>`;
+    svg+=`<path d="${path}" fill="none" stroke="${col}" stroke-width="2.5" stroke-linejoin="round"/>`;
+    // x ticks
+    for(let i=0;i<=5;i++){const v=reverseX?maxX-(i/5)*(maxX-minX):minX+(i/5)*(maxX-minX); const tx=PX+(i/5)*plotW;
+      svg+=`<text x="${tx.toFixed(1)}" y="${H-PB+14}" font-size="8" fill="#475569" text-anchor="middle">${Math.round(v)}</text>`;}
+    // y ticks
+    for(let i=0;i<=4;i++){const v=(i/4)*maxY; const ty=sy(v);
+      svg+=`<text x="${PX-5}" y="${(ty+3).toFixed(1)}" font-size="8" fill="#475569" text-anchor="end">${v<10?v.toFixed(2):Math.round(v)}</text>`;}
+  }
+  svg+=`</svg>`;
+  return { svg, title, col };
+}
+
+// ── Render Chart Block ──
+function renderChart(toolName, data, container) {
+  const result = buildSVG(toolName, data);
+  if (!result) return;
+  const { svg, title, col } = result;
+  const wrap = document.createElement('div');
+  wrap.className = 'nla-chart-wrap';
+  wrap.innerHTML = svg;
+  // Actions bar
+  const bar = document.createElement('div');
+  bar.className = 'nla-chart-actions';
+  const simLink = SIM_LINKS[toolName] ? `<a href="${SIM_LINKS[toolName]}">↗ Open full simulator</a>` : '';
+  bar.innerHTML = `<span style="font-size:11px;color:#475569;">${title}</span>${simLink}`;
+  const expBtn = document.createElement('button');
+  expBtn.className = 'nla-expand-btn';
+  expBtn.textContent = '⛶ Expand';
+  expBtn.onclick = () => {
+    modalTitle.textContent = title;
+    modalContent.innerHTML = svg;
+    modalLink.innerHTML = SIM_LINKS[toolName]
+      ? `<a href="${SIM_LINKS[toolName]}" style="display:inline-block;padding:10px 22px;border-radius:9px;border:1px solid ${col}44;background:${col}11;color:${col};font-size:13px;font-weight:600;text-decoration:none;">🔬 Open Full Simulator →</a>`
+      : '';
+    modalOverlay.classList.add('open');
+  };
+  bar.appendChild(expBtn);
+  wrap.appendChild(bar);
+  container.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ── Tool card ──
+function makeToolCard(label, color) {
+  const card = document.createElement('div');
+  card.className = 'nla-tool-card';
+  card.innerHTML = `<div class="nla-tool-spinner" style="border-top-color:${color}"></div><span>Running ${label}…</span>`;
+  return card;
+}
+function completeToolCard(card, label, ok) {
+  card.className = 'nla-tool-card done';
+  card.style.borderColor = ok ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)';
+  card.innerHTML = `<span style="font-size:14px">${ok?'✅':'❌'}</span><span>${ok ? label+' complete' : label+' failed'}</span>`;
+}
+
+// ── Instrument keyword detection ──
+const COMPOUNDS = ['paracetamol','aspirin','ibuprofen','amoxicillin','ciprofloxacin','metformin','ranitidine','caffeine','diclofenac','atorvastatin','omeprazole','amlodipine','losartan','chloramphenicol','phenol','benzocaine','lidocaine','dextrose','sucrose','ascorbic acid'];
+const INSTRUMENTS = [
+  { keys:['uv-vis','uv vis','uvvis','ultraviolet','spectrophotom','absorbance'], tool:'run_uvvis' },
+  { keys:['ftir','infrared','ir spectrum','wavenumber','transmittance'],         tool:'run_ftir'  },
+  { keys:['hplc','high performance','chromatogram','retention time'],            tool:'run_hplc'  },
+  { keys:['gas chrom',' gc ','gas chromat'],                                     tool:'run_gc'    },
+  { keys:['mass spec','mass spect','fragmentation','m/z'],                       tool:'run_mass_spec'},
+  { keys:['psa','particle size','size distribution'],                            tool:'run_psa'   },
+];
+function detectIntent(txt) {
+  const lo = txt.toLowerCase();
+  let tool = null, compound = null;
+  for (const I of INSTRUMENTS) { if (I.keys.some(k=>lo.includes(k))) { tool=I.tool; break; } }
+  for (const c of COMPOUNDS) { if (lo.includes(c)) { compound=c.replace(/ /g,'_'); break; } }
+  if (!tool && compound && /run|analyz|test|perform|do|show/.test(lo)) tool='run_uvvis';
+  const full = /full.analys|complete.analys|all instruments|full scan/.test(lo);
+  return { tool, compound, full };
+}
+
+// ── Execute tool on backend ──
+async function runTool(toolName, compound) {
+  const r = await fetch(`${BACKEND}/api/neural/agent/execute-tool`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ tool_name:toolName, arguments:{ compound_id:compound } })
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+// ── Call AI backend ──
+const SYS_PROMPT = 'You are Dr. Neuro, an expert AI pharmaceutical scientist at SimuPharma. '
+  + 'You speak confidently, concisely, and warmly like a real scientist. '
+  + 'When experiments run, provide a sharp 2-3 sentence interpretation of results. '
+  + 'Use precise scientific terminology but keep explanations accessible. '
+  + 'Format key values in bold. Maximum 150 words unless asked for more.';
+
+async function callAI(userText) {
+  // Try backend first (uses .env keys)
+  if (backendOk) {
+    try {
+      const msgs = [
+        { role: 'system', content: SYS_PROMPT },
+        ...history.slice(-14).map(h => ({ role: h.role === 'user' ? 'user' : 'assistant', content: h.text })),
+        { role: 'user', content: userText }
+      ];
+      const r = await fetch(`${BACKEND}/api/v1/ai/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: msgs, max_tokens: 400 })
+      });
+      if (r.ok) {
+        const d = await r.json();
+        // Backend returns Gemini format (normalized)
+        const text = d?.candidates?.[0]?.content?.parts?.[0]?.text
+          || d?.choices?.[0]?.message?.content
+          || d?.response || d?.message || '';
+        if (text) return text;
+      }
+    } catch(e) { console.warn('[NLA] Backend AI failed:', e.message); }
+  }
+  // Fallback: direct Gemini call with client-side key
+  const clientKey = localStorage.getItem(LS_KEY);
+  if (clientKey) {
+    try {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${clientKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: SYS_PROMPT }] },
+          contents: [
+            ...history.slice(-8).map(h => ({ role: h.role === 'user' ? 'user' : 'model', parts: [{ text: h.text }] })),
+            { role: 'user', parts: [{ text: userText }] }
+          ],
+          generationConfig: { maxOutputTokens: 400, temperature: 0.7 }
+        })
+      });
+      if (r.ok) {
+        const d = await r.json();
+        return d?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      }
+    } catch(e) { console.warn('[NLA] Gemini direct call failed:', e.message); }
+  }
+  return null;
+}
+
+// ── Main send logic ──
+async function send(text) {
+  text = text.trim();
+  if (!text || isBusy) return;
+  isBusy = true;
+  input.value = '';
+  input.style.height = '';
+
+  addUserMessage(text);
+  history.push({ role:'user', text });
+  document.getElementById('nla-suggestions')?.remove();
+
+  const { tool, compound, full } = detectIntent(text);
+  const msgWrap = document.createElement('div');
+  msgWrap.className = 'nla-msg ai';
+  const msgAvatar = document.createElement('div');
+  msgAvatar.className = 'nla-msg-avatar';
+  msgAvatar.textContent = '🧬';
+  const msgBody = document.createElement('div');
+  msgBody.className = 'nla-msg-body';
+  const msgMeta = document.createElement('div');
+  msgMeta.className = 'nla-msg-meta';
+  msgMeta.textContent = 'Dr. Neuro · ' + now();
+  const msgBubble = document.createElement('div');
+  msgBubble.className = 'nla-msg-bubble';
+  msgBody.appendChild(msgMeta);
+  msgBody.appendChild(msgBubble);
+  msgWrap.appendChild(msgAvatar);
+  msgWrap.appendChild(msgBody);
+  msgs.appendChild(msgWrap);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // Show typing
+  showTyping('Analyzing your request…');
+
+  // Run instruments if detected
+  if (tool && compound) {
+    const toolsToRun = full ? ['run_uvvis','run_ftir','run_hplc'] : [tool];
+    for (const t of toolsToRun) {
+      const lbl = TOOL_LABELS[t]||t;
+      const col = TOOL_COLORS[t]||'#6366f1';
+      const card = makeToolCard(lbl, col);
+      msgBubble.appendChild(card);
+      showTyping(`Running ${lbl}…`);
+      try {
+        const data = await runTool(t, compound);
+        completeToolCard(card, lbl, true);
+        renderChart(t, data, msgBubble);
+      } catch(e) {
+        completeToolCard(card, lbl, false);
+      }
+    }
+  }
+
+  // Get AI explanation
+  showTyping('Generating explanation…');
+  try {
+    const aiText = await callAI(text);
+    hideTyping();
+    if (aiText) {
+      const para = document.createElement('div');
+      para.style.cssText = 'margin-top:12px;font-size:14px;line-height:1.65;';
+      para.innerHTML = md(aiText);
+      msgBubble.appendChild(para);
+      history.push({ role:'assistant', text: aiText });
+      if (voiceOn) speak(aiText.replace(/<[^>]+>/g,'').slice(0,300));
+    } else if (!tool) {
+      const para = document.createElement('div');
+      para.innerHTML = '<p>I\'m offline. Add a Gemini API key in ⚙️ settings to enable AI responses.</p>';
+      msgBubble.appendChild(para);
+    }
+  } catch(e) { hideTyping(); }
+
+  msgs.scrollTop = msgs.scrollHeight;
+  isBusy = false;
+  renderSuggestions();
+}
+
+// ── Suggestions ──
+const SUGGESTIONS = [
+  'Run UV-Vis for paracetamol','FTIR scan of aspirin','HPLC analysis of caffeine',
+  'Full analysis of ibuprofen','What is Beer-Lambert Law?','Identify unknown compound MW 180',
+  'Compare paracetamol vs aspirin UV spectra','Mass spectrum of diclofenac',
+];
+function renderSuggestions() {
+  const old = document.getElementById('nla-suggestions');
+  if (old) old.remove();
+  const row = document.createElement('div');
+  row.id = 'nla-suggestions';
+  const chips = SUGGESTIONS.sort(()=>0.5-Math.random()).slice(0,4);
+  chips.forEach(s => {
+    const c = document.createElement('button');
+    c.className = 'nla-chip'; c.textContent = s;
+    c.onclick = () => send(s);
+    row.appendChild(c);
+  });
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ── Voice: Premium OpenAI TTS (nova) with browser fallback ──
+let currentAudio = null;
+async function speak(text) {
+  if (!voiceOn) return;
+  const clean = text.replace(/<[^>]+>/g, '').replace(/[*_#`]/g, '').trim().slice(0, 500);
+  if (!clean) return;
+  // Stop any playing audio
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  window.speechSynthesis?.cancel();
+  avatar.classList.add('speaking');
+  try {
+    const r = await fetch(`${BACKEND}/api/v1/ai/tts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: clean, voice: 'nova', model: 'tts-1-hd', speed: 1.05 })
+    });
+    if (r.ok) {
+      const blob = await r.blob();
+      const url = URL.createObjectURL(blob);
+      currentAudio = new Audio(url);
+      currentAudio.onended = () => { avatar.classList.remove('speaking'); URL.revokeObjectURL(url); currentAudio = null; };
+      currentAudio.onerror = () => { avatar.classList.remove('speaking'); currentAudio = null; };
+      currentAudio.play();
+      return;
+    }
+  } catch(e) { console.warn('[NLA] TTS backend failed, using browser fallback:', e.message); }
+  // Fallback: browser TTS with best available voice
+  if (!window.speechSynthesis) { avatar.classList.remove('speaking'); return; }
+  const voices = window.speechSynthesis.getVoices();
+  const best = voices.find(v => /natural|neural|premium/i.test(v.name))
+    || voices.find(v => v.lang === 'en-US' && /female|zira|samantha|aria/i.test(v.name))
+    || voices.find(v => v.lang.startsWith('en'));
+  const u = new SpeechSynthesisUtterance(clean);
+  if (best) u.voice = best;
+  u.rate = 1.1; u.pitch = 1;
+  u.onend = () => avatar.classList.remove('speaking');
+  window.speechSynthesis.speak(u);
+}
+
+// ── STT ──
+let recognition = null;
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.continuous = false; recognition.interimResults = false;
+  recognition.onresult = e => { input.value = e.results[0][0].transcript; micBtn.classList.remove('listening'); };
+  recognition.onend = () => micBtn.classList.remove('listening');
+}
+micBtn.addEventListener('click', () => {
+  if (!recognition) return;
+  if (micBtn.classList.contains('listening')) { recognition.stop(); micBtn.classList.remove('listening'); }
+  else { recognition.start(); micBtn.classList.add('listening'); }
+});
+
+// ── Events ──
+sendBtn.addEventListener('click', () => send(input.value));
+input.addEventListener('keydown', e => { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); send(input.value); } });
+input.addEventListener('input', () => { input.style.height=''; input.style.height=Math.min(input.scrollHeight,120)+'px'; });
+
+document.getElementById('nla-modal-close').onclick = () => modalOverlay.classList.remove('open');
+modalOverlay.addEventListener('click', e => { if(e.target===modalOverlay) modalOverlay.classList.remove('open'); });
+
+document.getElementById('nla-clear-btn').onclick = () => {
+  history = []; msgs.innerHTML = '';
+  addAIMessage('Conversation cleared. Ready for new experiments! 🧪');
+  renderSuggestions();
+};
+
+document.getElementById('nla-settings-btn').onclick = () => {
+  settingsPanel.style.display = 'flex';
+  document.getElementById('nla-key-input').value = localStorage.getItem(LS_KEY)||'';
+};
+document.getElementById('nla-settings-close').onclick = () => settingsPanel.style.display='none';
+document.getElementById('nla-key-save').onclick = () => {
+  const k = document.getElementById('nla-key-input').value.trim();
+  if (k) { localStorage.setItem(LS_KEY, k); statusTxt.textContent='Key saved · Gemini Active'; }
+  else { localStorage.removeItem(LS_KEY); }
+  settingsPanel.style.display='none';
+};
+
+const voiceLabel = document.getElementById('nla-voice-label');
+document.getElementById('nla-voice-toggle').onclick = () => {
+  voiceOn = !voiceOn;
+  localStorage.setItem('nla_voice', voiceOn?'on':'off');
+  voiceLabel.textContent = voiceOn ? 'Voice On' : 'Voice Off';
+  if (!voiceOn) window.speechSynthesis?.cancel();
+};
+
+document.getElementById('nla-export-btn').onclick = () => {
+  const txt = history.map(m=>`${m.role.toUpperCase()}: ${m.text}`).join('\n\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/plain;charset=utf-8,'+encodeURIComponent(txt);
+  a.download = 'neurolab-session.txt'; a.click();
+};
+
+document.querySelectorAll('#nla-quick-list li').forEach(li => {
+  li.addEventListener('click', () => send(li.dataset.msg));
+});
+
+// ── Init ──
+checkBackend().then(() => {
+  addAIMessage('👋 Hello! I\'m <strong>Dr. Neuro</strong>, your autonomous pharmaceutical AI scientist. I can run UV-Vis, FTIR, HPLC, GC, Mass Spec, and PSA experiments in real-time, explain scientific principles, and guide your learning. <br><br>What would you like to explore today?');
+  renderSuggestions();
+});
+
+// Escape closes modal
+document.addEventListener('keydown', e => { if (e.key==='Escape') { modalOverlay.classList.remove('open'); settingsPanel.style.display='none'; } });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instruments — SimuPharma Virtual Laboratory</title>
+    <meta name="description"
+        content="Explore our suite of virtual pharmaceutical instruments — HPLC, FTIR, GC, UV-Vis, Mass Spectrometry, Polarimetry, and Particle Size Analyzer.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="subpage.css">
+    <link rel="stylesheet" href="virtual_lab.css">
+</head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="sp-header">
+        <div class="header-inner container">
+            <a href="index.html" class="logo" aria-label="SimuPharma Home">
+                <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="17" stroke="url(#hLogoG)" stroke-width="2" />
+                    <path d="M14 12V28M26 12V28M14 20H26" stroke="url(#hLogoG)" stroke-width="2.5"
+                        stroke-linecap="round" />
+                    <defs>
+                        <linearGradient id="hLogoG" x1="0" y1="0" x2="40" y2="40">
+                            <stop stop-color="#2563EB" />
+                            <stop offset="1" stop-color="#7C3AED" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text">SimuPharma</span>
+            </a>
+
+            <nav>
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="instruments.html" class="nav-link active">Instruments</a></li>
+                    <li><a href="quiz.html" class="nav-link">Quiz</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+
+            <a href="instruments.html" class="btn btn-primary btn-sm header-cta">
+                Get Started <i class="fas fa-arrow-right"></i>
+            </a>
+
+            <button class="mobile-toggle" id="sp-mobile-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== MOBILE MENU ===== -->
+    <div id="sp-mobile-menu" class="sp-mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-bg"></div>
+        <nav class="mobile-menu-inner">
+            <ul class="mobile-nav-list">
+                <li style="--i:0"><a href="index.html">Home</a></li>
+                <li style="--i:1"><a href="about.html">About</a></li>
+                <li style="--i:2"><a href="instruments.html">Instruments</a></li>
+                <li style="--i:3"><a href="quiz.html">Quiz</a></li>
+                <li style="--i:4"><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+
+
+    <!-- ===== 3D VIRTUAL LAB CONTAINER ===== -->
+    <div id="vlab-container">
+        <canvas id="vlab-canvas"></canvas>
+
+        <!-- HUD (tooltip + controls hint) -->
+        <div id="vlab-hud">
+            <div id="vlab-tooltip"></div>
+            <div id="vlab-controls-hint">
+                <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+                <span>Move</span>
+                <kbd>Click</kbd>
+                <span>Interact</span>
+                <kbd>ESC</kbd>
+                <span>Exit</span>
+            </div>
+        </div>
+
+        <!-- Top bar -->
+        <div id="vlab-top-bar">
+            <button class="vlab-btn" id="vlab-list-btn"
+                onclick="document.getElementById('vlab-container').classList.remove('active');">
+                <i class="fas fa-th-large"></i> List View
+            </button>
+            <button class="vlab-btn" onclick="document.getElementById('vlab-container').classList.remove('active');">
+                <i class="fas fa-times"></i> Exit Lab
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Screen (outside container, managed by JS) -->
+    <div id="vlab-loading" style="display:none;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">🧪 SimuPharma Lab</div>
+        <div class="loading-sub">Preparing your virtual laboratory...</div>
+    </div>
+
+    <!-- Instrument HUD Overlay (glassmorphism panel) -->
+    <div id="vlab-instrument-hud"></div>
+
+    <!-- Transition overlay -->
+    <div id="vlab-transition-overlay"></div>
+
+
+    <!-- ===== PAGE HERO ===== -->
+    <section class="page-hero">
+        <div class="hero-particles">
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+            <div class="hero-particle"></div>
+        </div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+
+        <div class="container hero-content">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <i class="fas fa-chevron-right sep"></i>
+                <span>Instruments</span>
+            </div>
+            <div class="hero-badge">
+                <i class="fas fa-flask"></i>
+                <span>Virtual Laboratory</span>
+            </div>
+            <h1>Explore Our <span class="text-gradient">Instruments</span></h1>
+            <p class="hero-subtitle">
+                Select an instrument to learn its principles, watch a professional demo, and launch the interactive
+                simulator. Build real-world competence from your browser.
+            </p>
+            <button class="vlab-enter-btn" id="enter-lab-btn"
+                onclick="document.getElementById('vlab-container').classList.add('active');document.getElementById('vlab-enter-prompt').style.display='flex';">
+                <i class="fas fa-door-open"></i> Enter Virtual Lab
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+
+    <!-- ===== INSTRUMENT GRID ===== -->
+    <main>
+        <section class="sp-section" style="background: var(--white);">
+            <div class="container">
+                <div class="instr-grid">
+
+                    <!-- HPLC -->
+                    <div class="instr-card fade-in-up stagger-1">
+                        <div class="instr-card-visual blue">
+                            <div class="instr-card-icon blue">
+                                <i class="fas fa-vial"></i>
+                            </div>
+                            <div class="instr-wave-anim">
+                                <svg viewBox="0 0 200 30" preserveAspectRatio="none">
+                                    <path d="M0,15 Q25,5 50,15 T100,15 T150,15 T200,15" fill="none" stroke="#2563EB"
+                                        stroke-width="1.5" opacity="0.4" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="instr-card-body">
+                            <h3>HPLC</h3>
+                            <p>High Performance Liquid Chromatography for separation and quantitative analysis of drug
+                                compounds.</p>
+                            <div class="instr-tags">
+                                <span class="tag blue">Separation</span>
+                                <span class="tag blue">Quantitative</span>
+                            </div>
+                            <a href="hplc.html" class="instr-card-link">
+                                Learn &amp; Simulate <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- FTIR -->
+                    <div class="instr-card fade-in-up stagger-2">
+                        <div class="instr-card-visual purple">
+                            <div class="instr-card-icon purple">
+                                <i class="fas fa-wave-square"></i>
+                            </div>
+                            <div class="instr-wave-anim">
+                                <svg viewBox="0 0 200 30" preserveAspectRatio="none">
+                                    <path d="M0,15 Q25,5 50,15 T100,15 T150,15 T200,15" fill="none" stroke="#7C3AED"
+                                        stroke-width="1.5" opacity="0.4" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="instr-card-body">
+                            <h3>FTIR Spectroscopy</h3>
+                            <p>Fourier Transform Infrared Spectroscopy for molecular identification and functional group
+                                analysis.</p>
+                            <div class="instr-tags">
+                                <span class="tag purple">Identification</span>
+                                <span class="tag purple">Structural</span>
+                            </div>
+                            <a href="ftir.html" class="instr-card-link" style="color: var(--purple-600);">
+                                Learn &amp; Simulate <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- GC -->
+                    <div class="instr-card fade-in-up stagger-3">
+                        <div class="instr-card-visual orange">
+                            <div class="instr-card-icon orange">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="instr-wave-anim">
+                                <svg viewBox="0 0 200 30" preserveAspectRatio="none">
+                                    <path d="M0,15 Q25,5 50,15 T100,15 T150,15 T200,15" fill="none" stroke="#F59E0B"
+                                        stroke-width="1.5" opacity="0.4" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="instr-card-body">
+                            <h3>Gas Chromatography</h3>
+                            <p>Analyze volatile compounds through separation based on vaporization and differential
+                                adsorption.</p>
+                            <div class="instr-tags">
+                                <span class="tag orange">Volatile</span>
+                                <span class="tag orange">Separation</span>
+                            </div>
+                            <a href="gc.html" class="instr-card-link" style="color: var(--orange-600);">
+                                Learn &amp; Simulate <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Mass Spectrometry -->
+                    <div class="instr-card fade-in-up stagger-4">
+                        <div class="instr-card-visual cyan">
+                            <div class="instr-card-icon cyan">
+                                <i class="fas fa-atom"></i>
+                            </div>
+                            <div class="instr-wave-anim">
+                                <svg viewBox="0 0 200 30" preserveAspectRatio="none">
+                                    <path d="M0,15 Q25,5 50,15 T100,15 T150,15 T200,15" fill="none" stroke="#06B6D4"
+                                        stroke-width="1.5" opacity="0.4" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="instr-card-body">
+                            <h3>Mass Spectrometry</h3>
+                            <p>Measure molecular weight and determine structural information of pharmaceutical
+                                compounds.</p>
+                            <div class="instr-tags">
+                                <span class="tag cyan">Molecular Weight</span>
+                                <span class="tag cyan">Structural</span>
+                            </div>
+                            <a href="mass_spec.html" class="instr-card-link" style="color: var(--cyan-600);">
+                                Learn &amp; Simulate <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- UV-Vis -->
+                    <div class="instr-card fade-in-up stagger-5">
+                        <div class="instr-card-visual blue">
+                            <div class="instr-card-icon blue">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="instr-wave-anim">
+                                <svg viewBox="0 0 200 30" preserveAspectRatio="none">
+                                    <path d="M0,15 Q25,5 50,15 T100,15 T150,15 T200,15" fill="none" stroke="#2563EB"
+                                        stroke-width="1.5" opacity="0.4" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="instr-card-body">
+                            <h3>UV-Vis Spectroscopy</h3>
+                            <p>Measure concentration and absorbance of pharmaceutical samples using ultraviolet-visible
+                                light.</p>
+                            <div class="instr-tags">
+                                <span class="tag blue">Quantitative</span>
+                                <span class="tag blue">Absorption</span>
+                            </div>
+                            <a href="uv_vis.html" class="instr-card-link">
+                                Learn &amp; Simulate <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Polarimeter -->
+                    <div class="instr-card fade-in-up stagger-6">
+                        <div class="instr-card-visual green">
+                            <div class="instr-card-icon green">
+                                <i class="fas fa-compass"></i>
+                            </div>
+                            <div class="instr-wave-anim">
+                                <svg viewBox="0 0 200 30" preserveAspectRatio="none">
+                                    <path d="M0,15 Q25,5 50,15 T100,15 T150,15 T200,15" fill="none" stroke="#22C55E"
+                                        stroke-width="1.5" opacity="0.4" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="instr-card-body">
+                            <h3>Polarimetry</h3>
+                            <p>Analyze optically active (chiral) pharmaceutical compounds by measuring optical rotation.
+                            </p>
+                            <div class="instr-tags">
+                                <span class="tag green">Chirality</span>
+                                <span class="tag green">Optical</span>
+                            </div>
+                            <a href="polarimeter.html" class="instr-card-link" style="color: var(--green-600);">
+                                Learn &amp; Simulate <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- PSA -->
+                    <div class="instr-card fade-in-up stagger-7">
+                        <div class="instr-card-visual rose">
+                            <div class="instr-card-icon rose">
+                                <i class="fas fa-microscope"></i>
+                            </div>
+                            <div class="instr-wave-anim">
+                                <svg viewBox="0 0 200 30" preserveAspectRatio="none">
+                                    <path d="M0,15 Q25,5 50,15 T100,15 T150,15 T200,15" fill="none" stroke="#F43F5E"
+                                        stroke-width="1.5" opacity="0.4" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="instr-card-body">
+                            <h3>Particle Size Analyzer</h3>
+                            <p>Assess particle size distribution in pharmaceutical formulations using laser diffraction
+                                methods.</p>
+                            <div class="instr-tags">
+                                <span class="tag rose">Size Analysis</span>
+                                <span class="tag rose">Formulation</span>
+                            </div>
+                            <a href="psa.html" class="instr-card-link" style="color: var(--rose-500);">
+                                Learn &amp; Simulate <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="sp-footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <svg viewBox="0 0 40 40" fill="none">
+                            <circle cx="20" cy="20" r="17" stroke="rgba(255,255,255,0.35)" stroke-width="2" />
+                            <path d="M14 12V28M26 12V28M14 20H26" stroke="#fff" stroke-width="2.5"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span>SimuPharma</span>
+                    </a>
+                    <p>Transforming pharmaceutical education through innovative virtual simulations.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links-wrap">
+                    <div class="footer-col">
+                        <h4>Platform</h4>
+                        <ul>
+                            <li><a href="instruments.html">Instruments</a></li>
+                            <li><a href="quiz.html">Assessments</a></li>
+                            <li><a href="about.html">About</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="hplc.html">HPLC Guide</a></li>
+                            <li><a href="ftir.html">FTIR Guide</a></li>
+                            <li><a href="gc.html">GC Guide</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="contact.html">Contact Us</a></li>
+                            <li><a href="mailto:contact@simupharma.com">Email</a></li>
+                            <li><a href="#">Collaborate</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SimuPharma. All rights reserved.</p>
+                <p>Built with <i class="fas fa-heart"></i> for pharmaceutical education.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="subpage.js"></script>
+
+    <!-- Feature Modules -->
+    <link rel="stylesheet" href="assistant.css">
+    <link rel="stylesheet" href="a11y.css">
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="api_client.js"></script>
+    <script src="assistant.js"></script>
+    <script src="a11y.js"></script>
+    <script src="i18n.js"></script>
+    <script src="certificate.js"></script>
+    <script src="viewer3d.js"></script>
+    <script src="virtual_lab.js"></script>
+</body>
+
+</html>

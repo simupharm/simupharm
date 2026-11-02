@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimuPharma — SPPU Startup Olympiad 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg:#f8fafc;--card:#ffffff;--text:#0f172a;--muted:#475569;--dim:#94a3b8;--blue:#2563eb;--purple:#7c3aed;--cyan:#0891b2;--green:#16a34a;--red:#dc2626;--amber:#d97706;--border:rgba(15,23,42,0.08)}
+        html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+        body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+        .slide{min-height:100vh;width:100%;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;position:relative;scroll-snap-align:start;overflow:hidden;background:var(--bg)}
+        .slide::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(37,99,235,0.03) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(124,58,237,0.02) 0%,transparent 50%);pointer-events:none}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .slide>*:not(.slide-header):not(.slide-num){animation:fadeUp .6s ease both}
+        .slide-header{position:absolute;top:0;left:0;right:0;padding:20px 80px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+        .slide-brand{font-size:.85rem;font-weight:700;color:var(--blue);letter-spacing:.5px}
+        .slide-brand i{margin-right:6px}
+        .slide-event{font-size:.7rem;color:var(--dim);font-weight:500}
+        .slide-num{position:absolute;bottom:30px;right:80px;font-size:.7rem;color:var(--dim);font-weight:600}
+        .hero-number{font-family:'Outfit',sans-serif;font-size:5.5rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px}
+        .hero-text{font-size:3rem;font-weight:800;line-height:1.15;max-width:800px;letter-spacing:-.5px;color:var(--text)}
+        .hero-text .hl{background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero-text .red{color:var(--red);-webkit-text-fill-color:var(--red)}
+        .sub{font-size:1.1rem;color:var(--muted);max-width:650px;margin-top:20px;line-height:1.7}
+        .sub strong{color:var(--text)}
+        .split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;width:100%}
+        .tag{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+        .glass{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+        .stat-bar{display:flex;gap:40px;margin-top:40px;flex-wrap:wrap}
+        .stat-item{text-align:center}
+        .sv{font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800;color:var(--blue)}
+        .sv.red{color:var(--red)}
+        .sv.green{color:var(--green)}
+        .sv.purple{color:var(--purple)}
+        .sl{font-size:.68rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+        .analogy{margin-top:32px;padding:24px;border-radius:14px;background:linear-gradient(135deg,rgba(220,38,38,.04),rgba(220,38,38,.02));border:1px solid rgba(220,38,38,.12)}
+        .analogy .q{font-size:1.5rem;font-weight:700;line-height:1.3}
+        .analogy .q .red{color:var(--red)}
+        .analogy .a{font-size:.82rem;color:var(--muted);margin-top:8px}
+        .mockup{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.08)}
+        .mockup-bar{padding:10px 16px;background:#f1f5f9;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+        .dot{width:10px;height:10px;border-radius:50%}
+        .dot.r{background:#ef4444}.dot.y{background:#eab308}.dot.g{background:#22c55e}
+        .mockup-url{margin-left:12px;font-size:.68rem;color:var(--dim);background:#e2e8f0;padding:4px 12px;border-radius:6px;flex:1}
+        .mockup-body{padding:24px;min-height:280px;display:flex;flex-direction:column;gap:12px}
+        .cm{padding:10px 14px;border-radius:10px;font-size:.78rem;max-width:85%;line-height:1.5}
+        .cm.u{background:linear-gradient(135deg,var(--blue),#3b82f6);align-self:flex-end;color:#fff}
+        .cm.b{background:#f1f5f9;border:1px solid var(--border);color:var(--muted)}
+        .cm.b strong{color:var(--blue)}
+        .mchart{width:100%;height:80px;background:linear-gradient(180deg,rgba(245,158,11,.08) 0%,transparent 100%);border-radius:8px;position:relative;overflow:hidden;margin-top:4px}
+        .mchart svg{width:100%;height:100%}
+        .clbl{font-size:.6rem;color:var(--amber);font-weight:600;margin-top:4px}
+        .mkt-bars{display:flex;flex-direction:column;gap:16px}
+        .mkt-bar{border-radius:12px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden}
+        .mkt-bar::after{content:'';position:absolute;right:20px;top:50%;transform:translateY(-50%);width:60px;height:60px;border-radius:50%;opacity:.08}
+        .mkt-bar.tam{background:linear-gradient(135deg,rgba(37,99,235,.06),rgba(37,99,235,.03));border:1px solid rgba(37,99,235,.12)}
+        .mkt-bar.tam::after{background:var(--blue)}
+        .mkt-bar.sam{background:linear-gradient(135deg,rgba(124,58,237,.06),rgba(124,58,237,.03));border:1px solid rgba(124,58,237,.12)}
+        .mkt-bar.sam::after{background:var(--purple)}
+        .mkt-bar.som{background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(124,58,237,.08));border:2px solid rgba(99,102,241,.25);box-shadow:0 4px 16px rgba(37,99,235,.06)}
+        .mkt-bar.som::after{background:var(--blue);opacity:.12}
+        .mkt-bar .mkt-label{font-size:.7rem;color:var(--dim);font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+        .mkt-bar .mkt-val{font-family:'Outfit',sans-serif;font-weight:800;font-size:1.5rem}
+        .mkt-bar.tam .mkt-val{color:var(--blue)}
+        .mkt-bar.sam .mkt-val{color:var(--purple)}
+        .mkt-bar.som .mkt-val{color:var(--text)}
+        .mkt-bar .mkt-desc{font-size:.72rem;color:var(--muted);margin-top:2px}
+        .tier{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:12px;background:var(--card);border:1px solid var(--border);margin-bottom:10px}
+        .tier.feat{border-color:rgba(37,99,235,.25);background:linear-gradient(135deg,rgba(37,99,235,.04),rgba(124,58,237,.03));box-shadow:0 4px 16px rgba(37,99,235,.06)}
+        .ti{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+        .ti.free{background:rgba(22,163,74,.08);color:var(--green)}
+        .ti.pro{background:rgba(37,99,235,.08);color:var(--blue)}
+        .ti.inst{background:rgba(124,58,237,.08);color:var(--purple)}
+        .tinfo{flex:1}.tn{font-weight:700;font-size:.85rem}.td{font-size:.7rem;color:var(--dim);margin-top:2px}
+        .tp{font-family:'Outfit',sans-serif;font-weight:800;font-size:1.2rem;text-align:right;white-space:nowrap}
+        .tp small{font-size:.6rem;color:var(--dim);font-weight:500}
+        .egrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+        .ei{padding:12px 14px;background:#f8fafc;border:1px solid var(--border);border-radius:8px}
+        .ev{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:800}
+        .ev.green{color:var(--green)}.ev.blue{color:var(--blue)}.ev.purple{color:var(--purple)}.ev.amber{color:var(--amber)}
+        .el{font-size:.62rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+        .cklist{list-style:none;display:flex;flex-direction:column;gap:12px}
+        .cklist li{display:flex;align-items:flex-start;gap:10px;font-size:.9rem;font-weight:500}
+        .ck{width:22px;height:22px;border-radius:6px;background:rgba(22,163,74,.08);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;margin-top:2px}
+        .ck.pen{background:rgba(217,119,6,.08);color:var(--amber)}
+        .cklist li span{color:var(--muted);font-weight:400}
+        .demo-b{margin-top:20px;padding:18px 24px;background:linear-gradient(135deg,rgba(37,99,235,.06),rgba(124,58,237,.04));border:1px solid rgba(99,102,241,.15);border-radius:12px;display:flex;align-items:center;gap:14px}
+        .demo-b i{font-size:1.3rem;color:var(--blue)}
+        .demo-b strong{font-size:.9rem;display:block}
+        .demo-b span{font-size:.75rem;color:var(--muted)}
+        .comp-table{width:100%;border-collapse:collapse;font-size:.78rem}
+        .comp-table th{text-align:left;padding:12px 16px;background:#f1f5f9;font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:2px solid var(--border)}
+        .comp-table td{padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+        .comp-table tr.us{background:linear-gradient(135deg,rgba(37,99,235,.04),rgba(124,58,237,.03))}
+        .comp-table tr.us td{font-weight:600;color:var(--blue)}
+        .comp-table .y{color:var(--green);font-weight:700}.comp-table .n{color:var(--dim)}
+        .gtm-step{display:flex;gap:16px;align-items:flex-start;margin-bottom:20px}
+        .gtm-num{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0}
+        .gtm-info h4{font-size:.9rem;font-weight:700;margin-bottom:2px}
+        .gtm-info p{font-size:.78rem;color:var(--muted);line-height:1.5}
+        .team-card{display:flex;gap:16px;align-items:center;padding:16px 18px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.03);transition:transform .2s ease,box-shadow .2s ease}
+        .team-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+        .team-avatar{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;font-weight:800;flex-shrink:0}
+        .team-name{font-weight:700;font-size:.82rem}
+        .team-role{font-size:.68rem;color:var(--blue);font-weight:600;margin-top:1px}
+        .team-bio{font-size:.68rem;color:var(--muted);margin-top:3px;line-height:1.4}
+        .fin-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+        .fin-card{padding:18px;background:var(--card);border:1px solid var(--border);border-radius:12px;text-align:center}
+        .fin-yr{font-size:.65rem;color:var(--dim);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+        .fin-rev{font-family:'Outfit',sans-serif;font-size:1.6rem;font-weight:800;margin-top:4px}
+        .fin-sub{font-size:.68rem;color:var(--muted);margin-top:4px;line-height:1.4}
+        .fund-bar{display:flex;height:40px;border-radius:10px;overflow:hidden;margin-top:20px;border:1px solid var(--border)}
+        .fund-seg{display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff}
+        .nav-dots{position:fixed;right:30px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:100}
+        .nav-dot{width:8px;height:8px;border-radius:50%;background:rgba(15,23,42,.12);border:none;cursor:pointer;transition:all .3s ease}
+        .nav-dot.active{background:var(--blue);box-shadow:0 0 10px rgba(37,99,235,.3);transform:scale(1.3)}
+        @media(max-width:900px){.slide{padding:40px 24px}.slide-header{padding:16px 24px}.hero-text{font-size:1.6rem}.split{grid-template-columns:1fr;gap:30px}.slide-num{right:24px}.fin-row{grid-template-columns:1fr 1fr}}
+        @media print{
+            @page{size:landscape;margin:0.4in}
+            html{scroll-snap-type:none}
+            body{background:#fff}
+            .nav-dots,.nav-dot{display:none!important}
+            .slide-header{display:none!important}
+            .slide{
+                min-height:auto;height:7.2in;max-height:7.2in;
+                padding:20px 40px;
+                page-break-after:always;page-break-inside:avoid;
+                overflow:hidden;box-shadow:none;
+                display:flex;flex-direction:column;justify-content:center
+            }
+            .slide::before{display:none}
+            .slide>*{animation:none!important}
+            .slide-num{bottom:14px;right:40px;font-size:.65rem}
+            .hero-text{font-size:2rem!important;line-height:1.2!important;margin-bottom:8px}
+            .sub{font-size:.88rem!important;margin-top:10px!important;line-height:1.5!important}
+            .tag{font-size:.72rem;margin-bottom:8px}
+            .split{gap:30px!important}
+            .stat-bar{gap:24px;margin-top:16px}
+            .sv{font-size:1.5rem!important}
+            .sl{font-size:.65rem}
+            .analogy{padding:14px 18px;margin-top:16px}
+            .analogy .q{font-size:1.1rem}
+            .analogy .a{font-size:.72rem}
+            .glass{padding:16px;border-radius:10px}
+            .mockup{box-shadow:none;border:1px solid #ddd}
+            .mockup-body{min-height:auto!important;padding:14px!important;gap:8px!important}
+            .cm{font-size:.72rem!important;padding:8px 12px!important}
+            .mchart{height:50px}
+            .clbl{font-size:.6rem}
+            .mkt-bars{gap:10px}
+            .mkt-bar{padding:12px 16px}
+            .mkt-bar .mkt-val{font-size:1.2rem}
+            .mkt-bar .mkt-label{font-size:.65rem}
+            .mkt-bar .mkt-desc{font-size:.65rem}
+            .tier{padding:10px 14px;margin-bottom:6px}
+            .tn{font-size:.82rem}.td{font-size:.65rem}
+            .tp{font-size:1rem}
+            .ti{width:32px;height:32px;font-size:.8rem}
+            .egrid{gap:6px;margin-top:10px}
+            .ei{padding:8px 10px}
+            .ev{font-size:1rem}
+            .el{font-size:.58rem}
+            .cklist li{font-size:.82rem;gap:8px}
+            .ck{width:18px;height:18px;font-size:.55rem}
+            .demo-b{padding:10px 14px;margin-top:12px}
+            .demo-b i{font-size:1rem}
+            .demo-b strong{font-size:.8rem}
+            .demo-b span{font-size:.68rem}
+            .comp-table{font-size:.72rem}
+            .comp-table th{padding:8px 10px;font-size:.65rem}
+            .comp-table td{padding:8px 10px}
+            .gtm-step{margin-bottom:10px;gap:10px}
+            .gtm-num{width:28px;height:28px;font-size:.72rem}
+            .gtm-info h4{font-size:.82rem}
+            .gtm-info p{font-size:.7rem;line-height:1.4}
+            .team-card{padding:8px 12px;margin-bottom:5px;gap:10px}
+            .team-avatar{width:32px!important;height:32px!important;font-size:.7rem!important;border-radius:8px!important}
+            .team-name{font-size:.78rem}
+            .team-role{font-size:.65rem}
+            .team-bio{font-size:.65rem;line-height:1.3}
+            .fin-row{gap:8px;margin-top:12px}
+            .fin-card{padding:10px}
+            .fin-yr{font-size:.6rem}
+            .fin-rev{font-size:1.3rem!important}
+            .fin-sub{font-size:.62rem;line-height:1.3}
+            .fund-bar{height:28px;margin-top:12px}
+            .fund-seg{font-size:.58rem}
+            /* Slide 8 (Team) — extra compact */
+            #s8 .hero-text{font-size:1.5rem!important}
+            #s8 .sub{font-size:.72rem!important;margin-top:6px!important}
+            #s8 .team-card{padding:5px 8px;margin-bottom:3px;gap:6px}
+            #s8 .team-avatar{width:26px!important;height:26px!important;font-size:.58rem!important}
+            #s8 .team-name{font-size:.68rem}
+            #s8 .team-role{font-size:.55rem}
+            #s8 .team-bio{font-size:.55rem;line-height:1.2}
+            #s8 .glass{padding:10px}
+            #s8 .tag{font-size:.6rem;margin-bottom:4px}
+            #s8 .split{gap:16px!important}
+            /* Slide 10 (Ask) — aggressive compact */
+            #s10{padding:14px 36px!important}
+            #s10 .hero-text{font-size:1.3rem!important;margin-bottom:4px!important}
+            #s10 .hero-text span[style*="font-size:1.2rem"]{font-size:.8rem!important}
+            #s10 .sub{font-size:.65rem!important;margin-top:4px!important;line-height:1.3!important}
+            #s10 .glass{padding:8px 10px}
+            #s10 .tag{font-size:.55rem;margin-bottom:3px}
+            #s10 .split{gap:14px!important}
+            #s10 .ei{padding:4px 6px}
+            #s10 .ei div[style*="font-weight:700"]{font-size:.68rem!important}
+            #s10 .ei div[style*="font-size:.7rem"]{font-size:.58rem!important}
+            #s10 .fund-bar{height:20px;margin-top:6px}
+            #s10 .fund-seg{font-size:.45rem}
+            #s10 div[style*="margin-top:16px;padding:14px"]{padding:6px 10px!important;margin-top:8px!important}
+            #s10 div[style*="margin-top:16px;padding:14px"] div[style*="font-size:1.2rem"]{font-size:.8rem!important}
+            #s10 div[style*="margin-top:16px;padding:14px"] div[style*="font-weight:700"]{font-size:.68rem!important}
+            #s10 div[style*="margin-top:16px;padding:14px"] div[style*="font-size:.7rem"]{font-size:.55rem!important}
+            #s10 div[style*="display:flex;flex-direction:column;gap:14px"]{gap:6px!important}
+            #s10 div[style*="display:flex;gap:12px;align-items:center"] div[style*="width:32px"]{width:22px!important;height:22px!important;font-size:.58rem!important}
+            #s10 div[style*="font-weight:600;font-size:.82rem"]{font-size:.68rem!important}
+            #s10 div[style*="font-size:.72rem;color:var(--muted)"]{font-size:.55rem!important}
+            #s10 .glass[style*="margin-top:14px;text-align:center"]{display:none!important}
+            #s10 div[style*="font-size:.75rem;color:var(--dim)"]{font-size:.6rem!important;margin-bottom:4px!important}
+            #s10 div[style*="margin-top:20px"]{margin-top:8px!important}
+            #s10 div[style*="margin-top:16px;display:grid"]{margin-top:6px!important;gap:4px!important}
+        }
+    </style>
+</head>
+<body>
+<div class="nav-dots" id="dots"></div>
+
+<!-- S0: TITLE -->
+<section class="slide" id="s0" style="text-align:center;justify-content:center;align-items:center">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026 · Wadhwani Foundation</div></div>
+    <div style="max-width:800px">
+        <div style="width:100px;height:100px;border-radius:24px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;margin:0 auto 32px;box-shadow:0 12px 40px rgba(37,99,235,.2)">
+            <i class="fas fa-flask" style="font-size:2.8rem;color:#fff"></i>
+        </div>
+        <div class="hero-text" style="font-size:3.6rem;text-align:center;margin:0 auto">SimuPharma</div>
+        <p style="font-size:1.3rem;color:var(--muted);margin-top:16px;font-weight:500;line-height:1.6">India's first AI-powered virtual pharmaceutical laboratory</p>
+        <div style="margin-top:12px;font-size:1rem;color:var(--blue);font-weight:600">₹2 Crore lab ← → ₹199/month</div>
+        <div style="margin-top:40px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+            <div style="padding:10px 22px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:.78rem;font-weight:600;color:var(--muted)"><i class="fas fa-microscope" style="margin-right:6px;color:var(--blue)"></i> 7 Real Physics-Engine Simulators</div>
+            <div style="padding:10px 22px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:.78rem;font-weight:600;color:var(--muted)"><i class="fas fa-robot" style="margin-right:6px;color:var(--purple)"></i> Agentic AI Teacher</div>
+            <div style="padding:10px 22px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:.78rem;font-weight:600;color:var(--muted)"><i class="fas fa-indian-rupee-sign" style="margin-right:6px;color:var(--green)"></i> Built with ₹0 Investment</div>
+        </div>
+        <div style="margin-top:36px;font-size:.75rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:1.5px">SPPU Startup Olympiad 2026 · Wadhwani Foundation</div>
+        <div style="margin-top:8px;font-size:.82rem;color:var(--muted)">Pranav Dhanwate · Founder & Developer</div>
+    </div>
+    <div class="slide-num">01 / 13</div>
+</section>
+
+<!-- S1: HOOK -->
+<section class="slide" id="s1">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026 · Wadhwani Foundation</div></div>
+    <div class="hero-text" style="max-width:900px;font-size:3.2rem">Would you board a plane if the pilot<br><span class="red">only trained on textbooks?</span></div>
+    <p class="sub" style="max-width:750px;margin-top:24px;font-size:1.2rem">That's exactly how India trains its pharmacists.<br><strong>2 lakh graduates every year</strong> — testing the medicines you take —<br>most have <strong>never independently operated</strong> the instruments they'll use on Day 1.</p>
+    <div class="analogy">
+        <div class="q">Colleges own <span class="red">₹2 Crore</span> in lab instruments.<br>Each student uses them <span class="red">4 times in 4 years.</span></div>
+        <div class="a">30:1 student-to-instrument ratio · 5 min per turn · batch sizes of 120+ · broken/outdated equipment</div>
+    </div>
+    <div class="stat-bar">
+        <div class="stat-item"><div class="sv">3,079</div><div class="sl">Pharmacy Colleges</div></div>
+        <div class="stat-item"><div class="sv">7.8 Lakh</div><div class="sl">Students Enrolled</div></div>
+        <div class="stat-item"><div class="sv red">90%</div><div class="sl">Never Operated Solo</div></div>
+        <div class="stat-item"><div class="sv red">₹2 Cr</div><div class="sl">Equipment Per College</div></div>
+    </div>
+    <div class="slide-num">02 / 13</div>
+</section>
+
+<!-- S2: SOLUTION -->
+<section class="slide" id="s2">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026</div></div>
+    <div class="split">
+        <div>
+            <div class="tag" style="color:var(--blue)"><i class="fas fa-rocket"></i> The Solution</div>
+            <div class="hero-text" style="font-size:2.1rem">A <span class="hl">₹2 Crore lab</span><br>in every student's pocket.<br><span style="font-size:1.3rem;color:var(--muted);font-weight:500;-webkit-text-fill-color:var(--muted)">For ₹199/month.</span></div>
+            <p class="sub" style="margin-top:16px"><strong>7 real physics-engine simulators</strong> — not animations. Change flow rate → retention times shift. Change concentration → absorbance follows Beer-Lambert law.</p>
+            <p class="sub" style="margin-top:10px">+ An <strong>AI teacher</strong> that speaks, runs experiments, shows live spectra inline, and teaches like a professor available 24/7.</p>
+            <div class="stat-bar" style="margin-top:24px">
+                <div class="stat-item"><div class="sv">7</div><div class="sl">Instruments</div></div>
+                <div class="stat-item"><div class="sv">24/7</div><div class="sl">AI Teacher</div></div>
+                <div class="stat-item"><div class="sv green">5×</div><div class="sl">Cheaper than Labster</div></div>
+            </div>
+        </div>
+        <div class="mockup">
+            <div class="mockup-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="mockup-url">simupharma.com/ai</div></div>
+            <div class="mockup-body">
+                <div class="cm u">Analyze paracetamol — run UV-Vis and FTIR</div>
+                <div class="cm b"><strong>☀️ Running UV-Vis...</strong><div class="mchart"><svg viewBox="0 0 300 80" preserveAspectRatio="none"><path d="M0,70 C30,70 60,68 90,65 C120,55 140,15 160,8 C180,15 200,55 220,65 C250,68 270,70 300,70" fill="none" stroke="#d97706" stroke-width="2"/><path d="M0,70 C30,70 60,68 90,65 C120,55 140,15 160,8 C180,15 200,55 220,65 C250,68 270,70 300,70 L300,80 L0,80 Z" fill="rgba(217,119,6,.06)"/><line x1="160" y1="0" x2="160" y2="80" stroke="rgba(217,119,6,.2)" stroke-dasharray="3"/></svg></div><div class="clbl">UV-Vis Spectrum — λmax 243 nm</div></div>
+                <div class="cm b"><strong>🌊 FTIR: 6 functional groups</strong><br>Strong C=O stretch at <strong>1650 cm⁻¹</strong> — amide bond.<br><br>🧠 <em>What causes the broad O-H at 3300 cm⁻¹?</em></div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">03 / 13</div>
+</section>
+
+<!-- S3: MARKET -->
+<section class="slide" id="s3">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026</div></div>
+    <div class="split">
+        <div>
+            <div class="tag" style="color:var(--purple)"><i class="fas fa-chart-pie"></i> Market Opportunity</div>
+            <div class="hero-text" style="font-size:2.2rem">₹18,000 Cr market.<br><span class="hl">Zero Indian players.</span></div>
+            <p class="sub" style="margin-top:14px">Labster (Denmark) raised <strong>$100M</strong> at <strong>$30/student/month</strong>. India has 3,079 pharmacy colleges — and no local alternative. We're <strong>Labster for India</strong> at 1/10th the price.</p>
+            <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:10px"><i class="fas fa-globe" style="color:var(--blue);width:18px"></i><span style="font-size:.8rem;color:var(--muted)">Global virtual lab: <strong style="color:var(--text)">$6.3B by 2030</strong> — Grand View Research</span></div>
+                <div style="display:flex;align-items:center;gap:10px"><i class="fas fa-graduation-cap" style="color:var(--purple);width:18px"></i><span style="font-size:.8rem;color:var(--muted)">India pharmacy: <strong style="color:var(--text)">3,079 colleges, 7.8L students</strong> — PCI</span></div>
+                <div style="display:flex;align-items:center;gap:10px"><i class="fas fa-arrow-trend-up" style="color:var(--green);width:18px"></i><span style="font-size:.8rem;color:var(--muted)">India EdTech: <strong style="color:var(--text)">15% CAGR</strong> — RedSeer</span></div>
+                <div style="display:flex;align-items:center;gap:10px"><i class="fas fa-flag" style="color:var(--amber);width:18px"></i><span style="font-size:.8rem;color:var(--muted)">NEP 2020 mandates <strong style="color:var(--text)">digital-first lab access</strong></span></div>
+            </div>
+        </div>
+        <div class="mkt-bars">
+            <div class="mkt-bar tam">
+                <div><div class="mkt-label">TAM · Total Addressable Market</div><div class="mkt-val">₹18,000 Cr</div><div class="mkt-desc">Global virtual lab + EdTech simulation market</div></div>
+                <div style="font-size:1.5rem;opacity:.4">🌍</div>
+            </div>
+            <div class="mkt-bar sam" style="margin-left:24px">
+                <div><div class="mkt-label">SAM · Serviceable Available</div><div class="mkt-val">₹1,200 Cr</div><div class="mkt-desc">India pharmaceutical + chemistry education</div></div>
+                <div style="font-size:1.5rem;opacity:.4">🇮🇳</div>
+            </div>
+            <div class="mkt-bar som" style="margin-left:48px">
+                <div><div class="mkt-label">SOM · Year 3 Target</div><div class="mkt-val">₹60 Cr</div><div class="mkt-desc">200 colleges + 10K Pro students</div></div>
+                <div style="font-size:1.5rem;opacity:.4">🎯</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">04 / 13</div>
+</section>
+
+<!-- S4: BUSINESS MODEL -->
+<section class="slide" id="s4">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026</div></div>
+    <div class="split">
+        <div>
+            <div class="tag" style="color:var(--green)"><i class="fas fa-coins"></i> Business Model</div>
+            <div class="hero-text" style="font-size:2.2rem">Freemium SaaS.<br><span class="hl">92% gross margin.</span></div>
+            <p class="sub" style="margin-top:12px">Pure software — <strong>zero reagents, zero maintenance</strong>. Same model as Canva, Notion, Figma.</p>
+            <div style="margin-top:20px">
+                <div class="tier"><div class="ti free"><i class="fas fa-atom"></i></div><div class="tinfo"><div class="tn">Student Free</div><div class="td">3 instruments · 5 sims/day · Acquisition funnel</div></div><div class="tp" style="color:var(--green)">₹0</div></div>
+                <div class="tier feat"><div class="ti pro"><i class="fas fa-rocket"></i></div><div class="tinfo"><div class="tn">Student Pro</div><div class="td">All 7 instruments · AI teacher · Certs</div></div><div class="tp">₹199<small>/mo</small></div></div>
+                <div class="tier"><div class="ti inst"><i class="fas fa-university"></i></div><div class="tinfo"><div class="tn">Institution</div><div class="td">Faculty dashboard · NAAC reports · LMS</div></div><div class="tp">₹50K–3L<small>/yr</small></div></div>
+            </div>
+        </div>
+        <div>
+            <div class="glass">
+                <div class="tag" style="color:var(--amber)"><i class="fas fa-calculator"></i> Unit Economics</div>
+                <div class="egrid">
+                    <div class="ei"><div class="ev green">92%</div><div class="el">Gross Margin</div></div>
+                    <div class="ei"><div class="ev blue">28.7×</div><div class="el">LTV / CAC</div></div>
+                    <div class="ei"><div class="ev purple">₹150</div><div class="el">CAC (Organic)</div></div>
+                    <div class="ei"><div class="ev amber">₹4,300</div><div class="el">Avg LTV (Pro)</div></div>
+                </div>
+            </div>
+            <div class="glass" style="margin-top:14px">
+                <div class="tag" style="color:var(--cyan)"><i class="fas fa-bullseye"></i> Year 3 Target</div>
+                <div style="display:flex;gap:20px;align-items:center">
+                    <div><div style="font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:800">₹6 Cr</div><div style="font-size:.68rem;color:var(--dim);font-weight:600">ARR Target</div></div>
+                    <div style="font-size:.75rem;color:var(--muted);line-height:1.6">200 institutions × ₹1.8L avg<br>+ 10K Pro students × ₹199/mo</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">05 / 13</div>
+</section>
+
+<!-- S5: VALIDATION -->
+<section class="slide" id="s5">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026</div></div>
+    <div class="split">
+        <div>
+            <div class="tag" style="color:var(--green)"><i class="fas fa-check-double"></i> Validation</div>
+            <div class="hero-text" style="font-size:2.1rem">Not a concept deck.<br><span class="hl">Built, live, demoable.</span></div>
+            <ul class="cklist" style="margin-top:24px">
+                <li><div class="ck"><i class="fas fa-check"></i></div><div><strong>7 instruments live</strong> <span>— HPLC, FTIR, UV-Vis, GC, Mass Spec, Polarimeter, PSA</span></div></li>
+                <li><div class="ck"><i class="fas fa-check"></i></div><div><strong>AI agentic teacher</strong> <span>— speaks, inline spectra, follow-up questions</span></div></li>
+                <li><div class="ck"><i class="fas fa-check"></i></div><div><strong>Physics verified</strong> <span>— Beer-Lambert, Gaussian chromatography models</span></div></li>
+                <li><div class="ck"><i class="fas fa-check"></i></div><div><strong>PCI curriculum mapped</strong> <span>— NEP 2020 aligned</span></div></li>
+                <li><div class="ck"><i class="fas fa-check"></i></div><div><strong>Faculty dashboard</strong> <span>— analytics, NAAC/NBA reports</span></div></li>
+                <li><div class="ck"><i class="fas fa-check"></i></div><div><strong>Payments live</strong> <span>— Razorpay subscriptions integrated</span></div></li>
+                <li><div class="ck"><i class="fas fa-check"></i></div><div><strong>Gamification</strong> <span>— XP, streaks, badges, leaderboard, quizzes</span></div></li>
+                <li><div class="ck pen"><i class="fas fa-clock"></i></div><div><strong>3 college pilots</strong> <span>— discussions active, LOIs in progress</span></div></li>
+            </ul>
+        </div>
+        <div>
+            <div class="mockup">
+                <div class="mockup-bar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="mockup-url">simupharma.com</div></div>
+                <div class="mockup-body" style="min-height:220px;align-items:center;justify-content:center;text-align:center">
+                    <i class="fas fa-play-circle" style="font-size:2.5rem;color:var(--blue);margin-bottom:10px"></i>
+                    <div style="font-size:1rem;font-weight:700">Live Product</div>
+                    <div style="font-size:.75rem;color:var(--muted);margin-top:4px">Full platform running. Ask us to demo it.</div>
+                    <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
+                        <span style="padding:3px 8px;border-radius:6px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.12);font-size:.6rem;font-weight:600;color:var(--blue)">HPLC</span>
+                        <span style="padding:3px 8px;border-radius:6px;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.12);font-size:.6rem;font-weight:600;color:var(--purple)">FTIR</span>
+                        <span style="padding:3px 8px;border-radius:6px;background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.12);font-size:.6rem;font-weight:600;color:var(--amber)">UV-Vis</span>
+                        <span style="padding:3px 8px;border-radius:6px;background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.12);font-size:.6rem;font-weight:600;color:var(--red)">GC</span>
+                        <span style="padding:3px 8px;border-radius:6px;background:rgba(8,145,178,.06);border:1px solid rgba(8,145,178,.12);font-size:.6rem;font-weight:600;color:var(--cyan)">Mass Spec</span>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-b"><i class="fas fa-bolt"></i><div><strong>🎬 Live Demo Available</strong><span>Ask us to run it right now. No slides — real product.</span></div></div>
+        </div>
+    </div>
+    <div class="slide-num">06 / 13</div>
+</section>
+
+<!-- S6: COMPETITION -->
+<section class="slide" id="s6">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026</div></div>
+    <div class="tag" style="color:var(--red)"><i class="fas fa-crosshairs"></i> Competitive Landscape</div>
+    <div class="hero-text" style="font-size:2.2rem;margin-bottom:24px">Global giants, <span class="hl">zero India presence.</span></div>
+    <div class="glass" style="overflow-x:auto;padding:0">
+        <table class="comp-table">
+            <thead><tr><th>Feature</th><th>SimuPharma</th><th>Labster (Denmark)</th><th>PraxiLabs (Egypt)</th><th>Physical Lab</th></tr></thead>
+            <tbody>
+                <tr class="us"><td>Price</td><td><strong>₹199/mo</strong></td><td>$30/mo (~₹2,500)</td><td>$15/mo (~₹1,250)</td><td>₹2 Cr+ setup</td></tr>
+                <tr><td>India Curriculum (PCI/NEP)</td><td class="y">✓ Mapped</td><td class="n">✗ Western only</td><td class="n">✗ Generic</td><td class="y">✓ Manual</td></tr>
+                <tr class="us"><td>AI Teacher (Agentic)</td><td class="y"><strong>✓ Speaks + runs expts</strong></td><td class="n">✗ None</td><td class="n">✗ None</td><td class="n">✗ Faculty-dependent</td></tr>
+                <tr><td>Physics Engines</td><td class="y">✓ Beer-Lambert, Gaussian</td><td class="y">✓ Comparable</td><td class="n">✗ Basic</td><td class="y">✓ Real instruments</td></tr>
+                <tr class="us"><td>Inline Spectra/Charts</td><td class="y"><strong>✓ Real-time in chat</strong></td><td class="n">✗ None</td><td class="n">✗ None</td><td class="y">✓ On instrument</td></tr>
+                <tr><td>Instruments</td><td><strong>7 pharma-specific</strong></td><td>200+ (generic science)</td><td>50+ (generic)</td><td>Varies by budget</td></tr>
+                <tr class="us"><td>NAAC/NBA Reports</td><td class="y"><strong>✓ Auto-generated</strong></td><td class="n">✗ No</td><td class="n">✗ No</td><td class="n">✗ Manual</td></tr>
+                <tr><td>Language</td><td><strong>English + Hindi</strong></td><td>English only</td><td>English/Arabic</td><td>—</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p style="margin-top:14px;font-size:.82rem;color:var(--muted)"><strong style="color:var(--text)">Our moat:</strong> PCI curriculum mapping + AI teacher + India-first pricing. Labster can't serve India at $30/mo. We own the ₹199 price point.</p>
+    <div class="slide-num">07 / 13</div>
+</section>
+
+<!-- S7: GO-TO-MARKET -->
+<section class="slide" id="s7">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026</div></div>
+    <div class="split">
+        <div>
+            <div class="tag" style="color:var(--cyan)"><i class="fas fa-bullhorn"></i> Go-to-Market Strategy</div>
+            <div class="hero-text" style="font-size:2.2rem">Bottom-up adoption.<br><span class="hl">Students first, institutions follow.</span></div>
+            <div style="margin-top:28px">
+                <div class="gtm-step"><div class="gtm-num">1</div><div class="gtm-info"><h4>Free tier virality</h4><p>Students discover SimuPharma via Google/YouTube (pharmacy students actively search "HPLC simulator"). Free tier → organic viral loop within college batches via WhatsApp groups.</p></div></div>
+                <div class="gtm-step"><div class="gtm-num">2</div><div class="gtm-info"><h4>Pro conversion</h4><p>₹199/month — less than chai money. Convert power users through AI teacher value + quiz prep + certificates. Target: 15% free→Pro conversion.</p></div></div>
+                <div class="gtm-step"><div class="gtm-num">3</div><div class="gtm-info"><h4>Institutional sales</h4><p>When 30+ students in a college use SimuPharma, pitch the principal: "Your students already use us. Get the faculty dashboard + NAAC reports." Direct outreach + PCI conference presence.</p></div></div>
+                <div class="gtm-step"><div class="gtm-num">4</div><div class="gtm-info"><h4>Government channels</h4><p>AICTE/NEP digital lab mandates → state-level partnerships. Target: 5 state pharmacy council MOUs by Year 2.</p></div></div>
+            </div>
+        </div>
+        <div>
+            <div class="glass">
+                <div class="tag" style="color:var(--green)"><i class="fas fa-funnel-dollar"></i> Acquisition Funnel</div>
+                <div style="margin-top:12px">
+                    <div style="background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;padding:14px 20px;border-radius:10px 10px 4px 4px;font-weight:700;display:flex;justify-content:space-between"><span>Organic Discovery (SEO/YouTube)</span><span>50K</span></div>
+                    <div style="background:rgba(37,99,235,.08);padding:12px 20px;margin:0 16px;border-radius:0;font-weight:600;font-size:.85rem;display:flex;justify-content:space-between"><span>Free Signups</span><span>25K</span></div>
+                    <div style="background:rgba(37,99,235,.05);padding:12px 20px;margin:0 32px;border-radius:0;font-weight:600;font-size:.85rem;display:flex;justify-content:space-between"><span>Active Users (30-day)</span><span>12K</span></div>
+                    <div style="background:rgba(124,58,237,.08);padding:12px 20px;margin:0 48px;border-radius:0;font-weight:600;font-size:.85rem;display:flex;justify-content:space-between;color:var(--purple)"><span>Pro Conversions (15%)</span><span>1,800</span></div>
+                    <div style="background:rgba(22,163,74,.08);padding:12px 20px;margin:0 64px;border-radius:0 0 10px 10px;font-weight:700;font-size:.85rem;display:flex;justify-content:space-between;color:var(--green)"><span>Institution Deals</span><span>200</span></div>
+                </div>
+            </div>
+            <div class="glass" style="margin-top:14px">
+                <div style="display:flex;gap:20px">
+                    <div style="text-align:center;flex:1"><div class="sv" style="font-size:1.4rem">₹150</div><div class="sl">CAC (Organic)</div></div>
+                    <div style="text-align:center;flex:1"><div class="sv green" style="font-size:1.4rem">30 days</div><div class="sl">Sales Cycle (Student)</div></div>
+                    <div style="text-align:center;flex:1"><div class="sv purple" style="font-size:1.4rem">90 days</div><div class="sl">Sales Cycle (Inst.)</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">08 / 13</div>
+</section>
+
+<!-- S8: TEAM -->
+<section class="slide" id="s8">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026</div></div>
+    <div class="split">
+        <div>
+            <div class="tag" style="color:var(--amber)"><i class="fas fa-users"></i> The Team</div>
+            <div class="hero-text" style="font-size:2.2rem">Built solo from scratch.<br><span class="hl">Backed by a strong team.</span></div>
+            <p class="sub" style="margin-top:12px">I didn't read about the 30:1 student-to-instrument ratio in a report — I lived it. Self-taught coder who built the <strong>entire platform alone</strong>, from frontend to AI, without spending a single rupee.</p>
+            <div style="margin-top:20px">
+                <div class="team-card" style="border-color:rgba(37,99,235,.2);background:linear-gradient(135deg,rgba(37,99,235,.03),rgba(124,58,237,.02))">
+                    <div class="team-avatar">PD</div>
+                    <div><div class="team-name">Pranav Dhanwate</div><div class="team-role">Founder · 3rd Year B.Pharmacy · Full-Stack Developer + AI</div><div class="team-bio">Self-taught coder through online courses. Built entire SimuPharma platform solo: 7 simulators, FastAPI backend, Gemini AI integration, Razorpay payments, gamification. Zero external funding used.</div></div>
+                </div>
+            </div>
+            <div style="margin-top:16px">
+                <div style="font-size:.7rem;color:var(--dim);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px"><i class="fas fa-people-group" style="margin-right:4px"></i> Core Team</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                    <div class="team-card"><div class="team-avatar" style="background:linear-gradient(135deg,var(--green),var(--cyan));width:36px;height:36px;font-size:.8rem;border-radius:9px">AP</div><div><div class="team-name">Aditya Pol</div></div></div>
+                    <div class="team-card"><div class="team-avatar" style="background:linear-gradient(135deg,var(--amber),#f97316);width:36px;height:36px;font-size:.8rem;border-radius:9px">MK</div><div><div class="team-name">Mayur Kangane</div></div></div>
+                    <div class="team-card"><div class="team-avatar" style="background:linear-gradient(135deg,var(--purple),#ec4899);width:36px;height:36px;font-size:.8rem;border-radius:9px">SS</div><div><div class="team-name">Satyajit Shelar</div></div></div>
+                    <div class="team-card"><div class="team-avatar" style="background:linear-gradient(135deg,var(--red),var(--amber));width:36px;height:36px;font-size:.8rem;border-radius:9px">TS</div><div><div class="team-name">Tejas Shirsath</div></div></div>
+                    <div class="team-card"><div class="team-avatar" style="background:linear-gradient(135deg,var(--cyan),var(--blue));width:36px;height:36px;font-size:.8rem;border-radius:9px">PS</div><div><div class="team-name">Piyush Salve</div></div></div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="glass">
+                <div class="tag" style="color:var(--purple)"><i class="fas fa-star"></i> Why Us?</div>
+                <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">
+                    <div style="display:flex;gap:12px;align-items:flex-start">
+                        <div style="width:32px;height:32px;border-radius:8px;background:rgba(37,99,235,.06);color:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-user-graduate"></i></div>
+                        <div><div style="font-weight:700;font-size:.85rem">Founder = Target User</div><div style="font-size:.75rem;color:var(--muted);margin-top:2px">Pharmacy student who experienced the exact problems daily. Deep understanding of PCI curriculum, lab dynamics, and student needs.</div></div>
+                    </div>
+                    <div style="display:flex;gap:12px;align-items:flex-start">
+                        <div style="width:32px;height:32px;border-radius:8px;background:rgba(22,163,74,.06);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-code"></i></div>
+                        <div><div style="font-weight:700;font-size:.85rem">Zero-Cost Execution</div><div style="font-size:.75rem;color:var(--muted);margin-top:2px">Full platform built with ₹0 investment — pure sweat equity. Self-taught coding, no outsourcing, no external help. Proves extreme resourcefulness.</div></div>
+                    </div>
+                    <div style="display:flex;gap:12px;align-items:flex-start">
+                        <div style="width:32px;height:32px;border-radius:8px;background:rgba(124,58,237,.06);color:var(--purple);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-fire"></i></div>
+                        <div><div style="font-weight:700;font-size:.85rem">Speed of Execution</div><div style="font-size:.75rem;color:var(--muted);margin-top:2px">7 instrument simulators, AI agent, full payment stack, gamification — all built as a student while attending classes.</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass" style="margin-top:14px">
+                <div style="font-size:.72rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px"><i class="fas fa-chalkboard-teacher" style="margin-right:4px"></i> Faculty Mentor</div>
+                <div style="display:flex;gap:12px;align-items:center">
+                    <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(124,58,237,.08));display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-user-tie" style="color:var(--blue);font-size:1.2rem"></i></div>
+                    <div><div style="font-weight:700;font-size:.85rem">Dr. Suhas Siddheshwar</div><div style="font-size:.72rem;color:var(--blue);font-weight:600">HOD, Pharmaceutics</div><div style="font-size:.72rem;color:var(--muted);margin-top:2px">Pravara Rural College of Pharmacy, Loni</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">09 / 13</div>
+</section>
+
+<!-- S9: FINANCIALS -->
+<section class="slide" id="s9">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026</div></div>
+    <div class="tag" style="color:var(--green)"><i class="fas fa-chart-line"></i> Financial Projections (3-Year)</div>
+    <div class="hero-text" style="font-size:1.8rem;margin-bottom:8px"><span class="hl">Profitable by Year 2.</span> ₹6 Cr ARR by Year 3.</div>
+    <div class="fin-row">
+        <div class="fin-card" style="border-top:3px solid var(--dim)"><div class="fin-yr">Year 0 (Now)</div><div class="fin-rev" style="color:var(--green)">₹0 spent</div><div class="fin-sub">Fully bootstrapped<br>Pre-revenue<br><strong style="color:var(--green)">Zero investment</strong></div></div>
+        <div class="fin-card" style="border-top:3px solid var(--amber)"><div class="fin-yr">Year 1</div><div class="fin-rev" style="color:var(--amber)">₹20L</div><div class="fin-sub">500 Pro users<br>10 Institution pilots<br>₹150 CAC organic</div></div>
+        <div class="fin-card" style="border-top:3px solid var(--blue)"><div class="fin-yr">Year 2</div><div class="fin-rev" style="color:var(--blue)">₹1.5 Cr</div><div class="fin-sub">3,000 Pro users<br>50 Institutions<br><strong style="color:var(--green)">Break-even</strong></div></div>
+        <div class="fin-card" style="border-top:3px solid var(--green)"><div class="fin-yr">Year 3</div><div class="fin-rev" style="color:var(--green)">₹6 Cr</div><div class="fin-sub">10K Pro users<br>200 Institutions<br><strong style="color:var(--green)">Profitable</strong></div></div>
+    </div>
+    <div style="margin-top:28px" class="split">
+        <div class="glass">
+            <div class="tag" style="color:var(--blue)"><i class="fas fa-list-ol"></i> Key Assumptions</div>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.82rem;color:var(--muted)">
+                <li>• 15% free→Pro conversion rate (industry avg: 10-20%)</li>
+                <li>• ₹150 CAC through organic SEO + WhatsApp virality</li>
+                <li>• ₹1.8L avg. institution deal (weighted across Starter/Standard/Premium)</li>
+                <li>• 8% monthly churn for Pro (industry: 5-12%)</li>
+                <li>• 92% gross margin (pure SaaS, Gemini API cost ~₹2/user/mo)</li>
+            </ul>
+        </div>
+        <div class="glass">
+            <div class="tag" style="color:var(--purple)"><i class="fas fa-road"></i> Path to ₹100 Cr</div>
+            <p style="font-size:.85rem;color:var(--muted);line-height:1.7">If we capture just <strong style="color:var(--text)">5% of India's pharmacy colleges</strong> (154 colleges × ₹3L/yr) + <strong style="color:var(--text)">50K Pro subscriptions</strong> → that's <strong style="color:var(--text)">₹16.6 Cr ARR</strong>. Add chemistry departments (4,000+ colleges) and we're looking at a ₹100 Cr revenue business within 5 years.</p>
+        </div>
+    </div>
+    <div class="slide-num">10 / 13</div>
+</section>
+
+<!-- S10: ASK -->
+<section class="slide" id="s10">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026</div></div>
+    <div class="split">
+        <div>
+            <div class="tag" style="color:var(--blue);font-size:.78rem"><i class="fas fa-hand-holding-usd"></i> The Ask</div>
+            <div class="hero-text" style="font-size:2.8rem">Raising <span class="hl">₹15 Lakhs</span><br><span style="font-size:1.4rem;color:var(--muted);font-weight:500;-webkit-text-fill-color:var(--muted)">Pre-seed · Built this far with ₹0</span></div>
+            <p class="sub" style="margin-top:16px;font-size:1rem">Built the <strong>entire product with zero investment</strong>. ₹15L accelerates us to <strong>₹20L ARR in 12 months</strong> and positions for a Seed round at ₹5 Cr+ valuation.</p>
+            <div style="margin-top:22px">
+                <div style="font-size:.82rem;color:var(--dim);font-weight:600;text-transform:uppercase;margin-bottom:10px">Use of Funds</div>
+                <div class="fund-bar" style="height:44px">
+                    <div class="fund-seg" style="width:40%;background:var(--blue);font-size:.72rem">Product 40%</div>
+                    <div class="fund-seg" style="width:30%;background:var(--purple);font-size:.72rem">Marketing 30%</div>
+                    <div class="fund-seg" style="width:20%;background:var(--green);font-size:.72rem">Team 20%</div>
+                    <div class="fund-seg" style="width:10%;background:var(--amber);font-size:.68rem">Ops</div>
+                </div>
+            </div>
+            <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div class="ei"><div style="font-weight:700;font-size:.92rem;color:var(--blue)">₹6L — Product</div><div style="font-size:.78rem;color:var(--muted);margin-top:3px">Mobile apps, 5 more instruments, cloud</div></div>
+                <div class="ei"><div style="font-weight:700;font-size:.92rem;color:var(--purple)">₹4.5L — Marketing</div><div style="font-size:.78rem;color:var(--muted);margin-top:3px">SEO, YouTube, college activations</div></div>
+                <div class="ei"><div style="font-weight:700;font-size:.92rem;color:var(--green)">₹3L — Team</div><div style="font-size:.78rem;color:var(--muted);margin-top:3px">1 pharma content specialist</div></div>
+                <div class="ei"><div style="font-weight:700;font-size:.92rem;color:var(--amber)">₹1.5L — Operations</div><div style="font-size:.78rem;color:var(--muted);margin-top:3px">Cloud infra, API costs, compliance</div></div>
+            </div>
+            <div style="margin-top:18px;padding:16px 20px;background:linear-gradient(135deg,rgba(22,163,74,.05),rgba(22,163,74,.02));border:1px solid rgba(22,163,74,.12);border-radius:10px;display:flex;align-items:center;gap:12px">
+                <div style="font-size:1.4rem">💰</div>
+                <div><div style="font-weight:700;font-size:.92rem;color:var(--green)">Built with ₹0 → Asking ₹15L</div><div style="font-size:.78rem;color:var(--muted);margin-top:2px">Imagine what we build with actual funding.</div></div>
+            </div>
+        </div>
+        <div>
+            <div class="glass">
+                <div class="tag" style="color:var(--green);font-size:.78rem"><i class="fas fa-flag-checkered"></i> 12-Month Milestones</div>
+                <div style="display:flex;flex-direction:column;gap:16px;margin-top:10px">
+                    <div style="display:flex;gap:14px;align-items:center"><div style="width:38px;height:38px;border-radius:50%;background:rgba(37,99,235,.08);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;flex-shrink:0">Q1</div><div><div style="font-weight:600;font-size:.92rem">Launch mobile apps</div><div style="font-size:.78rem;color:var(--muted)">iOS + Android · Mobile-first access</div></div></div>
+                    <div style="display:flex;gap:14px;align-items:center"><div style="width:38px;height:38px;border-radius:50%;background:rgba(124,58,237,.08);color:var(--purple);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;flex-shrink:0">Q2</div><div><div style="font-weight:600;font-size:.92rem">10 college pilots live</div><div style="font-size:.78rem;color:var(--muted)">Pravara + SPPU network</div></div></div>
+                    <div style="display:flex;gap:14px;align-items:center"><div style="width:38px;height:38px;border-radius:50%;background:rgba(22,163,74,.08);color:var(--green);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;flex-shrink:0">Q3</div><div><div style="font-weight:600;font-size:.92rem">500 paying users</div><div style="font-size:.78rem;color:var(--muted)">Pro + Institution combined</div></div></div>
+                    <div style="display:flex;gap:14px;align-items:center"><div style="width:38px;height:38px;border-radius:50%;background:rgba(217,119,6,.08);color:var(--amber);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;flex-shrink:0">Q4</div><div><div style="font-weight:600;font-size:.92rem">₹20L ARR → Seed Ready</div><div style="font-size:.78rem;color:var(--muted)">Target ₹3-5 Cr raise</div></div></div>
+                </div>
+            </div>
+            <div class="glass" style="margin-top:14px;text-align:center">
+                <div style="font-size:.78rem;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Why Now?</div>
+                <div style="font-size:.92rem;color:var(--muted);line-height:1.7"><strong style="color:var(--text)">NEP 2020</strong> mandates digital lab access.<br><strong style="color:var(--text)">NAAC</strong> now requires digital learning proof.<br><strong style="color:var(--text)">Labster</strong> just raised $100M — validates the space.<br><strong style="color:var(--blue)">India has zero local players. We move first.</strong></div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">11 / 13</div>
+</section>
+
+<!-- S11: ROADMAP -->
+<section class="slide" id="s11">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026</div></div>
+    <div class="tag" style="color:var(--purple)"><i class="fas fa-road"></i> Roadmap</div>
+    <div class="hero-text" style="font-size:2.2rem;margin-bottom:32px">What this funding <span class="hl">de-risks.</span></div>
+    <div style="display:flex;gap:0;align-items:flex-start;position:relative">
+        <div style="position:absolute;top:24px;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--green));border-radius:2px;z-index:0"></div>
+        <div style="flex:1;text-align:center;position:relative;z-index:1">
+            <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#3b82f6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.75rem;margin:0 auto;box-shadow:0 4px 12px rgba(37,99,235,.2)">M3</div>
+            <div style="margin-top:14px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+                <div style="font-weight:800;font-size:.9rem;color:var(--blue)">Month 3</div>
+                <div style="font-size:.78rem;font-weight:700;margin-top:4px">Product Complete</div>
+                <div style="font-size:.7rem;color:var(--muted);margin-top:4px;line-height:1.4">Mobile apps launched<br>12 instruments total<br>Advanced AI teacher v2</div>
+            </div>
+        </div>
+        <div style="flex:1;text-align:center;position:relative;z-index:1">
+            <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--purple),#a855f7);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.75rem;margin:0 auto;box-shadow:0 4px 12px rgba(124,58,237,.2)">M6</div>
+            <div style="margin-top:14px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+                <div style="font-weight:800;font-size:.9rem;color:var(--purple)">Month 6</div>
+                <div style="font-size:.78rem;font-weight:700;margin-top:4px">15 LOIs Received</div>
+                <div style="font-size:.7rem;color:var(--muted);margin-top:4px;line-height:1.4">College partnerships signed<br>500+ active users<br>First paying institutions</div>
+            </div>
+        </div>
+        <div style="flex:1;text-align:center;position:relative;z-index:1">
+            <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green),#22c55e);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.75rem;margin:0 auto;box-shadow:0 4px 12px rgba(22,163,74,.2)">M12</div>
+            <div style="margin-top:14px;padding:14px;background:linear-gradient(135deg,rgba(22,163,74,.04),rgba(22,163,74,.02));border:2px solid rgba(22,163,74,.15);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+                <div style="font-weight:800;font-size:.9rem;color:var(--green)">Month 12</div>
+                <div style="font-size:.78rem;font-weight:700;margin-top:4px">₹20L ARR</div>
+                <div style="font-size:.7rem;color:var(--muted);margin-top:4px;line-height:1.4">Revenue milestone hit<br>Seed round ready<br>Chemistry vertical started</div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:32px;padding:18px 24px;background:linear-gradient(135deg,rgba(37,99,235,.04),rgba(124,58,237,.03));border:1px solid rgba(99,102,241,.1);border-radius:12px;display:flex;align-items:center;gap:14px">
+        <div style="font-size:1.3rem">🎯</div>
+        <div><div style="font-weight:700;font-size:.85rem">Every rupee has a milestone attached.</div><div style="font-size:.75rem;color:var(--muted);margin-top:2px">₹15L in → ₹20L ARR out in 12 months. That's a 1.3× return on pure operational spend — before any valuation growth.</div></div>
+    </div>
+    <div class="slide-num">12 / 13</div>
+</section>
+
+<!-- S12: VISION & CLOSING -->
+<section class="slide" id="s12" style="text-align:center;justify-content:center;align-items:center">
+    <div class="slide-header"><div class="slide-brand"><i class="fas fa-flask"></i> SimuPharma</div><div class="slide-event">SPPU Startup Olympiad 2026 · Wadhwani Foundation</div></div>
+    <div style="max-width:700px">
+        <div class="tag" style="color:var(--purple);justify-content:center"><i class="fas fa-eye"></i> Vision / Closing</div>
+        <div class="hero-text" style="font-size:2.4rem;text-align:center;margin:0 auto">Become India's leading<br><span class="hl">virtual lab platform,</span><br>powering 10 lakh students by 2030.</div>
+        <p class="sub" style="text-align:center;margin:20px auto 0;font-size:1rem">From pharmacy to chemistry, biology, engineering and medicine — every Indian student deserves a lab that's always open.</p>
+        <div style="margin-top:36px;font-size:.85rem;font-weight:600;color:var(--muted)">Let's talk:</div>
+        <div style="margin-top:12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <div style="padding:12px 24px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border-radius:10px;font-weight:700;font-size:.85rem"><i class="fas fa-globe" style="margin-right:6px"></i> simupharma.com</div>
+            <div style="padding:12px 24px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-weight:600;font-size:.85rem;color:var(--text)"><i class="fas fa-envelope" style="margin-right:6px;color:var(--blue)"></i> simupharm.team@gmail.com</div>
+            <div style="padding:12px 24px;background:var(--card);border:1px solid var(--border);border-radius:10px;font-weight:600;font-size:.85rem;color:var(--text)"><i class="fas fa-phone" style="margin-right:6px;color:var(--green)"></i> 9309398358</div>
+        </div>
+        <div style="margin-top:36px;padding:16px 24px;background:linear-gradient(135deg,rgba(37,99,235,.06),rgba(124,58,237,.04));border:1px solid rgba(99,102,241,.12);border-radius:12px;display:inline-flex;align-items:center;gap:10px">
+            <i class="fas fa-laptop-code" style="font-size:1.2rem;color:var(--blue)"></i>
+            <div style="text-align:left"><div style="font-weight:700;font-size:.85rem">🎬 Want to see it live?</div><div style="font-size:.72rem;color:var(--muted)">We can demo the full platform right now.</div></div>
+        </div>
+    </div>
+    <div class="slide-num">13 / 13</div>
+</section>
+
+<script>
+const slides=document.querySelectorAll('.slide');const dotsC=document.getElementById('dots');
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.onclick=()=>slides[i].scrollIntoView({behavior:'smooth'});dotsC.appendChild(d)});
+const dots2=dotsC.querySelectorAll('.nav-dot');
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const i=[...slides].indexOf(e.target);dots2.forEach((d,j)=>d.classList.toggle('active',j===i))}})},{threshold:.5});
+slides.forEach(s=>obs.observe(s));
+document.addEventListener('keydown',e=>{const c=[...slides].findIndex(s=>{const r=s.getBoundingClientRect();return r.top>=-100&&r.top<=innerHeight/2});if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key===' '){e.preventDefault();slides[Math.min(c+1,slides.length-1)].scrollIntoView({behavior:'smooth'})}else if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();slides[Math.max(c-1,0)].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>

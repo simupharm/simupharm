@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimuPharma - Digital Polarimeter Twin v2.0</title>
+    <link rel="stylesheet" href="hplc_simulator_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* ── Rotation Dial ── */
+        .rotation-dial {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .rotation-dial svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .dial-ring {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 8;
+        }
+
+        .dial-arc {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: all 0.8s ease;
+        }
+
+        .dial-arc.positive {
+            stroke: #22c55e;
+        }
+
+        .dial-arc.negative {
+            stroke: #ef4444;
+        }
+
+        .dial-needle {
+            transform-origin: 100px 100px;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .dial-center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .dial-center-text .rotation-value {
+            font-family: 'JetBrains Mono';
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .dial-center-text .rotation-unit {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* ── EE Bar ── */
+        .ee-bar {
+            height: 12px;
+            border-radius: 6px;
+            background: #1e293b;
+            overflow: hidden;
+            margin: 6px 0;
+            position: relative;
+        }
+
+        .ee-bar::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .ee-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.6s ease, margin-left 0.6s ease;
+            position: absolute;
+            top: 0;
+        }
+
+        .ee-bar-fill.r-form {
+            background: linear-gradient(90deg, #3b82f6, #6366f1);
+        }
+
+        .ee-bar-fill.s-form {
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+        }
+
+        .ee-bar-fill.racemic {
+            background: linear-gradient(90deg, #64748b, #94a3b8);
+        }
+
+        /* ── Result Card ── */
+        .result-card {
+            background: rgba(37, 99, 235, 0.06);
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+
+        .result-card .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .result-card .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-card .result-label {
+            color: #64748b;
+        }
+
+        .result-card .result-value {
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono';
+            font-weight: 600;
+        }
+
+        /* ── Light‑Path Diagram (schematic strip) ── */
+        .light-path-diagram {
+            margin: 12px 0;
+        }
+
+        .light-path-strip {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            height: 36px;
+            position: relative;
+        }
+
+        .light-path-strip .lp-segment {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .light-path-strip .lp-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            z-index: 2;
+        }
+
+        .light-path-strip .lp-connector {
+            flex: 1;
+            height: 3px;
+            min-width: 10px;
+            position: relative;
+        }
+
+        .light-path-strip .lp-connector .lp-beam {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 2px;
+        }
+
+        .light-path-strip .lp-connector.unpolarized .lp-beam {
+            background: repeating-linear-gradient(90deg, #f59e0b 0px, #f59e0b 4px, transparent 4px, transparent 8px);
+            opacity: 0.7;
+        }
+
+        .light-path-strip .lp-connector.polarized .lp-beam {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            opacity: 0.8;
+        }
+
+        .light-path-strip .lp-connector.rotated .lp-beam {
+            background: linear-gradient(90deg, #22c55e, #4ade80);
+            opacity: 0.8;
+        }
+
+        .light-path-strip .lp-connector.analyzed .lp-beam {
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+            opacity: 0.8;
+        }
+
+        .light-path-labels {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 4px;
+        }
+
+        .light-path-labels .lp-label {
+            flex: 1;
+            font-size: 9px;
+            color: #64748b;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .light-path-labels .lp-label span {
+            display: block;
+            font-size: 8px;
+            color: #475569;
+            margin-top: 1px;
+        }
+
+        /* ── Polarization State Badges ── */
+        .pol-state-row {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pol-state-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 10px;
+            color: #94a3b8;
+        }
+
+        .pol-state-badge .psb-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        /* ── 3D Viewport ── */
+        .viewport-3d-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 420px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, #0d1525 0%, #060a12 100%);
+        }
+
+        .viewport-3d-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+
+        /* HUD overlay */
+        .viewport-hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .hud-rotation {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 10px 16px;
+            text-align: center;
+        }
+
+        .hud-rotation .rotation-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .hud-rotation .rotation-label {
+            font-size: 9px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .hud-legend {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hud-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            color: #94a3b8;
+        }
+
+        .hud-legend-item .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Polarization plane angle inset */
+        .hud-pol-plane {
+            position: absolute;
+            bottom: 40px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 8px 12px;
+            pointer-events: none;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hud-pol-plane .pol-mini-dial {
+            width: 48px;
+            height: 48px;
+            position: relative;
+        }
+
+        .hud-pol-plane .pol-mini-dial svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .hud-pol-plane .pol-mini-dial .pmd-ring {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 3;
+        }
+
+        .hud-pol-plane .pol-mini-dial .pmd-zero {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.12);
+            stroke-width: 1;
+            stroke-dasharray: 2 4;
+        }
+
+        .hud-pol-plane .pol-mini-dial .pmd-needle {
+            stroke: #3b82f6;
+            stroke-width: 2;
+            stroke-linecap: round;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: 24px 24px;
+        }
+
+        .hud-pol-plane .pol-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .hud-pol-plane .pol-info .pi-label {
+            font-size: 9px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hud-pol-plane .pol-info .pi-value {
+            font-family: 'JetBrains Mono';
+            font-size: 16px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .hud-pol-plane .pol-info .pi-dir {
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .hud-pol-plane .pol-info .pi-dir.dextro {
+            color: #22c55e;
+        }
+
+        .hud-pol-plane .pol-info .pi-dir.levo {
+            color: #ef4444;
+        }
+
+        .hud-pol-plane .pol-info .pi-dir.none {
+            color: #64748b;
+        }
+
+        /* Component labels floating in viewport */
+        .viewport-component-labels {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 18px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .vcl-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .vcl-item .vcl-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .vcl-item .vcl-name {
+            font-size: 8px;
+            color: rgba(148, 163, 184, 0.6);
+            white-space: nowrap;
+        }
+
+        .viewport-bottom-label {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 10px;
+            color: rgba(148, 163, 184, 0.4);
+            pointer-events: none;
+            z-index: 10;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── View-control toolbar in viewport ── */
+        .viewport-toolbar {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 4px;
+            z-index: 10;
+        }
+
+        .viewport-toolbar button {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(8px);
+            color: #94a3b8;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .viewport-toolbar button:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: #fff;
+        }
+
+        .viewport-toolbar button.active {
+            background: rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        /* ── Wave type annotation (top-right of light path) ── */
+        .wave-annotation {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+            justify-content: center;
+        }
+
+        .wave-annotation .wa-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 9px;
+            color: #64748b;
+        }
+
+        .wave-annotation .wa-swatch {
+            width: 16px;
+            height: 3px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="toast-container"></div>
+
+    <div id="loading-overlay" class="hidden">
+        <div class="loader-content">
+            <div class="dna-loader">
+                <div class="helix"></div>
+                <div class="helix"></div>
+            </div>
+            <p id="loading-text">Initializing Polarimeter...</p>
+        </div>
+    </div>
+
+    <div id="app-container">
+
+        <!-- ══════════════════════════════════════════
+             VIEW 1 — INSTRUMENT (front panel)
+             ══════════════════════════════════════════ -->
+        <div id="hplc-main-view" class="view active">
+            <div class="main-view-header">
+                <div class="logo-section">
+                    <div class="logo-icon"><i class="fas fa-sync-alt"></i></div>
+                    <div class="logo-text">
+                        <h1>SimuPharma</h1>
+                        <span>Digital Polarimeter Twin v2.0</span>
+                    </div>
+                </div>
+                <div class="header-status">
+                    <div class="status-chip" id="system-status-chip">
+                        <span class="status-dot offline"></span>
+                        <span>System Offline</span>
+                    </div>
+                    <div class="difficulty-selector">
+                        <button class="difficulty-btn active" data-level="beginner">Beginner</button>
+                        <button class="difficulty-btn" data-level="intermediate">Intermediate</button>
+                        <button class="difficulty-btn" data-level="advanced">Advanced</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instrument-container">
+                <img src="images/polarimeter_main.png" alt="Polarimeter" class="hplc-bg-image"
+                    onerror="this.style.display='none'">
+
+                <!-- Hotspots -->
+                <div class="hotspot pulse-animate" id="hotspot-screen" data-controls="screen-view"
+                    data-name="Display Screen">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-desktop"></i></div>
+                    <div class="hotspot-tooltip">
+                        <span class="tooltip-title">Display Panel</span>
+                        <span class="tooltip-desc">Digital readout of observed rotation α</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-source" data-controls="source-modal"
+                    data-name="Light Source">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-lightbulb"></i></div>
+                    <div class="hotspot-tooltip left">
+                        <span class="tooltip-title">Sodium Vapor Lamp</span>
+                        <span class="tooltip-desc">Monochromatic 589.3 nm D-line source</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-sample" data-controls="sample-modal"
+                    data-name="Sample Chamber">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-flask"></i></div>
+                    <div class="hotspot-tooltip">
+                        <span class="tooltip-title">Observation Tube</span>
+                        <span class="tooltip-desc">Glass tube holding optically active solution</span>
+                    </div>
+                </div>
+
+                <div class="hotspot pulse-animate" id="hotspot-temp" data-controls="temp-modal"
+                    data-name="Temperature Control">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-thermometer-half"></i></div>
+                    <div class="hotspot-tooltip left">
+                        <span class="tooltip-title">Peltier Thermostat</span>
+                        <span class="tooltip-desc">Maintains sample at set temperature (±0.1 °C)</span>
+                    </div>
+                </div>
+
+                <div class="startup-button" id="hotspot-setup">
+                    <div class="startup-icon"><i class="fas fa-power-off"></i></div>
+                    <span class="startup-text">System Startup</span>
+                    <div class="startup-progress">
+                        <div class="startup-progress-fill" id="startup-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-stats-panel">
+                <div class="stat-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-lamp">--</span>
+                        <span class="stat-label">Lamp Status</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-sync-alt"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-rotation">--</span>
+                        <span class="stat-label">Observed α (°)</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-thermometer-half"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-temp">20 °C</span>
+                        <span class="stat-label">Temperature</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="qs-runtime">0:00</span>
+                        <span class="stat-label">Measure Time</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+             VIEW 2 — SOFTWARE / MEASUREMENT SCREEN
+             ══════════════════════════════════════════ -->
+        <div id="main-screen-view" class="view">
+
+            <!-- ── Header bar ── -->
+            <div class="screen-header glass-panel">
+                <div class="header-left">
+                    <button id="back-to-main-view-button" class="btn icon-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="method-info">
+                        <span class="method-label">Mode:</span>
+                        <span id="method-name" class="method-value">Optical Rotation</span>
+                    </div>
+                </div>
+                <div class="header-center">
+                    <div class="run-status" id="run-status-indicator">
+                        <span class="status-icon"><i class="fas fa-circle"></i></span>
+                        <span id="screen-title" class="status-text">Ready</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <span class="screen-time" id="system-time">--:--</span>
+                    <button id="fullscreen-button" class="btn icon-btn"><i class="fas fa-expand"></i></button>
+                </div>
+            </div>
+
+            <!-- ── Main content three-column ── -->
+            <div class="screen-content">
+
+                <!-- ─── LEFT PANEL: Parameters & Light Path ─── -->
+                <div class="left-panel glass-panel">
+
+                    <div class="panel-section">
+                        <h4><i class="fas fa-sliders-h"></i> Measurement Parameters</h4>
+                        <div class="param-grid">
+                            <div class="param-item">
+                                <label>Wavelength (λ)</label>
+                                <div class="param-display">
+                                    <span id="live-wavelength" class="param-value">589.3</span>
+                                    <span class="param-unit">nm</span>
+                                </div>
+                            </div>
+                            <div class="param-item">
+                                <label>Path Length (l)</label>
+                                <div class="param-display">
+                                    <span id="live-path" class="param-value">1.0</span>
+                                    <span class="param-unit">dm</span>
+                                </div>
+                            </div>
+                            <div class="param-item">
+                                <label>Temperature (T)</label>
+                                <div class="param-display">
+                                    <span id="live-temp" class="param-value">20.0</span>
+                                    <span class="param-unit">°C</span>
+                                </div>
+                            </div>
+                            <div class="param-item">
+                                <label>Concentration (c)</label>
+                                <div class="param-display">
+                                    <span id="live-conc" class="param-value">0.100</span>
+                                    <span class="param-unit">g/mL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h4><i class="fas fa-flask"></i> Loaded Sample</h4>
+                        <div class="sample-info">
+                            <span id="sample-name" class="sample-name">No sample loaded</span>
+                            <span class="sample-vial"><i class="fas fa-vial"></i> Observation tube</span>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h4><i class="fas fa-route"></i> Optical Path</h4>
+
+                        <!-- Schematic light-path with physics-correct labels -->
+                        <div class="light-path-diagram">
+                            <div class="light-path-strip">
+                                <!-- Source -->
+                                <div class="lp-segment">
+                                    <div class="lp-icon" style="background:rgba(245,158,11,0.25)">
+                                        <i class="fas fa-sun" style="color:#f59e0b"></i>
+                                    </div>
+                                </div>
+                                <div class="lp-connector unpolarized">
+                                    <div class="lp-beam"></div>
+                                </div>
+                                <!-- Polarizer -->
+                                <div class="lp-segment">
+                                    <div class="lp-icon" style="background:rgba(59,130,246,0.25)">
+                                        <i class="fas fa-arrows-alt-v" style="color:#3b82f6"></i>
+                                    </div>
+                                </div>
+                                <div class="lp-connector polarized">
+                                    <div class="lp-beam"></div>
+                                </div>
+                                <!-- Sample -->
+                                <div class="lp-segment">
+                                    <div class="lp-icon" style="background:rgba(34,197,94,0.25)">
+                                        <i class="fas fa-flask" style="color:#22c55e"></i>
+                                    </div>
+                                </div>
+                                <div class="lp-connector rotated">
+                                    <div class="lp-beam"></div>
+                                </div>
+                                <!-- Analyzer -->
+                                <div class="lp-segment">
+                                    <div class="lp-icon" style="background:rgba(139,92,246,0.25)">
+                                        <i class="fas fa-redo" style="color:#8b5cf6"></i>
+                                    </div>
+                                </div>
+                                <div class="lp-connector analyzed">
+                                    <div class="lp-beam"></div>
+                                </div>
+                                <!-- Detector -->
+                                <div class="lp-segment">
+                                    <div class="lp-icon" style="background:rgba(239,68,68,0.25)">
+                                        <i class="fas fa-eye" style="color:#ef4444"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="light-path-labels">
+                                <div class="lp-label">Na Lamp<span>Unpolarized</span></div>
+                                <div class="lp-label" style="flex:0.6"></div>
+                                <div class="lp-label">Polarizer<span>0° plane</span></div>
+                                <div class="lp-label" style="flex:0.6"></div>
+                                <div class="lp-label">Sample<span>Rotates α</span></div>
+                                <div class="lp-label" style="flex:0.6"></div>
+                                <div class="lp-label">Analyzer<span>Measures α</span></div>
+                                <div class="lp-label" style="flex:0.6"></div>
+                                <div class="lp-label">Detector<span>Intensity</span></div>
+                            </div>
+
+                            <div class="wave-annotation">
+                                <div class="wa-item">
+                                    <div class="wa-swatch"
+                                        style="background:repeating-linear-gradient(90deg,#f59e0b 0px,#f59e0b 3px,transparent 3px,transparent 6px)">
+                                    </div>
+                                    Unpolarized
+                                </div>
+                                <div class="wa-item">
+                                    <div class="wa-swatch" style="background:#3b82f6"></div>
+                                    Plane-polarized
+                                </div>
+                                <div class="wa-item">
+                                    <div class="wa-swatch" style="background:#22c55e"></div>
+                                    Rotated
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Polarization state badges -->
+                        <div class="pol-state-row">
+                            <div class="pol-state-badge">
+                                <div class="psb-dot" style="background:#f59e0b"></div> λ = <span
+                                    id="ps-wavelength">589.3</span> nm
+                            </div>
+                            <div class="pol-state-badge">
+                                <div class="psb-dot" style="background:#22c55e"></div> α = <span
+                                    id="ps-alpha">0.000</span>°
+                            </div>
+                            <div class="pol-state-badge" id="ps-direction-badge">
+                                <div class="psb-dot" style="background:#64748b"></div> <span id="ps-direction">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Biot's Law reference (educational) -->
+                    <div class="panel-section" style="border-top:1px solid rgba(255,255,255,0.06);padding-top:10px">
+                        <h4><i class="fas fa-superscript"></i> Biot's Law</h4>
+                        <div
+                            style="text-align:center;padding:6px 0;font-family:'JetBrains Mono';font-size:13px;color:#94a3b8;letter-spacing:0.5px">
+                            [α]<sub>D</sub><sup>T</sup> &nbsp;=&nbsp; α / ( l &times; c )
+                        </div>
+                        <div style="font-size:10px;color:#475569;line-height:1.5">
+                            <b style="color:#64748b">α</b> = observed rotation (°) &nbsp;|&nbsp;
+                            <b style="color:#64748b">l</b> = path length (dm) &nbsp;|&nbsp;
+                            <b style="color:#64748b">c</b> = concentration (g/mL)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ─── CENTER: 3D Optical System Viewport ─── -->
+                <div class="chromatogram-section glass-panel"
+                    style="display:flex;flex-direction:column;padding:0;overflow:hidden">
+
+                    <div class="viewport-3d-container" id="viewport-3d">
+
+                        <!-- HUD top bar -->
+                        <div class="viewport-hud">
+                            <div class="hud-rotation">
+                                <div class="rotation-value" id="rotation-display">0.000°</div>
+                                <div class="rotation-label">Observed Rotation (α)</div>
+                            </div>
+                            <div class="hud-legend">
+                                <div class="hud-legend-item">
+                                    <div class="dot" style="background:#f59e0b"></div>Na Lamp (source)
+                                </div>
+                                <div class="hud-legend-item">
+                                    <div class="dot" style="background:#3b82f6"></div>Polarizer (Nicol prism)
+                                </div>
+                                <div class="hud-legend-item">
+                                    <div class="dot" style="background:#22c55e"></div>Sample tube
+                                </div>
+                                <div class="hud-legend-item">
+                                    <div class="dot" style="background:#8b5cf6"></div>Analyzer (rotatable)
+                                </div>
+                                <div class="hud-legend-item">
+                                    <div class="dot" style="background:#ef4444"></div>Photodetector
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Polarization-plane mini-dial (bottom-left) -->
+                        <div class="hud-pol-plane" id="hud-pol-plane">
+                            <div class="pol-mini-dial">
+                                <svg viewBox="0 0 48 48">
+                                    <circle class="pmd-ring" cx="24" cy="24" r="20" />
+                                    <!-- 0° reference dashes -->
+                                    <line class="pmd-zero" x1="4" y1="24" x2="44" y2="24" />
+                                    <line class="pmd-zero" x1="24" y1="4" x2="24" y2="44" />
+                                    <!-- Needle (rotated by JS) -->
+                                    <line class="pmd-needle" id="pol-plane-needle" x1="24" y1="24" x2="44" y2="24" />
+                                </svg>
+                            </div>
+                            <div class="pol-info">
+                                <div class="pi-label">Polarization Plane</div>
+                                <div class="pi-value" id="pol-plane-angle">0.0°</div>
+                                <div class="pi-dir none" id="pol-plane-dir">No rotation</div>
+                            </div>
+                        </div>
+
+                        <!-- View control toolbar -->
+                        <div class="viewport-toolbar">
+                            <button id="view-reset-btn" title="Reset camera"><i class="fas fa-home"></i></button>
+                            <button id="view-side-btn" title="Side view"><i class="fas fa-arrows-alt-h"></i></button>
+                            <button id="view-front-btn" title="End-on view (through beam)"><i
+                                    class="fas fa-dot-circle"></i></button>
+                            <button id="view-top-btn" title="Top view"><i class="fas fa-arrow-down"></i></button>
+                            <button id="view-animate-btn" title="Toggle auto-rotate" class="active"><i
+                                    class="fas fa-sync-alt"></i></button>
+                        </div>
+
+                        <div class="viewport-bottom-label">
+                            3D Optical Rotation Visualisation — Drag to orbit &bull; Scroll to zoom
+                        </div>
+                    </div>
+
+                    <!-- Results beneath viewport -->
+                    <div style="padding:14px">
+                        <div class="result-card" id="results-card">
+                            <div class="result-row">
+                                <span class="result-label">Observed Rotation (α)</span>
+                                <span class="result-value" id="res-alpha">--</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Specific Rotation [α]<sub>D</sub><sup>T</sup></span>
+                                <span class="result-value" id="res-specific">--</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Enantiomeric Excess (% ee)</span>
+                                <span class="result-value" id="res-ee">--</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Direction</span>
+                                <span class="result-value" id="res-config">--</span>
+                            </div>
+                        </div>
+
+                        <!-- EE bar -->
+                        <div style="margin-top:10px">
+                            <div
+                                style="display:flex;justify-content:space-between;font-size:10px;color:#64748b;margin-bottom:3px">
+                                <span>← levorotatory (−)</span>
+                                <span style="color:#94a3b8;font-weight:600">Racemic</span>
+                                <span>dextrorotatory (+) →</span>
+                            </div>
+                            <div class="ee-bar">
+                                <div class="ee-bar-fill r-form" id="ee-bar-fill" style="width:0%;left:50%"></div>
+                            </div>
+                            <div
+                                style="display:flex;justify-content:space-between;font-size:9px;color:#475569;margin-top:2px">
+                                <span>100% (−)</span>
+                                <span>0% ee</span>
+                                <span>100% (+)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ─── RIGHT PANEL: Info cards ─── -->
+                <div class="right-panel">
+                    <div class="instrument-card glass-panel">
+                        <h5><i class="fas fa-info-circle" style="margin-right:4px;opacity:0.5"></i>Compound Info</h5>
+                        <div style="font-size:13px;color:#94a3b8">
+                            <div style="margin-bottom:6px">
+                                <span style="color:#64748b">Name:</span>
+                                <span id="info-name" style="color:#cbd5e1">--</span>
+                            </div>
+                            <div style="margin-bottom:6px">
+                                <span style="color:#64748b">Formula:</span>
+                                <span id="info-formula" style="color:#cbd5e1;font-family:'JetBrains Mono'">--</span>
+                            </div>
+                            <div style="margin-bottom:6px">
+                                <span style="color:#64748b">MW:</span>
+                                <span id="info-mw" style="color:#cbd5e1;font-family:'JetBrains Mono'">--</span>
+                            </div>
+                            <div style="margin-bottom:6px">
+                                <span style="color:#64748b">[α]<sub>D</sub><sup>20</sup> (lit.):</span>
+                                <span id="info-lit-rotation"
+                                    style="color:#f59e0b;font-family:'JetBrains Mono';font-weight:700">--</span>
+                            </div>
+                            <div>
+                                <span style="color:#64748b">Solvent:</span>
+                                <span id="info-solvent" style="color:#cbd5e1">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instrument-card glass-panel">
+                        <h5><i class="fas fa-lightbulb" style="margin-right:4px;opacity:0.5"></i>Lamp Status</h5>
+                        <div style="display:flex;align-items:center;gap:8px;padding:8px 0">
+                            <div id="lamp-indicator"
+                                style="width:12px;height:12px;border-radius:50%;background:#64748b;transition:background 0.4s">
+                            </div>
+                            <span id="lamp-status-text" style="color:#94a3b8;font-size:13px">Off</span>
+                        </div>
+                        <div style="font-size:12px;color:#64748b">
+                            Wavelength:
+                            <span style="color:#f59e0b;font-family:'JetBrains Mono'">589.3 nm</span>
+                            <span style="color:#475569">(Na D-line)</span>
+                        </div>
+                        <div style="font-size:11px;color:#475569;margin-top:4px">
+                            Warm-up time ≈ 10–15 min &bull; Monochromatic
+                        </div>
+                    </div>
+
+                    <div class="instrument-card glass-panel">
+                        <h5><i class="fas fa-thermometer-half" style="margin-right:4px;opacity:0.5"></i>Temperature</h5>
+                        <div style="text-align:center;padding:8px 0">
+                            <div id="temp-display"
+                                style="font-family:'JetBrains Mono';font-size:28px;font-weight:700;color:#3b82f6">
+                                20.0°C
+                            </div>
+                            <div style="font-size:11px;color:#64748b;margin-top:2px">Peltier-controlled (±0.1 °C)</div>
+                        </div>
+                    </div>
+
+                    <div class="instrument-card glass-panel timer-card">
+                        <div class="timer-display">
+                            <span id="elapsed-time" class="timer-value">00:00.0</span>
+                        </div>
+                        <div class="timer-progress">
+                            <div class="timer-progress-fill" id="timer-progress-fill"></div>
+                        </div>
+                        <span class="timer-label">Measurement Time</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── System Log ── -->
+            <div id="hplc-log-panel" class="glass-panel">
+                <div class="log-header">
+                    <h5><i class="fas fa-terminal"></i> System Log</h5>
+                    <button id="clear-log-btn" class="btn-small"><i class="fas fa-trash"></i></button>
+                </div>
+                <div id="log-content"></div>
+            </div>
+
+            <!-- ── Footer Controls ── -->
+            <div class="screen-footer glass-panel">
+                <div class="footer-left">
+                    <button id="run-button" class="btn primary-btn" disabled>
+                        <i class="fas fa-play"></i> Measure
+                    </button>
+                    <button id="stop-button" class="btn danger-btn" disabled>
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                </div>
+                <div class="footer-center">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="instant-mode-toggle">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">Instant Result</span>
+                    </label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="fault-mode-toggle">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">Fault Simulation</span>
+                    </label>
+                </div>
+                <div class="footer-right">
+                    <button id="sst-report-button" class="btn secondary-btn" disabled>
+                        <i class="fas fa-file-medical-alt"></i> Report
+                    </button>
+                    <button id="reset-button" class="btn secondary-btn">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         MODAL BACKDROP
+         ══════════════════════════════════════════ -->
+    <div id="modal-backdrop" class="hidden"></div>
+
+    <!-- ── STARTUP WIZARD ── -->
+    <div id="setup-modal" class="modal hidden wizard-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-power-off"></i> Polarimeter Startup Sequence</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-progress">
+                <div class="wizard-step active" data-step="1">
+                    <div class="step-number">1</div><span>Lamp</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="2">
+                    <div class="step-number">2</div><span>Zero</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="3">
+                    <div class="step-number">3</div><span>Sample</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="4">
+                    <div class="step-number">4</div><span>Ready</span>
+                </div>
+            </div>
+
+            <div class="wizard-content">
+                <!-- Step 1: Lamp warm-up -->
+                <div class="wizard-panel active" id="wizard-step-1">
+                    <div class="step-visual">
+                        <div class="step-overlay" id="overlay-step-1">
+                            <i class="fas fa-lightbulb" style="font-size:48px;color:#f59e0b"></i>
+                            <span>Warm Up Sodium Vapor Lamp</span>
+                        </div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Sodium Lamp Warm-Up</h4>
+                        <p class="step-description">
+                            The sodium vapor lamp must reach thermal equilibrium for stable
+                            monochromatic emission at 589.3 nm. In practice this takes 10–15 min;
+                            we simulate it here.
+                        </p>
+                        <div class="step-actions">
+                            <button id="btn-lamp-on" class="btn action-btn">
+                                <i class="fas fa-lightbulb"></i> Turn On Lamp
+                            </button>
+                        </div>
+                        <div class="step-status">
+                            <div class="status-item">
+                                <span class="status-label">Lamp:</span>
+                                <span id="status-lamp" class="status-value pending">Off</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Intensity:</span>
+                                <span id="status-intensity" class="status-value pending">0 %</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Zero calibration -->
+                <div class="wizard-panel" id="wizard-step-2">
+                    <div class="step-visual">
+                        <div class="step-overlay" id="overlay-step-2">
+                            <i class="fas fa-bullseye" style="font-size:48px;color:#3b82f6"></i>
+                            <span>Zero-Point Calibration</span>
+                        </div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Zero-Point Calibration</h4>
+                        <p class="step-description">
+                            Insert a tube filled with pure solvent (blank). The instrument
+                            adjusts the analyzer so that the reading is exactly 0.000°. This
+                            eliminates systematic offsets.
+                        </p>
+                        <div class="step-actions">
+                            <button id="btn-zero" class="btn action-btn" disabled>
+                                <i class="fas fa-crosshairs"></i> Calibrate Zero
+                            </button>
+                        </div>
+                        <div class="step-status">
+                            <div class="status-item">
+                                <span class="status-label">Zero Reading:</span>
+                                <span id="status-zero" class="status-value pending">Not calibrated</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Load sample -->
+                <div class="wizard-panel" id="wizard-step-3">
+                    <div class="step-visual">
+                        <div class="step-overlay" id="overlay-step-3">
+                            <i class="fas fa-flask" style="font-size:48px;color:#22c55e"></i>
+                            <span>Prepare &amp; Load Sample</span>
+                        </div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Sample Preparation</h4>
+                        <p class="step-description">
+                            Select the optically active compound, dissolve it to the desired
+                            concentration, fill the observation tube, and insert it into the
+                            sample chamber.
+                        </p>
+                        <div class="step-actions">
+                            <button id="btn-load-sample" class="btn action-btn" disabled>
+                                <i class="fas fa-flask"></i> Load Sample Tube
+                            </button>
+                        </div>
+                        <div class="step-status">
+                            <div class="status-item">
+                                <span class="status-label">Sample:</span>
+                                <span id="status-sample" class="status-value pending">Empty</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: System ready -->
+                <div class="wizard-panel" id="wizard-step-4">
+                    <div class="step-complete">
+                        <div class="complete-animation"><i class="fas fa-check-circle"></i></div>
+                        <h4>System Ready for Measurement</h4>
+                        <p>All components are calibrated and the sample is in place.</p>
+                        <div class="ready-stats">
+                            <div class="ready-stat"><i class="fas fa-lightbulb"></i><span>Lamp Stable</span></div>
+                            <div class="ready-stat"><i class="fas fa-bullseye"></i><span>Zero Calibrated</span></div>
+                            <div class="ready-stat"><i class="fas fa-flask"></i><span>Sample Loaded</span></div>
+                            <div class="ready-stat"><i class="fas fa-thermometer-half"></i><span>Temp Stable</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="wizard-prev-btn" class="btn secondary-btn" disabled>
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button id="wizard-next-btn" class="btn primary-btn" disabled>
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+            <button id="wizard-finish-btn" class="btn success-btn hidden">
+                <i class="fas fa-check"></i> Start Measurement
+            </button>
+        </div>
+    </div>
+
+    <!-- ── SAMPLE CONFIGURATION MODAL ── -->
+    <div id="sample-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-flask"></i> Sample Configuration</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Optically Active Compound</h4>
+                <div class="config-control">
+                    <select id="sample-select"
+                        style="width:100%;padding:10px;background:#1e293b;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-family:inherit;font-size:14px">
+                        <option value="Sucrose">Sucrose — [α]D²⁰ = +66.5° (water, c 10)</option>
+                        <option value="Glucose">D-Glucose — [α]D²⁰ = +52.7° (water, c 10, equil.)</option>
+                        <option value="Fructose">D-Fructose — [α]D²⁰ = −92.0° (water, c 2)</option>
+                        <option value="Tartaric_L">L-(+)-Tartaric Acid — [α]D²⁰ = +12.0° (water, c 20)</option>
+                        <option value="Tartaric_D">D-(−)-Tartaric Acid — [α]D²⁰ = −12.0° (water, c 20)</option>
+                        <option value="Camphor">(+)-Camphor — [α]D²⁰ = +44.3° (ethanol, c 10)</option>
+                        <option value="Menthol">(−)-Menthol — [α]D²⁰ = −50.0° (ethanol, c 10)</option>
+                        <option value="Ibuprofen_S">S-(+)-Ibuprofen — [α]D²⁰ = +59.0° (methanol, c 1)</option>
+                        <option value="Naproxen_S">S-(+)-Naproxen — [α]D²⁰ = +66.0° (CHCl₃, c 1)</option>
+                        <option value="Quinine">(−)-Quinine — [α]D²⁰ = −169.0° (ethanol, c 2)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="config-section">
+                <h4>Measurement Parameters</h4>
+                <div class="config-control">
+                    <label>Concentration (g/mL)</label>
+                    <div class="range-with-input">
+                        <input type="range" id="conc-input" min="0.01" max="0.50" step="0.01" value="0.10">
+                        <input type="number" id="conc-number" min="0.01" max="0.50" step="0.01" value="0.10">
+                    </div>
+                    <div style="font-size:10px;color:#475569;margin-top:2px">
+                        Mass of solute per mL of solution
+                    </div>
+                </div>
+                <div class="config-control">
+                    <label>Path Length (dm)</label>
+                    <div class="range-with-input">
+                        <input type="range" id="path-input" min="0.5" max="2.0" step="0.1" value="1.0">
+                        <input type="number" id="path-number" min="0.5" max="2.0" step="0.1" value="1.0">
+                    </div>
+                    <div style="font-size:10px;color:#475569;margin-top:2px">
+                        Observation tube length (1 dm = 100 mm)
+                    </div>
+                </div>
+                <div class="config-control">
+                    <label>Temperature (°C)</label>
+                    <div class="range-with-input">
+                        <input type="range" id="temp-input" min="15" max="35" step="0.5" value="20">
+                        <input type="number" id="temp-number" min="15" max="35" step="0.5" value="20">
+                    </div>
+                    <div style="font-size:10px;color:#475569;margin-top:2px">
+                        Standard = 20 °C — rotation is temperature-dependent
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn">
+                <i class="fas fa-check"></i> Apply Settings
+            </button>
+        </div>
+    </div>
+
+    <!-- ── LIGHT SOURCE MODAL ── -->
+    <div id="source-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-lightbulb"></i> Light Source Selection</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Wavelength</h4>
+                <p style="font-size:12px;color:#64748b;margin-bottom:10px">
+                    Optical rotation depends on wavelength (optical rotatory dispersion).
+                    The sodium D-line at 589.3 nm is the pharmacopeial standard.
+                </p>
+                <div class="column-cards">
+                    <label class="column-card selected">
+                        <input type="radio" name="wavelength" value="589.3" checked>
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#f59e0b"><i class="fas fa-sun"></i></div>
+                            <h5>Sodium D-line</h5>
+                            <p>589.3 nm — Pharmacopeial standard (USP/EP/JP)</p>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="wavelength" value="546.1">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#22c55e"><i class="fas fa-lightbulb"></i></div>
+                            <h5>Mercury Green</h5>
+                            <p>546.1 nm — Alternative green line</p>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="wavelength" value="365.0">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#8b5cf6"><i class="fas fa-radiation"></i></div>
+                            <h5>Mercury UV</h5>
+                            <p>365.0 nm — Greater rotation (shorter λ)</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn">
+                <i class="fas fa-check"></i> Apply
+            </button>
+        </div>
+    </div>
+
+    <!-- ── TEMPERATURE CONTROL MODAL ── -->
+    <div id="temp-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-thermometer-half"></i> Temperature Control</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Peltier Thermostat</h4>
+                <p style="font-size:12px;color:#64748b;margin-bottom:10px">
+                    Specific rotation is reported at a defined temperature (usually 20 °C).
+                    The Peltier element maintains the sample within ±0.1 °C.
+                </p>
+                <div class="config-control">
+                    <div class="temp-slider-container">
+                        <input type="range" id="temp-modal-input" min="15" max="35" step="0.5" value="20"
+                            class="temp-slider">
+                        <div class="temp-display">
+                            <span id="temp-modal-display" class="temp-value">20.0</span>
+                            <span class="temp-unit">°C</span>
+                        </div>
+                    </div>
+                    <div class="temp-presets">
+                        <button class="temp-preset" data-temp="15">15 °C</button>
+                        <button class="temp-preset active" data-temp="20">20 °C</button>
+                        <button class="temp-preset" data-temp="25">25 °C</button>
+                        <button class="temp-preset" data-temp="30">30 °C</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn">
+                <i class="fas fa-check"></i> Set Temperature
+            </button>
+        </div>
+    </div>
+
+    <!-- ── MEASUREMENT REPORT MODAL ── -->
+    <div id="sst-modal" class="modal hidden config-modal" style="max-width:600px">
+        <div class="modal-header">
+            <h3><i class="fas fa-file-medical-alt"></i> Measurement Report</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body" id="report-body">
+            <p style="color:#64748b;text-align:center">Take a measurement first to generate a report.</p>
+        </div>
+        <div class="modal-footer">
+            <button id="export-report-btn" class="btn primary-btn">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+    </div>
+
+    <!-- ── FAULT SIMULATION MODAL ── -->
+    <div id="fault-selector-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Fault Simulation</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Simulated Instrument Faults</h4>
+                <p style="font-size:12px;color:#64748b;margin-bottom:10px">
+                    Select a fault to observe its effect on the measurement. In real
+                    instruments, these cause unreliable or erratic readings.
+                </p>
+                <div class="column-cards">
+                    <label class="column-card selected">
+                        <input type="radio" name="fault-type" value="none" checked>
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#22c55e"><i class="fas fa-check-circle"></i></div>
+                            <h5>Normal Operation</h5>
+                            <p>No faults — instrument operates correctly</p>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="fault-type" value="bubble">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#ef4444"><i class="fas fa-circle"></i></div>
+                            <h5>Air Bubble</h5>
+                            <p>Bubble in sample tube — scatters light, erratic readings</p>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="fault-type" value="dirty-tube">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#f59e0b"><i class="fas fa-smog"></i></div>
+                            <h5>Dirty / Scratched Tube</h5>
+                            <p>Reduces light transmission — noisy signal, offset errors</p>
+                        </div>
+                    </label>
+                    <label class="column-card">
+                        <input type="radio" name="fault-type" value="weak-lamp">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#8b5cf6"><i class="fas fa-battery-quarter"></i></div>
+                            <h5>Aging Lamp</h5>
+                            <p>Weak / flickering emission — unstable baseline, drift</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn primary-btn modal-confirm-btn">
+                <i class="fas fa-check"></i> Apply Fault
+            </button>
+        </div>
+    </div>
+
+    <!-- ── MODAL BACKDROP ── -->
+    <div id="modal-backdrop" class="hidden"
+        style="position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);z-index:999"></div>
+
+    <!-- ── SETUP / STARTUP WIZARD MODAL ── -->
+    <div id="setup-modal" class="modal hidden config-modal" style="max-width:560px">
+        <div class="modal-header">
+            <h3><i class="fas fa-power-off"></i> System Startup</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <!-- Wizard step indicators -->
+            <div style="display:flex;gap:8px;margin-bottom:18px">
+                <div class="wizard-step active"
+                    style="flex:1;text-align:center;padding:8px 0;border-radius:8px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);font-size:11px;color:#94a3b8;transition:all .3s">
+                    <i class="fas fa-lightbulb"></i> Lamp
+                </div>
+                <div class="wizard-step"
+                    style="flex:1;text-align:center;padding:8px 0;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);font-size:11px;color:#64748b;transition:all .3s">
+                    <i class="fas fa-bullseye"></i> Zero
+                </div>
+                <div class="wizard-step"
+                    style="flex:1;text-align:center;padding:8px 0;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);font-size:11px;color:#64748b;transition:all .3s">
+                    <i class="fas fa-flask"></i> Sample
+                </div>
+                <div class="wizard-step"
+                    style="flex:1;text-align:center;padding:8px 0;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);font-size:11px;color:#64748b;transition:all .3s">
+                    <i class="fas fa-check-circle"></i> Ready
+                </div>
+            </div>
+
+            <!-- Panel 1: Lamp Warm-Up -->
+            <div class="wizard-panel active">
+                <div style="text-align:center;padding:16px 0">
+                    <div style="font-size:40px;color:#f59e0b;margin-bottom:12px"><i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h4 style="color:#e2e8f0;margin:0 0 8px">Sodium Vapor Lamp</h4>
+                    <p style="font-size:12px;color:#94a3b8;margin:0 0 16px">Ignite the Na D-line emission source
+                        (589.3 nm).<br>Lamp requires warm-up for stable monochromatic output.</p>
+                    <div
+                        style="display:flex;justify-content:space-between;font-size:11px;color:#64748b;margin-bottom:4px">
+                        <span>Status: <span id="status-lamp" class="status-value">Off</span></span>
+                        <span>Intensity: <span id="status-intensity" class="status-value">0%</span></span>
+                    </div>
+                    <button id="btn-lamp-on" class="btn primary-btn" style="margin-top:10px;width:100%">
+                        <i class="fas fa-power-off"></i> Turn On Lamp
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panel 2: Zero Calibration -->
+            <div class="wizard-panel" style="display:none">
+                <div style="text-align:center;padding:16px 0">
+                    <div style="font-size:40px;color:#3b82f6;margin-bottom:12px"><i class="fas fa-bullseye"></i>
+                    </div>
+                    <h4 style="color:#e2e8f0;margin:0 0 8px">Zero Calibration</h4>
+                    <p style="font-size:12px;color:#94a3b8;margin:0 0 16px">Insert a blank solvent tube and set the
+                        zero point.<br>This compensates for any baseline offset.</p>
+                    <div style="font-size:11px;color:#64748b;margin-bottom:4px">
+                        Zero: <span id="status-zero" class="status-value">Not calibrated</span>
+                    </div>
+                    <button id="btn-zero" class="btn primary-btn" disabled style="margin-top:10px;width:100%">
+                        <i class="fas fa-crosshairs"></i> Calibrate Zero
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panel 3: Sample Loading -->
+            <div class="wizard-panel" style="display:none">
+                <div style="text-align:center;padding:16px 0">
+                    <div style="font-size:40px;color:#22c55e;margin-bottom:12px"><i class="fas fa-flask"></i></div>
+                    <h4 style="color:#e2e8f0;margin:0 0 8px">Load Sample</h4>
+                    <p style="font-size:12px;color:#94a3b8;margin:0 0 8px">Insert the observation tube containing
+                        the optically active solution.</p>
+                    <div style="font-size:12px;color:#64748b;margin-bottom:4px">
+                        <span>Sample: <span id="status-sample" class="status-value">None</span></span>
+                    </div>
+
+                    <!-- Sample selector -->
+                    <select id="sample-select"
+                        style="width:100%;padding:8px 12px;border-radius:8px;background:#0f172a;border:1px solid rgba(255,255,255,0.1);color:#e2e8f0;font-size:13px;margin:8px 0">
+                        <option value="Sucrose">Sucrose (C₁₂H₂₂O₁₁)</option>
+                        <option value="Glucose">D-Glucose (C₆H₁₂O₆)</option>
+                        <option value="Fructose">D-Fructose (C₆H₁₂O₆)</option>
+                        <option value="Tartaric_L">L-Tartaric Acid</option>
+                        <option value="Tartaric_D">D-Tartaric Acid</option>
+                        <option value="Camphor">D-Camphor</option>
+                        <option value="Menthol">L-Menthol</option>
+                        <option value="Ibuprofen_S">S-(+)-Ibuprofen</option>
+                        <option value="Naproxen_S">S-(+)-Naproxen</option>
+                        <option value="Quinine">(−)-Quinine</option>
+                    </select>
+
+                    <div class="range-with-input" style="margin:8px 0">
+                        <label style="font-size:11px;color:#64748b">Concentration (g/mL)</label>
+                        <div style="display:flex;gap:8px;align-items:center">
+                            <input type="range" id="conc-range" min="0.01" max="0.50" step="0.005" value="0.10"
+                                style="flex:1">
+                            <input type="number" id="conc-number" min="0.01" max="0.50" step="0.005" value="0.10"
+                                style="width:70px;padding:4px 8px;border-radius:6px;background:#0f172a;border:1px solid rgba(255,255,255,0.1);color:#e2e8f0;font-size:12px;text-align:center">
+                        </div>
+                    </div>
+
+                    <div class="range-with-input" style="margin:8px 0">
+                        <label style="font-size:11px;color:#64748b">Path Length (dm)</label>
+                        <div style="display:flex;gap:8px;align-items:center">
+                            <input type="range" id="path-range" min="0.5" max="2.0" step="0.1" value="1.0"
+                                style="flex:1">
+                            <input type="number" id="path-number" min="0.5" max="2.0" step="0.1" value="1.0"
+                                style="width:70px;padding:4px 8px;border-radius:6px;background:#0f172a;border:1px solid rgba(255,255,255,0.1);color:#e2e8f0;font-size:12px;text-align:center">
+                        </div>
+                    </div>
+
+                    <button id="btn-load-sample" class="btn primary-btn" disabled style="margin-top:10px;width:100%">
+                        <i class="fas fa-vial"></i> Load Sample
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panel 4: Complete -->
+            <div class="wizard-panel" style="display:none">
+                <div style="text-align:center;padding:24px 0">
+                    <div class="step-complete">
+                        <div class="complete-animation">
+                            <i class="fas fa-check-circle" style="font-size:48px;color:#22c55e"></i>
+                        </div>
+                        <h4 style="color:#e2e8f0;margin:12px 0 6px">System Ready for Measurement</h4>
+                        <p style="font-size:12px;color:#94a3b8;margin:0">All systems nominal. You may now proceed to
+                            the measurement screen.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="display:flex;justify-content:space-between">
+            <button id="wizard-prev-btn" class="btn" disabled style="opacity:0.5">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button id="wizard-next-btn" class="btn primary-btn" disabled>
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+            <button id="wizard-finish-btn" class="btn primary-btn hidden">
+                <i class="fas fa-play"></i> Start Measuring
+            </button>
+        </div>
+    </div>
+
+    <script src="polarimeter_script.js"></script>
+    <script src="api_client.js"></script>
+    <script src="assistant.js"></script>
+</body>
+
+</html>

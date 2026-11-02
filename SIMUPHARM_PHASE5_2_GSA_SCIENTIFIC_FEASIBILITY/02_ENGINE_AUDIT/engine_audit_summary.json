@@ -1,0 +1,29 @@
+{
+  "temperature_sensitivity_dtR": 0.0,
+  "temperature_sensitivity_dRs": 0.0,
+  "internal_diameter_sensitivity_dtR": 0.0,
+  "internal_diameter_sensitivity_dRs": 0.0,
+  "injection_volume_sensitivity_dHeight": 0.0,
+  "van_deemter_A_cm": 0.001,
+  "van_deemter_B_cm_ml_min": 0.05,
+  "van_deemter_C_cm_min_ml": 2.5e-09,
+  "van_deemter_u_opt_ml_min": 4472.13595499958,
+  "van_deemter_H_min_cm": 0.001022360679774998,
+  "flow_rates_tested": [
+    0.2,
+    0.5,
+    1.0,
+    1.5,
+    2.0
+  ],
+  "Rs_at_flow_rates": [
+    0.832,
+    1.311,
+    1.845,
+    2.249,
+    2.584
+  ],
+  "tailing_mean": 1.14376,
+  "tailing_std": 0.08565245122003222,
+  "tailing_is_stochastic_random": true
+}

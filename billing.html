@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing — SimuPharma</title>
+    <meta name="description" content="Manage your SimuPharma subscription, view invoices, and track usage.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <style>
+        :root {
+            --bg-primary: #030712;
+            --bg-secondary: #0f172a;
+            --bg-card: rgba(15, 23, 42, 0.8);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #2563eb;
+            --accent-purple: #7c3aed;
+            --accent-green: #22c55e;
+            --accent-orange: #f59e0b;
+            --border: rgba(148, 163, 184, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .bg-effects {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-effects::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(37, 99, 235, 0.06) 0%, transparent 50%);
+        }
+
+        /* Nav */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 32px;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 32px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 40px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* Plan Badge */
+        .plan-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .plan-free {
+            background: rgba(6, 182, 212, 0.15);
+            color: #06b6d4;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+        }
+
+        .plan-pro {
+            background: rgba(124, 58, 237, 0.15);
+            color: #a78bfa;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .stat-value.green {
+            color: #22c55e;
+        }
+
+        .stat-value.purple {
+            color: #a78bfa;
+        }
+
+        .stat-value.orange {
+            color: #f59e0b;
+        }
+
+        /* Usage Bar */
+        .usage-bar-container {
+            margin-top: 12px;
+        }
+
+        .usage-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .usage-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(148, 163, 184, 0.1);
+        }
+
+        .usage-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            transition: width 0.5s ease;
+        }
+
+        .usage-bar-fill.warning {
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(148, 163, 184, 0.1);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(148, 163, 184, 0.15);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        /* Invoice Table */
+        .invoice-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 14px;
+        }
+
+        .invoice-table th {
+            text-align: left;
+            padding: 10px 12px;
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .invoice-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .invoice-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .invoice-status {
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-paid {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        /* Auth Gate */
+        .auth-gate {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .auth-gate i {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .auth-gate h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .auth-gate p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Success Banner */
+        .success-banner {
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 24px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 16px 40px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-effects"></div>
+
+    <nav class="nav">
+        <a href="index.html" class="nav-brand">🔬 SimuPharma</a>
+        <div class="nav-links">
+            <a href="instruments.html">Instruments</a>
+            <a href="pricing.html">Pricing</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Auth Gate -->
+        <div id="auth-gate" class="auth-gate" style="display:none;">
+            <i class="fas fa-lock"></i>
+            <h2>Sign In Required</h2>
+            <p>Sign in to manage your subscription and billing.</p>
+            <button class="btn btn-primary" onclick="SimuPharmaAPI?.showAuthModal()">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading-state" class="loading">
+            <div class="spinner"></div>
+            Loading billing information...
+        </div>
+
+        <!-- Main Content -->
+        <div id="billing-content" style="display:none;">
+            <h1 class="page-title">Billing & Subscription</h1>
+            <p class="page-subtitle" id="user-greeting">Manage your plan, usage, and invoices</p>
+
+            <!-- Success Banner -->
+            <div class="success-banner" id="success-banner">
+                <i class="fas fa-check-circle"></i> Your subscription has been activated! Welcome to Pro.
+            </div>
+
+            <!-- Current Plan Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Current Plan</span>
+                    <span class="plan-badge plan-free" id="plan-badge">FREE</span>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value green" id="stat-instruments">3</div>
+                        <div class="stat-label">Instruments</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value purple" id="stat-simulations">0 / 5</div>
+                        <div class="stat-label">Simulations Today</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value orange" id="stat-status">Active</div>
+                        <div class="stat-label">Status</div>
+                    </div>
+                </div>
+
+                <!-- Usage Bar (Free users only) -->
+                <div class="usage-bar-container" id="usage-bar-section">
+                    <div class="usage-bar-label">
+                        <span>Daily Simulations</span>
+                        <span id="usage-label">0 / 5 used</span>
+                    </div>
+                    <div class="usage-bar">
+                        <div class="usage-bar-fill" id="usage-bar-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="actions" style="margin-top: 20px;">
+                    <a href="pricing.html" class="btn btn-primary" id="btn-upgrade">
+                        <i class="fas fa-rocket"></i> Upgrade to Pro
+                    </a>
+                    <button class="btn btn-secondary" id="btn-portal" style="display:none;"
+                        onclick="openBillingPortal()">
+                        <i class="fas fa-credit-card"></i> Manage Payment
+                    </button>
+                    <button class="btn btn-danger" id="btn-cancel" style="display:none;" onclick="cancelPlan()">
+                        <i class="fas fa-times"></i> Cancel Plan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Invoice History -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Invoice History</span>
+                </div>
+                <div id="invoices-content">
+                    <div class="empty-state" id="no-invoices">
+                        <i class="fas fa-receipt" style="font-size:24px;margin-bottom:8px;display:block;"></i>
+                        No invoices yet. Invoices will appear here after you subscribe to a plan.
+                    </div>
+                    <table class="invoice-table" id="invoices-table" style="display:none;">
+                        <thead>
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoices-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="api_client.js"></script>
+    <script>
+        // Auto-load billing data
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check for success param
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('success') === 'true') {
+                document.getElementById('success-banner').style.display = 'block';
+                // Clean URL
+                window.history.replaceState({}, '', 'billing.html');
+            }
+
+            await loadBillingData();
+        });
+
+        // Listen for auth changes
+        window.addEventListener('simupharma:auth', () => loadBillingData());
+
+        async function loadBillingData() {
+            const loading = document.getElementById('loading-state');
+            const authGate = document.getElementById('auth-gate');
+            const content = document.getElementById('billing-content');
+
+            if (!window.SimuPharmaAPI?.isLoggedIn()) {
+                loading.style.display = 'none';
+                authGate.style.display = 'block';
+                content.style.display = 'none';
+                return;
+            }
+
+            loading.style.display = 'block';
+            authGate.style.display = 'none';
+            content.style.display = 'none';
+
+            try {
+                // Load subscription data
+                const sub = await SimuPharmaAPI.billing.getSubscription();
+                if (sub) renderSubscription(sub);
+
+                // Load invoices
+                const invoiceData = await SimuPharmaAPI.billing.getInvoices();
+                if (invoiceData?.invoices) renderInvoices(invoiceData.invoices);
+
+                loading.style.display = 'none';
+                content.style.display = 'block';
+            } catch (err) {
+                loading.style.display = 'none';
+                content.style.display = 'block';
+                console.error('Failed to load billing:', err);
+            }
+        }
+
+        function renderSubscription(sub) {
+            const badge = document.getElementById('plan-badge');
+            const statInstruments = document.getElementById('stat-instruments');
+            const statSims = document.getElementById('stat-simulations');
+            const statStatus = document.getElementById('stat-status');
+            const usageSection = document.getElementById('usage-bar-section');
+            const usageLabel = document.getElementById('usage-label');
+            const usageFill = document.getElementById('usage-bar-fill');
+            const btnUpgrade = document.getElementById('btn-upgrade');
+            const btnPortal = document.getElementById('btn-portal');
+            const btnCancel = document.getElementById('btn-cancel');
+
+            if (sub.plan === 'free') {
+                badge.className = 'plan-badge plan-free';
+                badge.textContent = 'FREE';
+                statInstruments.textContent = '3';
+                const used = sub.simulations_today || 0;
+                const limit = sub.daily_simulation_limit || 5;
+                statSims.textContent = `${used} / ${limit}`;
+                usageLabel.textContent = `${used} / ${limit} used`;
+                const pct = Math.min((used / limit) * 100, 100);
+                usageFill.style.width = pct + '%';
+                if (pct >= 80) usageFill.classList.add('warning');
+                usageSection.style.display = 'block';
+                btnUpgrade.style.display = 'inline-flex';
+                btnPortal.style.display = 'none';
+                btnCancel.style.display = 'none';
+            } else {
+                badge.className = 'plan-badge plan-pro';
+                badge.textContent = sub.plan_name || 'PRO';
+                statInstruments.textContent = '7';
+                statSims.textContent = '∞';
+                usageSection.style.display = 'none';
+                btnUpgrade.style.display = 'none';
+                btnPortal.style.display = 'inline-flex';
+                btnCancel.style.display = 'inline-flex';
+
+                if (sub.cancel_at_period_end) {
+                    statStatus.textContent = 'Canceling';
+                    statStatus.style.color = '#f59e0b';
+                    btnCancel.style.display = 'none';
+                }
+            }
+
+            if (sub.expires_at) {
+                const exp = new Date(sub.expires_at);
+                statStatus.title = 'Renews ' + exp.toLocaleDateString();
+            }
+        }
+
+        function renderInvoices(invoices) {
+            if (!invoices.length) return;
+            document.getElementById('no-invoices').style.display = 'none';
+            const table = document.getElementById('invoices-table');
+            const tbody = document.getElementById('invoices-body');
+            table.style.display = 'table';
+
+            tbody.innerHTML = invoices.map(inv => {
+                const date = new Date(inv.created * 1000).toLocaleDateString();
+                const amount = '₹' + (inv.amount_paid / 100).toLocaleString();
+                const statusClass = inv.status === 'paid' ? 'status-paid' : 'status-pending';
+                return `<tr>
+                    <td>${inv.number || inv.id.slice(-8)}</td>
+                    <td>${date}</td>
+                    <td>${amount}</td>
+                    <td><span class="invoice-status ${statusClass}">${inv.status}</span></td>
+                    <td>${inv.invoice_pdf ? `<a href="${inv.invoice_pdf}" target="_blank" style="color:#2563eb">PDF</a>` : ''}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        async function openBillingPortal() {
+            try {
+                const result = await SimuPharmaAPI.billing.openBillingPortal();
+                if (result?.portal_url) window.location.href = result.portal_url;
+            } catch (err) {
+                alert(err.message || 'Could not open billing portal.');
+            }
+        }
+
+        async function cancelPlan() {
+            if (!confirm('Cancel your Pro subscription? You\'ll keep access until the end of your billing period.')) return;
+            try {
+                await SimuPharmaAPI.billing.cancelSubscription();
+                loadBillingData();
+            } catch (err) {
+                alert(err.message || 'Failed to cancel. Try the billing portal.');
+            }
+        }
+    </script>
+</body>
+
+</html>

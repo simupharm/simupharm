@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimuPharma - Particle Size Analyzer Digital Twin v2.0</title>
+    <link rel="stylesheet" href="hplc_simulator_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+    <style>
+        .d-value-card {
+            background: rgba(37, 99, 235, 0.06);
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .d-value-card .d-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .d-value-card .d-number {
+            font-family: 'JetBrains Mono';
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin: 4px 0;
+        }
+
+        .d-value-card .d-unit {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .d-values-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 13px;
+        }
+
+        .metric-row .metric-label {
+            color: #64748b;
+        }
+
+        .metric-row .metric-value {
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono';
+            font-weight: 600;
+        }
+
+        .pass-fail {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .pass-fail.pass {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+
+        .pass-fail.fail {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .chart-toggle {
+            display: flex;
+            gap: 4px;
+            background: #1e293b;
+            padding: 3px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .chart-toggle button {
+            flex: 1;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            background: transparent;
+            color: #64748b;
+            font-family: inherit;
+        }
+
+        .chart-toggle button.active {
+            background: #2563eb;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="toast-container"></div>
+    <div id="loading-overlay" class="hidden">
+        <div class="loader-content">
+            <div class="dna-loader">
+                <div class="helix"></div>
+                <div class="helix"></div>
+            </div>
+            <p id="loading-text">Initializing PSA...</p>
+        </div>
+    </div>
+
+    <div id="app-container">
+        <!-- VIEW 1: INSTRUMENT -->
+        <div id="hplc-main-view" class="view active">
+            <div class="main-view-header">
+                <div class="logo-section">
+                    <div class="logo-icon"><i class="fas fa-circle-notch"></i></div>
+                    <div class="logo-text">
+                        <h1>SimuPharma</h1><span>Particle Size Analyzer Digital Twin v2.0</span>
+                    </div>
+                </div>
+                <div class="header-status">
+                    <div class="status-chip" id="system-status-chip"><span
+                            class="status-dot offline"></span><span>System Offline</span></div>
+                    <div class="difficulty-selector">
+                        <button class="difficulty-btn active" data-level="beginner">Beginner</button>
+                        <button class="difficulty-btn" data-level="intermediate">Intermediate</button>
+                        <button class="difficulty-btn" data-level="advanced">Advanced</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instrument-container">
+                <img src="images/psa_main.png" alt="Particle Size Analyzer" class="hplc-bg-image"
+                    onerror="this.style.display='none'">
+
+                <div class="hotspot pulse-animate" id="hotspot-screen" data-controls="screen-view"
+                    data-name="Data Display">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-desktop"></i></div>
+                    <div class="hotspot-tooltip"><span class="tooltip-title">Software</span><span
+                            class="tooltip-desc">View distribution & results</span></div>
+                </div>
+                <div class="hotspot pulse-animate" id="hotspot-laser" data-controls="laser-modal"
+                    data-name="Laser Source">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-crosshairs"></i></div>
+                    <div class="hotspot-tooltip left"><span class="tooltip-title">He-Ne Laser</span><span
+                            class="tooltip-desc">632.8 nm diffraction source</span></div>
+                </div>
+                <div class="hotspot pulse-animate" id="hotspot-cell" data-controls="cell-modal" data-name="Sample Cell">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-flask"></i></div>
+                    <div class="hotspot-tooltip"><span class="tooltip-title">Sample Cell</span><span
+                            class="tooltip-desc">Wet/dry dispersion unit</span></div>
+                </div>
+                <div class="hotspot pulse-animate" id="hotspot-detector" data-controls="detector-modal"
+                    data-name="Detector Array">
+                    <div class="hotspot-ring"></div>
+                    <div class="hotspot-core"><i class="fas fa-solar-panel"></i></div>
+                    <div class="hotspot-tooltip left"><span class="tooltip-title">Detector Array</span><span
+                            class="tooltip-desc">Multi-angle photodiodes</span></div>
+                </div>
+
+                <div class="startup-button" id="hotspot-setup">
+                    <div class="startup-icon"><i class="fas fa-power-off"></i></div>
+                    <span class="startup-text">System Startup</span>
+                    <div class="startup-progress">
+                        <div class="startup-progress-fill" id="startup-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-stats-panel">
+                <div class="stat-card"><i class="fas fa-crosshairs"></i>
+                    <div class="stat-info"><span class="stat-value" id="qs-laser">--</span><span
+                            class="stat-label">Laser Status</span></div>
+                </div>
+                <div class="stat-card"><i class="fas fa-chart-bar"></i>
+                    <div class="stat-info"><span class="stat-value" id="qs-d50">--</span><span class="stat-label">D50
+                            (µm)</span></div>
+                </div>
+                <div class="stat-card"><i class="fas fa-tint"></i>
+                    <div class="stat-info"><span class="stat-value" id="qs-obscuration">--</span><span
+                            class="stat-label">Obscuration</span></div>
+                </div>
+                <div class="stat-card"><i class="fas fa-clock"></i>
+                    <div class="stat-info"><span class="stat-value" id="qs-runtime">0:00</span><span
+                            class="stat-label">Measure Time</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: SOFTWARE -->
+        <div id="main-screen-view" class="view">
+            <div class="screen-header glass-panel">
+                <div class="header-left">
+                    <button id="back-to-main-view-button" class="btn icon-btn"><i
+                            class="fas fa-arrow-left"></i></button>
+                    <div class="method-info"><span class="method-label">Method:</span><span id="method-name"
+                            class="method-value">Laser Diffraction</span></div>
+                </div>
+                <div class="header-center">
+                    <div class="run-status" id="run-status-indicator"><span class="status-icon"><i
+                                class="fas fa-circle"></i></span><span id="screen-title"
+                            class="status-text">Ready</span></div>
+                </div>
+                <div class="header-right">
+                    <span class="screen-time" id="system-time">--:--</span>
+                    <button id="fullscreen-button" class="btn icon-btn"><i class="fas fa-expand"></i></button>
+                </div>
+            </div>
+
+            <div class="screen-content">
+                <!-- Left: Parameters -->
+                <div class="left-panel glass-panel">
+                    <div class="panel-section">
+                        <h4><i class="fas fa-sliders-h"></i> Parameters</h4>
+                        <div class="param-grid">
+                            <div class="param-item"><label>Dispersion</label>
+                                <div class="param-display"><span id="live-dispersion" class="param-value">Wet</span>
+                                </div>
+                            </div>
+                            <div class="param-item"><label>Pump Speed</label>
+                                <div class="param-display"><span id="live-pump" class="param-value">2500</span><span
+                                        class="param-unit">RPM</span></div>
+                            </div>
+                            <div class="param-item"><label>Obscuration</label>
+                                <div class="param-display"><span id="live-obscuration"
+                                        class="param-value">--</span><span class="param-unit">%</span></div>
+                            </div>
+                            <div class="param-item"><label>Model</label>
+                                <div class="param-display"><span id="live-model" class="param-value">Mie</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-section">
+                        <h4><i class="fas fa-flask"></i> Sample</h4>
+                        <div class="sample-info">
+                            <span id="sample-name" class="sample-name">No sample loaded</span>
+                            <span class="sample-vial"><i class="fas fa-vial"></i> Wet dispersion</span>
+                        </div>
+                    </div>
+                    <div class="panel-section">
+                        <h4><i class="fas fa-ruler"></i> D-Values</h4>
+                        <div class="d-values-grid" id="d-values-grid">
+                            <div class="d-value-card">
+                                <div class="d-label">D10</div>
+                                <div class="d-number" id="live-d10">--</div>
+                                <div class="d-unit">µm</div>
+                            </div>
+                            <div class="d-value-card">
+                                <div class="d-label">D50</div>
+                                <div class="d-number" id="live-d50">--</div>
+                                <div class="d-unit">µm</div>
+                            </div>
+                            <div class="d-value-card">
+                                <div class="d-label">D90</div>
+                                <div class="d-number" id="live-d90">--</div>
+                                <div class="d-unit">µm</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center: Distribution Chart -->
+                <div class="chromatogram-section glass-panel">
+                    <div class="chart-toolbar">
+                        <div class="toolbar-group">
+                            <div class="chart-toggle" id="chart-type-toggle">
+                                <button class="active" data-type="volume">Volume %</button>
+                                <button data-type="cumulative">Cumulative</button>
+                                <button data-type="number">Number</button>
+                            </div>
+                        </div>
+                        <div class="toolbar-group">
+                            <button class="chart-tool" id="zoom-in-btn" title="Zoom In"><i
+                                    class="fas fa-search-plus"></i></button>
+                            <button class="chart-tool" id="zoom-out-btn" title="Zoom Out"><i
+                                    class="fas fa-search-minus"></i></button>
+                            <button class="chart-tool" id="reset-zoom-btn" title="Reset"><i
+                                    class="fas fa-compress"></i></button>
+                        </div>
+                        <div class="toolbar-group">
+                            <button class="chart-tool" id="export-data-btn" title="Export"><i
+                                    class="fas fa-download"></i></button>
+                            <button class="chart-tool" id="screenshot-btn" title="Screenshot"><i
+                                    class="fas fa-camera"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-container"><canvas id="hplc-chart"></canvas></div>
+                    <div class="chart-footer"><span class="axis-label">Particle Size (µm) — Log Scale</span></div>
+                </div>
+
+                <!-- Right: Metrics -->
+                <div class="right-panel">
+                    <div class="instrument-card glass-panel">
+                        <h5>Distribution Metrics</h5>
+                        <div class="metric-row"><span class="metric-label">Mean</span><span class="metric-value"
+                                id="metric-mean">--</span></div>
+                        <div class="metric-row"><span class="metric-label">Median (D50)</span><span class="metric-value"
+                                id="metric-d50">--</span></div>
+                        <div class="metric-row"><span class="metric-label">Mode</span><span class="metric-value"
+                                id="metric-mode">--</span></div>
+                        <div class="metric-row"><span class="metric-label">Span</span><span class="metric-value"
+                                id="metric-span">--</span></div>
+                        <div class="metric-row"><span class="metric-label">Uniformity</span><span class="metric-value"
+                                id="metric-uniformity">--</span></div>
+                        <div class="metric-row"><span class="metric-label">SSA</span><span class="metric-value"
+                                id="metric-ssa">--</span></div>
+                    </div>
+                    <div class="instrument-card glass-panel">
+                        <h5>Specification Check</h5>
+                        <div class="metric-row"><span class="metric-label">D50 (10–50 µm)</span><span id="spec-d50"
+                                class="pass-fail pass">--</span></div>
+                        <div class="metric-row"><span class="metric-label">D90 (< 100 µm)</span><span id="spec-d90"
+                                        class="pass-fail pass">--</span></div>
+                        <div class="metric-row"><span class="metric-label">Span (< 3.0)</span><span id="spec-span"
+                                        class="pass-fail pass">--</span></div>
+                    </div>
+                    <div class="instrument-card glass-panel">
+                        <h5>Laser Alignment</h5>
+                        <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
+                            <div id="laser-dot" style="width:10px;height:10px;border-radius:50%;background:#64748b">
+                            </div>
+                            <span id="laser-status-text" style="color:#94a3b8;font-size:13px">Off</span>
+                        </div>
+                        <div style="font-size:12px;color:#64748b;margin-top:4px">Wavelength: <span
+                                style="color:#ef4444;font-family:'JetBrains Mono'">632.8 nm</span></div>
+                    </div>
+                    <div class="instrument-card glass-panel timer-card">
+                        <div class="timer-display"><span id="elapsed-time" class="timer-value">00:00.0</span></div>
+                        <div class="timer-progress">
+                            <div class="timer-progress-fill" id="timer-progress-fill"></div>
+                        </div>
+                        <span class="timer-label">Measurement Time</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hplc-log-panel" class="glass-panel">
+                <div class="log-header">
+                    <h5><i class="fas fa-terminal"></i> System Log</h5><button id="clear-log-btn" class="btn-small"><i
+                            class="fas fa-trash"></i></button>
+                </div>
+                <div id="log-content"></div>
+            </div>
+
+            <div class="screen-footer glass-panel">
+                <div class="footer-left">
+                    <button id="run-button" class="btn primary-btn" disabled><i class="fas fa-play"></i>
+                        Measure</button>
+                    <button id="stop-button" class="btn danger-btn" disabled><i class="fas fa-stop"></i> Stop</button>
+                </div>
+                <div class="footer-center">
+                    <label class="toggle-switch"><input type="checkbox" id="instant-mode-toggle"><span
+                            class="toggle-slider"></span><span class="toggle-label">Instant Result</span></label>
+                    <label class="toggle-switch"><input type="checkbox" id="fault-mode-toggle"><span
+                            class="toggle-slider"></span><span class="toggle-label">Fault Simulation</span></label>
+                </div>
+                <div class="footer-right">
+                    <button id="sst-report-button" class="btn secondary-btn" disabled><i
+                            class="fas fa-file-medical-alt"></i> Report</button>
+                    <button id="reset-button" class="btn secondary-btn"><i class="fas fa-redo"></i> Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-backdrop" class="hidden"></div>
+
+    <!-- STARTUP WIZARD -->
+    <div id="setup-modal" class="modal hidden wizard-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-power-off"></i> PSA Startup</h3><button class="modal-close-btn"><i
+                    class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="wizard-progress">
+                <div class="wizard-step active" data-step="1">
+                    <div class="step-number">1</div><span>Laser</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="2">
+                    <div class="step-number">2</div><span>Align</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="3">
+                    <div class="step-number">3</div><span>Background</span>
+                </div>
+                <div class="wizard-connector"></div>
+                <div class="wizard-step" data-step="4">
+                    <div class="step-number">4</div><span>Ready</span>
+                </div>
+            </div>
+            <div class="wizard-content">
+                <div class="wizard-panel active" id="wizard-step-1">
+                    <div class="step-visual">
+                        <div class="step-overlay" id="overlay-step-1"><i class="fas fa-crosshairs"
+                                style="font-size:48px;color:#ef4444"></i><span>Initialize He-Ne Laser</span></div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Laser Initialization</h4>
+                        <p class="step-description">Turn on the Helium-Neon laser (632.8 nm) and verify beam stability.
+                        </p>
+                        <div class="step-actions"><button id="btn-laser-on" class="btn action-btn"><i
+                                    class="fas fa-power-off"></i> Turn On Laser</button></div>
+                        <div class="step-status">
+                            <div class="status-item"><span class="status-label">Laser:</span><span id="status-laser"
+                                    class="status-value pending">Off</span></div>
+                            <div class="status-item"><span class="status-label">Power:</span><span id="status-power"
+                                    class="status-value pending">0 mW</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wizard-panel" id="wizard-step-2">
+                    <div class="step-visual">
+                        <div class="step-overlay"><i class="fas fa-bullseye"
+                                style="font-size:48px;color:#3b82f6"></i><span>Aligning Optical Path</span></div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Optical Alignment</h4>
+                        <p class="step-description">Auto-align the laser beam through the sample cell to the detector
+                            array.</p>
+                        <div class="step-actions"><button id="btn-align" class="btn action-btn" disabled><i
+                                    class="fas fa-bullseye"></i> Auto-Align</button></div>
+                        <div class="purge-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="align-progress-fill"></div>
+                            </div><span id="align-progress-text">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="wizard-panel" id="wizard-step-3">
+                    <div class="step-visual">
+                        <div class="step-overlay"><i class="fas fa-adjust"
+                                style="font-size:48px;color:#22c55e"></i><span>Measuring Background</span></div>
+                    </div>
+                    <div class="step-controls">
+                        <h4>Background Measurement</h4>
+                        <p class="step-description">Measure background scattering without sample to establish baseline.
+                        </p>
+                        <div class="step-actions"><button id="btn-background" class="btn action-btn" disabled><i
+                                    class="fas fa-play"></i> Measure Background</button></div>
+                        <div class="step-status">
+                            <div class="status-item"><span class="status-label">Background:</span><span
+                                    id="status-background" class="status-value pending">Not measured</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wizard-panel" id="wizard-step-4">
+                    <div class="step-complete">
+                        <div class="complete-animation"><i class="fas fa-check-circle"></i></div>
+                        <h4>System Ready!</h4>
+                        <p>Laser aligned and background measured. Ready for particle size analysis.</p>
+                        <div class="ready-stats">
+                            <div class="ready-stat"><i class="fas fa-crosshairs"></i><span>Laser Stable</span></div>
+                            <div class="ready-stat"><i class="fas fa-bullseye"></i><span>Aligned</span></div>
+                            <div class="ready-stat"><i class="fas fa-adjust"></i><span>Background OK</span></div>
+                            <div class="ready-stat"><i class="fas fa-check"></i><span>Detectors OK</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="wizard-prev-btn" class="btn secondary-btn" disabled><i class="fas fa-arrow-left"></i>
+                Previous</button>
+            <button id="wizard-next-btn" class="btn primary-btn" disabled>Next <i
+                    class="fas fa-arrow-right"></i></button>
+            <button id="wizard-finish-btn" class="btn success-btn hidden"><i class="fas fa-check"></i> Start
+                Analysis</button>
+        </div>
+    </div>
+
+    <!-- SAMPLE CELL MODAL -->
+    <div id="cell-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-flask"></i> Sample Configuration</h3><button class="modal-close-btn"><i
+                    class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Sample Material</h4>
+                <select id="sample-select"
+                    style="width:100%;padding:10px;background:#1e293b;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-family:inherit;font-size:14px">
+                    <option value="Lactose">Lactose Monohydrate (D50 ≈ 60 µm)</option>
+                    <option value="MCC">Microcrystalline Cellulose (D50 ≈ 90 µm)</option>
+                    <option value="Paracetamol_Micronized">Micronized Paracetamol (D50 ≈ 5 µm)</option>
+                    <option value="Starch">Corn Starch (D50 ≈ 15 µm)</option>
+                    <option value="API_Coarse">Coarse API Powder (D50 ≈ 150 µm)</option>
+                    <option value="Magnesium_Stearate">Magnesium Stearate (D50 ≈ 8 µm)</option>
+                    <option value="Silica">Colloidal Silica (D50 ≈ 0.02 µm)</option>
+                    <option value="Emulsion">Lipid Emulsion (D50 ≈ 0.3 µm)</option>
+                    <option value="Granules">Wet Granulation (D50 ≈ 300 µm)</option>
+                    <option value="Spray_Dried">Spray-Dried Powder (D50 ≈ 25 µm)</option>
+                </select>
+            </div>
+            <div class="config-section">
+                <h4>Dispersion Type</h4>
+                <div class="column-cards">
+                    <label class="column-card selected"><input type="radio" name="dispersion" value="wet" checked>
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-tint"></i></div>
+                            <h5>Wet Dispersion</h5>
+                            <p>Aqueous suspension with ultrasonics. Best for powders.</p>
+                            <div class="column-specs"><span>Water / IPA</span><span>Ultrasonic probe</span></div>
+                        </div>
+                    </label>
+                    <label class="column-card"><input type="radio" name="dispersion" value="dry">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-wind"></i></div>
+                            <h5>Dry Dispersion</h5>
+                            <p>Compressed air venturi. For free-flowing granules.</p>
+                            <div class="column-specs"><span>1-4 bar</span><span>Venturi feed</span></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="config-section">
+                <h4>Pump Speed (RPM)</h4>
+                <div class="config-control">
+                    <div class="range-with-input"><input type="range" id="pump-input" min="500" max="3500" step="100"
+                            value="2500"><input type="number" id="pump-number" min="500" max="3500" step="100"
+                            value="2500"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"><button class="btn primary-btn modal-confirm-btn"><i class="fas fa-check"></i>
+                Apply</button></div>
+    </div>
+
+    <!-- LASER MODAL -->
+    <div id="laser-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-crosshairs"></i> Laser Configuration</h3><button class="modal-close-btn"><i
+                    class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Optical Model</h4>
+                <div class="column-cards">
+                    <label class="column-card selected"><input type="radio" name="optical-model" value="mie" checked>
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-circle"></i></div>
+                            <h5>Mie Theory</h5>
+                            <p>Full solution to Maxwell's equations. Required refractive index.</p>
+                        </div>
+                    </label>
+                    <label class="column-card"><input type="radio" name="optical-model" value="fraunhofer">
+                        <div class="column-card-content">
+                            <div class="column-icon"><i class="fas fa-ring"></i></div>
+                            <h5>Fraunhofer</h5>
+                            <p>Diffraction-only model. Good for particles > 50 µm.</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="config-section">
+                <h4>Refractive Index (Mie only)</h4>
+                <div class="config-row">
+                    <div class="config-control half"><label>Real Part</label><input type="number" id="ri-real"
+                            value="1.544" step="0.001"
+                            style="width:100%;padding:8px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-family:inherit">
+                    </div>
+                    <div class="config-control half"><label>Imaginary Part</label><input type="number" id="ri-imag"
+                            value="0.100" step="0.001"
+                            style="width:100%;padding:8px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:#e2e8f0;font-family:inherit">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"><button class="btn primary-btn modal-confirm-btn"><i class="fas fa-check"></i>
+                Apply</button></div>
+    </div>
+
+    <!-- DETECTOR MODAL -->
+    <div id="detector-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-solar-panel"></i> Detector Array</h3><button class="modal-close-btn"><i
+                    class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Detector Configuration</h4>
+                <p style="color:#94a3b8;font-size:13px">Multi-element silicon photodiode array covering 0.01° to 135°
+                    scattering angles. 64 detector elements with logarithmic spacing.</p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;font-size:13px">
+                    <div class="metric-row"><span class="metric-label">Forward detectors:</span><span
+                            class="metric-value">31</span></div>
+                    <div class="metric-row"><span class="metric-label">Side detectors:</span><span
+                            class="metric-value">21</span></div>
+                    <div class="metric-row"><span class="metric-label">Back-scatter:</span><span
+                            class="metric-value">12</span></div>
+                    <div class="metric-row"><span class="metric-label">Total elements:</span><span
+                            class="metric-value">64</span></div>
+                    <div class="metric-row"><span class="metric-label">Range:</span><span class="metric-value">0.01–3500
+                            µm</span></div>
+                    <div class="metric-row"><span class="metric-label">Accuracy:</span><span
+                            class="metric-value">±1%</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"><button class="btn primary-btn modal-confirm-btn"><i class="fas fa-check"></i>
+                Close</button></div>
+    </div>
+
+    <!-- REPORT MODAL -->
+    <div id="sst-modal" class="modal hidden config-modal" style="max-width:700px">
+        <div class="modal-header">
+            <h3><i class="fas fa-file-medical-alt"></i> Particle Size Report</h3><button class="modal-close-btn"><i
+                    class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body" id="report-body">
+            <p style="color:#64748b;text-align:center">Run a measurement first</p>
+        </div>
+        <div class="modal-footer"><button id="export-report-btn" class="btn primary-btn"><i class="fas fa-download"></i>
+                Export</button></div>
+    </div>
+
+    <!-- FAULT MODAL -->
+    <div id="fault-selector-modal" class="modal hidden config-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Fault Simulation</h3><button class="modal-close-btn"><i
+                    class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="config-section">
+                <h4>Select Fault</h4>
+                <div class="column-cards">
+                    <label class="column-card selected"><input type="radio" name="fault-type" value="none" checked>
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#22c55e"><i class="fas fa-check-circle"></i></div>
+                            <h5>Normal</h5>
+                            <p>No faults</p>
+                        </div>
+                    </label>
+                    <label class="column-card"><input type="radio" name="fault-type" value="bubbles">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#ef4444"><i class="fas fa-circle"></i></div>
+                            <h5>Air Bubbles</h5>
+                            <p>Bubbles in cell — false large particles</p>
+                        </div>
+                    </label>
+                    <label class="column-card"><input type="radio" name="fault-type" value="dirty-cell">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#f59e0b"><i class="fas fa-smog"></i></div>
+                            <h5>Dirty Cell</h5>
+                            <p>Contaminated windows — high background</p>
+                        </div>
+                    </label>
+                    <label class="column-card"><input type="radio" name="fault-type" value="agglomeration">
+                        <div class="column-card-content">
+                            <div class="column-icon" style="color:#8b5cf6"><i class="fas fa-cubes"></i></div>
+                            <h5>Agglomeration</h5>
+                            <p>Poor dispersion — bimodal distribution</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"><button class="btn primary-btn modal-confirm-btn"><i class="fas fa-check"></i>
+                Apply</button></div>
+    </div>
+
+    <script src="psa_script.js"></script>
+    <script src="api_client.js"></script>
+    <script src="assistant.js"></script>
+</body>
+
+</html>

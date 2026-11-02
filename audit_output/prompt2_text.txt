@@ -1,0 +1,918 @@
+<USER_REQUEST>
+PROMPT 2 — SIMUPHARM PUBLICATION PROJECT
+PRIOR-ART, NOVELTY, BENCHMARK DATASET & SCIENTIFIC COMPARISON AUDIT
+
+ROLE
+You are now acting as an independent scientific intelligence team supporting publication of SimuPharm.io.
+
+This is NOT a coding task.
+
+This is NOT a product-development task.
+
+This is NOT a request to improve SimuPharm.
+
+Your task is to determine, as rigorously and skeptically as possible:
+
+1. What has already been done in the literature?
+2. What exactly is novel about SimuPharm?
+3. Which novelty claims are defensible?
+4. Which novelty claims must be abandoned?
+5. What existing simulators/software/platforms are the closest competitors?
+6. What experimental/literature datasets can legitimately be used as validation benchmarks?
+7. What exact experimental conditions must be reproduced in SimuPharm?
+8. What evidence would be required for a publication-grade comparison?
+9. Which proposed paper concept has the strongest publication potential?
+
+IMPORTANT:
+Treat the existing SimuPharm codebase and documentation as FROZEN.
+
+DO NOT modify:
+- source code
+- equations
+- algorithms
+- frontend
+- backend
+- database
+- compound library
+- configuration
+- dependencies
+- prompts
+- model parameters
+- generated scientific outputs
+
+You may READ and EXECUTE existing code where necessary for inspection or reproducibility, but you must not alter files or scientific behavior.
+
+If execution creates temporary files, place them outside the project source tree and clearly identify them.
+
+==================================================
+PART 1 — ESTABLISH THE EXACT SIMUPHARM CLAIMS
+==================================================
+
+First inspect the entire existing project.
+
+Create a table containing every scientifically meaningful claim made anywhere in:
+
+- README
+- documentation
+- manuscript drafts
+- PDFs
+- presentations
+- comments
+- source code
+- UI text
+- metadata
+- marketing language
+- scientific descriptions
+- API/database descriptions
+
+For every claim classify it as:
+
+A. Directly supported by implementation
+B. Partially supported
+C. Unsupported
+D. Potentially misleading
+E. Marketing language
+F. Requires experimental validation
+G. Requires educational validation
+H. Requires literature support
+
+For each claim provide:
+
+CLAIM ID
+Exact claim
+Location
+Evidence
+Status
+Required evidence
+Risk to publication
+
+DO NOT silently correct claims.
+
+==================================================
+PART 2 — PRIOR ART SEARCH
+==================================================
+
+Perform a deep literature and software prior-art investigation.
+
+Search broadly across:
+
+- Google Scholar
+- Crossref
+- PubMed where relevant
+- ACS
+- Wiley
+- Elsevier
+- Springer
+- RSC
+- IEEE
+- ScienceDirect
+- Scopus-accessible metadata where available
+- Web of Science-accessible metadata where available
+- GitHub
+- institutional repositories
+- educational software repositories
+- DOI registries
+
+Search for at least:
+
+HPLC simulators
+HPLC virtual laboratories
+HPLC simulation software
+chromatography simulators
+gradient HPLC simulators
+virtual chromatography laboratories
+in silico chromatography
+mechanistic HPLC models
+retention prediction software
+HPLC educational software
+analytical chemistry virtual laboratories
+virtual analytical instruments
+browser-based analytical chemistry simulators
+pharmaceutical analytical virtual laboratories
+fault-injection laboratory education
+virtual laboratory troubleshooting
+digital twins analytical chemistry
+AI analytical chemistry education
+machine learning chromatography education
+
+Also search specifically for prior art related to:
+
+- Van Deemter simulation
+- linear solvent strength models
+- gradient retention integration
+- peak broadening
+- EMG peak models
+- system suitability simulation
+- pressure simulation
+- chromatographic troubleshooting
+- simulated instrument faults
+- educational diagnostic systems
+- adaptive laboratory education
+
+Do NOT stop after finding papers that support SimuPharm.
+
+Actively search for papers/software that make SimuPharm appear LESS novel.
+
+==================================================
+PART 3 — BUILD A PRIOR-ART MATRIX
+==================================================
+
+For every important prior-art system create:
+
+SYSTEM ID
+Authors/company
+Year
+Title
+DOI
+URL
+Publisher
+Open-source? YES/NO/UNKNOWN
+Browser-based? YES/NO
+Instrument(s)
+HPLC? YES/NO
+Isocratic simulation
+Gradient simulation
+Retention model
+Peak-width model
+Pressure model
+System suitability
+Fault simulation
+Educational functionality
+Student assessment
+AI/ML
+Adaptive learning
+Digital twin
+Compound database
+Multi-instrument capability
+Numerical integration
+Experimental validation
+Educational validation
+Major strengths
+Major weaknesses
+Similarity to SimuPharm
+Potential novelty threat
+
+Do not invent values.
+
+Use UNKNOWN when evidence is unavailable.
+
+==================================================
+PART 4 — BOSWELL AND OTHER CLOSEST HPLC PRECEDENTS
+==================================================
+
+Perform a dedicated deep analysis of the closest HPLC simulator precedents.
+
+In particular investigate:
+
+Boswell et al. / HPLC-Simulator.org
+
+Determine precisely:
+
+- what it simulated
+- equations/models
+- experimental calibration
+- number/type of compounds
+- isocratic functionality
+- gradient functionality
+- browser architecture
+- educational purpose
+- validation
+- limitations
+- publication claims
+- what SimuPharm genuinely adds
+
+Do not merely state that SimuPharm is "more advanced."
+
+Identify concrete differences.
+
+Create:
+
+FEATURE
+BOSWELL
+SIMUPHARM
+NEW?
+EVIDENCE
+PUBLICATION SIGNIFICANCE
+
+Then repeat this comparison against the other 3–10 closest systems.
+
+==================================================
+PART 5 — NOVELTY DECOMPOSITION
+==================================================
+
+Do NOT evaluate novelty as one vague statement.
+
+Break SimuPharm novelty into individual components:
+
+N1 — browser-native implementation
+N2 — mechanistic HPLC simulation
+N3 — numerical gradient integration
+N4 — retention modelling
+N5 — Van Deemter/band-broadening modelling
+N6 — EMG/asymmetric peaks
+N7 — pressure modelling
+N8 — system suitability
+N9 — fault injection
+N10 — troubleshooting education
+N11 — multi-instrument integration
+N12 — unified pharmaceutical analytical laboratory
+N13 — adaptive learning
+N14 — AI/ML
+N15 — digital twin
+N16 — compound/API library
+N17 — automated analysis
+N18 — any other genuinely unique feature discovered
+
+For EACH novelty component classify:
+
+NOVEL
+PARTIALLY NOVEL
+KNOWN
+KNOWN BUT COMBINED DIFFERENTLY
+UNSUPPORTED
+NOT CURRENTLY DEFENSIBLE
+
+Then explain why.
+
+The objective is NOT to make SimuPharm look novel.
+
+The objective is to identify the strongest TRUE novelty.
+
+==================================================
+PART 6 — "WHY NOT JUST ANOTHER HPLC SIMULATOR?"
+==================================================
+
+Act as an extremely hostile reviewer.
+
+Write at least 15 possible reviewer objections.
+
+Examples:
+
+"Why is this not simply another implementation of Boswell?"
+
+"Which component is scientifically new?"
+
+"Is numerical gradient integration itself novel?"
+
+"Are the equations novel or merely established chromatography equations?"
+
+"Is fault injection scientifically novel or simply an educational feature?"
+
+"Is the multi-instrument architecture actually a scientific contribution?"
+
+"Where is the evidence that students learn better?"
+
+"Why should a reader trust simulated chromatograms?"
+
+"Does the compound database add scientific value?"
+
+"Are AI/ML claims justified?"
+
+"Does Digital Twin terminology have scientific validity?"
+
+For every objection provide:
+
+OBJECTION
+SEVERITY
+CURRENT ANSWER
+EVIDENCE
+WHAT IS MISSING
+HOW THE MANUSCRIPT SHOULD RESPOND
+
+==================================================
+PART 7 — FIND REAL VALIDATION DATASETS
+==================================================
+
+Now identify real experimental chromatographic datasets that could potentially be used to validate SimuPharm.
+
+This is extremely important.
+
+Do NOT fabricate benchmark data.
+
+Do NOT use random numbers from secondary websites.
+
+Prioritize:
+
+- peer-reviewed experimental papers
+- supplementary information
+- openly available datasets
+- repositories
+- published chromatograms
+- retention-time tables
+- method-development datasets
+- pharmaceutical/API chromatography datasets
+- benchmark datasets with sufficiently detailed experimental conditions
+
+For each candidate dataset record:
+
+DATASET ID
+Citation
+DOI
+URL
+Access status
+License
+Instrument
+Column manufacturer
+Column model
+Column dimensions
+Particle size
+Stationary phase
+Mobile phase
+A/B composition
+Buffer
+pH
+Additives
+Flow rate
+Temperature
+Injection volume
+Gradient program
+Run time
+Analytes
+Analyte concentration
+Retention times
+Peak widths if available
+Resolution if available
+Pressure if available
+Number of replicates
+Raw chromatogram available?
+Numerical data available?
+Can conditions be reconstructed?
+Can it legally be used?
+Can it be cited?
+Potential suitability for SimuPharm validation
+
+Score each dataset from 0–10 for validation usefulness.
+
+==================================================
+PART 8 — PRIORITIZE BENCHMARK DATASETS
+==================================================
+
+Rank all candidate datasets.
+
+Create:
+
+RANK
+DATASET
+SCORE
+WHY
+WHAT CAN BE VALIDATED
+LIMITATIONS
+
+Then select:
+
+A. BEST PRIMARY VALIDATION DATASET
+B. BEST SECONDARY DATASET
+C. BEST STRESS-TEST DATASET
+D. BEST EDUCATIONAL/FAULT-INJECTION DATASET IF AVAILABLE
+
+Do not select datasets merely because they produce favorable results.
+
+Prefer scientifically representative datasets.
+
+==================================================
+PART 9 — DETERMINE WHAT SIMUPHARM CAN ACTUALLY BE VALIDATED AGAINST
+==================================================
+
+For each selected benchmark determine whether SimuPharm can reproduce:
+
+1. retention time
+2. retention factor
+3. selectivity
+4. peak width
+5. plate count
+6. resolution
+7. tailing/asymmetry
+8. pressure
+9. gradient compression
+10. system suitability metrics
+
+For each metric state:
+
+VALIDATABLE NOW
+VALIDATABLE WITH CONFIGURATION
+REQUIRES CODE CHANGE
+NOT VALIDATABLE
+UNKNOWN
+
+IMPORTANT:
+
+Do not recommend modifying the simulator yet.
+
+This is an audit.
+
+==================================================
+PART 10 — SCIENTIFIC VALIDATION DESIGN
+==================================================
+
+Based on the literature, design a rigorous validation experiment.
+
+For every experiment specify:
+
+Research question
+Hypothesis
+Independent variables
+Dependent variables
+Controlled variables
+Experimental conditions
+Simulation conditions
+Number of runs
+Replicates
+Expected outputs
+Statistical test
+Acceptance criteria
+Failure criteria
+Potential confounders
+
+Do NOT choose arbitrary acceptance limits.
+
+Every acceptance criterion must be justified by:
+
+- literature
+- analytical practice
+- regulatory guidance
+- statistical equivalence principles
+- or clearly labelled as a proposed exploratory criterion
+
+Explicitly distinguish:
+
+EXPLORATORY
+PRE-SPECIFIED
+REGULATORY
+LITERATURE-DERIVED
+
+==================================================
+PART 11 — STATISTICAL COMPARISON PLAN
+==================================================
+
+Determine the most scientifically appropriate statistical framework.
+
+Consider:
+
+MAE
+RMSE
+MAPE
+R²
+Pearson/Spearman correlation
+residual analysis
+confidence intervals
+prediction intervals
+Bland–Altman analysis where appropriate
+equivalence testing
+TOST
+mixed-effects models where relevant
+repeatability
+reproducibility
+coefficient of variation
+bias
+limits of agreement
+
+Do not automatically recommend every test.
+
+Explain which test answers which scientific question.
+
+For retention time, peak width, resolution, and other variables separately determine the most appropriate analysis.
+
+==================================================
+PART 12 — SEARCH FOR NEGATIVE OR CONTRADICTORY EVIDENCE
+==================================================
+
+This section is mandatory.
+
+Find literature showing:
+
+- limitations of mechanistic retention models
+- variability between columns
+- limitations of LSS models
+- difficulties predicting S parameters
+- effects not captured by simple models
+- peak-shape limitations
+- temperature effects
+- instrument-specific effects
+- solvent/additive effects
+- stationary-phase differences
+
+The goal is to understand where SimuPharm is expected to fail.
+
+Create:
+
+LIMITATION
+LITERATURE EVIDENCE
+EXPECTED SIMUPHARM IMPACT
+CAN IT BE CONTROLLED?
+SHOULD IT BE REPORTED AS A LIMITATION?
+
+A scientifically honest paper should define its domain of validity.
+
+==================================================
+PART 13 — AI/ML/DIGITAL-TWIN CLAIM AUDIT
+==================================================
+
+Perform a separate prior-art analysis of:
+
+AI in analytical chemistry education
+ML chromatography prediction
+adaptive learning
+Bayesian Knowledge Tracing
+AI tutoring
+digital twins in analytical chemistry
+digital twins in laboratory education
+virtual instruments
+in-silico instruments
+
+Determine whether SimuPharm's current terminology is defensible.
+
+For each:
+
+CLAIM
+SIMUPHARM IMPLEMENTATION
+LITERATURE DEFINITION
+MATCH?
+RISK
+RECOMMENDATION
+
+Do not preserve AI/ML terminology simply because it sounds impressive.
+
+==================================================
+PART 14 — MULTI-INSTRUMENT NOVELTY
+==================================================
+
+Investigate whether existing platforms already provide unified simulation of:
+
+HPLC
+GC
+UV-Vis
+FTIR
+Mass spectrometry
+Polarimetry
+other analytical instruments
+
+Determine whether SimuPharm's multi-instrument architecture itself provides publishable novelty.
+
+Separate:
+
+TECHNICAL NOVELTY
+EDUCATIONAL NOVELTY
+SOFTWARE ENGINEERING NOVELTY
+SCIENTIFIC NOVELTY
+
+Do not confuse these categories.
+
+==================================================
+PART 15 — PUBLICATION CONCEPT COMPARISON
+==================================================
+
+Based on everything discovered, generate at least 4 possible publication concepts.
+
+For each provide:
+
+Title
+Research question
+Scientific contribution
+Educational contribution
+Novelty
+Required validation
+Required experiments
+Likely reviewer objections
+Best journal
+Publication risk
+Estimated evidence burden
+Overall score /100
+
+At minimum compare:
+
+CONCEPT A:
+HPLC mechanistic simulator + experimental validation
+
+CONCEPT B:
+HPLC simulator + troubleshooting/fault injection education
+
+CONCEPT C:
+Unified multi-instrument virtual analytical laboratory
+
+CONCEPT D:
+Computational model/software paper
+
+If another concept is stronger, add it.
+
+==================================================
+PART 16 — JOURNAL MATCHING
+==================================================
+
+Using current official journal information, evaluate:
+
+Journal of Chemical Education
+Computer Applications in Engineering Education
+Journal of Chromatography A
+Chemometrics and Intelligent Laboratory Systems
+Journal of Pharmaceutical and Biomedical Analysis
+Microchemical Journal
+Analytical Methods
+Pharmacy Education
+SoftwareX
+other genuinely suitable journals discovered
+
+For each:
+
+Scope match
+Novelty threshold
+Validation expectations
+Education requirement
+Software requirement
+Experimental requirement
+Traditional publication route
+Open-access option
+APC information
+Potential hidden/mandatory charges
+Likely article type
+Risk
+Fit score /100
+
+Use OFFICIAL PUBLISHER SOURCES wherever possible.
+
+Do not assume "free publication" means "open access."
+
+Clearly distinguish:
+
+NO MANDATORY APC ON SUBSCRIPTION ROUTE
+OPTIONAL OPEN ACCESS APC
+MANDATORY APC
+UNKNOWN
+
+==================================================
+PART 17 — CLAIM/EVIDENCE LEDGER
+==================================================
+
+Build the master publication evidence ledger.
+
+Columns:
+
+CLAIM ID
+MANUSCRIPT CLAIM
+SOURCE
+SOURCE TYPE
+EVIDENCE
+STATUS
+CONFIDENCE
+VALIDATION REQUIRED
+EXPERIMENT REQUIRED
+LITERATURE REQUIRED
+EDUCATIONAL DATA REQUIRED
+SAFE TO PUBLISH?
+RECOMMENDED WORDING
+
+Use confidence levels:
+
+HIGH
+MEDIUM
+LOW
+UNKNOWN
+
+Never upgrade confidence simply because multiple agents agree.
+
+==================================================
+PART 18 — FINAL NOVELTY STATEMENT
+==================================================
+
+Write three versions.
+
+VERSION 1:
+Most conservative scientifically defensible novelty statement.
+
+VERSION 2:
+Balanced publication-ready novelty statement.
+
+VERSION 3:
+Strongest statement that can be defended with evidence.
+
+Do NOT use phrases such as:
+
+"world's first"
+"revolutionary"
+"unprecedented"
+"unique"
+"AI-powered"
+
+unless the evidence genuinely supports them.
+
+==================================================
+PART 19 — WHAT WE SHOULD NOT CLAIM
+==================================================
+
+Create a red-flag list.
+
+Explicitly identify claims that should NOT appear in a manuscript unless additional evidence is generated.
+
+Examples may include:
+
+AI/ML
+Bayesian Knowledge Tracing
+Digital Twin
+300+ compounds
+first HPLC simulator
+real-time instrument equivalence
+clinical validity
+experimental accuracy
+educational effectiveness
+
+But verify each against the actual project.
+
+==================================================
+PART 20 — FINAL GO/NO-GO DECISION
+==================================================
+
+Give a brutally honest conclusion.
+
+Answer:
+
+1. Is there enough genuine novelty for publication?
+2. What is the strongest scientific contribution?
+3. What is the weakest claim?
+4. What is the strongest paper concept?
+5. What is the minimum evidence required?
+6. What experiments are absolutely necessary?
+7. What can be excluded from Paper 1?
+8. What should remain as future work?
+9. Which journal should be targeted first?
+10. What would make the paper rejectable?
+11. What would make the paper publishable?
+12. What is the highest-value next action?
+
+==================================================
+ANTI-HALLUCINATION RULES
+==================================================
+
+These rules are mandatory.
+
+1. NEVER fabricate papers.
+2. NEVER fabricate DOI numbers.
+3. NEVER fabricate datasets.
+4. NEVER fabricate experimental values.
+5. NEVER fabricate journal policies.
+6. NEVER claim a source was inspected if it was not.
+7. NEVER convert an inference into a fact.
+8. NEVER treat a search-result snippet as equivalent to reading the paper.
+9. If full text is inaccessible, explicitly state:
+   "METADATA VERIFIED — FULL TEXT NOT VERIFIED."
+10. If a dataset cannot be legally or technically accessed, mark it accordingly.
+11. Separate:
+   VERIFIED FACT
+   SOURCE-DERIVED INTERPRETATION
+   INFERENCE
+   HYPOTHESIS
+   UNKNOWN
+
+==================================================
+CONFLICT RESOLUTION
+==================================================
+
+If multiple agents disagree:
+
+DO NOT average their conclusions.
+
+Create a conflict table:
+
+ISSUE
+AGENT A
+AGENT B
+EVIDENCE A
+EVIDENCE B
+WHAT WOULD RESOLVE IT
+CURRENT STATUS
+
+Preserve disagreement where uncertainty genuinely exists.
+
+==================================================
+FINAL DELIVERABLES
+==================================================
+
+Create the following artifacts:
+
+01_prior_art_master_matrix.csv
+02_novelty_matrix.csv
+03_benchmark_dataset_matrix.csv
+04_claim_evidence_ledger.csv
+05_journal_comparison.csv
+06_reviewer_objections.csv
+
+And a comprehensive report:
+
+SIMUPHARM_PRIOR_ART_NOVELTY_AND_VALIDATION_INTELLIGENCE_REPORT.md
+
+Also create:
+
+SIMUPHARM_PRIOR_ART_NOVELTY_AND_VALIDATION_INTELLIGENCE_REPORT.pdf
+
+The report should contain:
+
+1. Executive decision
+2. SimuPharm claim inventory
+3. Prior-art landscape
+4. HPLC simulator landscape
+5. Boswell deep comparison
+6. Novelty decomposition
+7. Multi-instrument analysis
+8. AI/ML/Digital Twin audit
+9. Benchmark datasets
+10. Validation feasibility
+11. Statistical framework
+12. Negative evidence and limitations
+13. Hostile reviewer analysis
+14. Claim/evidence ledger
+15. Journal comparison
+16. Publication concepts
+17. Recommended manuscript concept
+18. Minimum validation package
+19. Risks
+20. Final GO/NO-GO
+21. Next-step research plan
+
+==================================================
+CRITICAL STOP CONDITION
+==================================================
+
+DO NOT modify SimuPharm.
+
+DO NOT implement recommendations.
+
+DO NOT "fix" equations.
+
+DO NOT add datasets to the application.
+
+DO NOT rewrite AI/ML modules.
+
+DO NOT alter the compound database.
+
+DO NOT begin experimental validation.
+
+DO NOT write the manuscript yet.
+
+Your only job in this phase is to establish:
+
+WHAT IS ALREADY KNOWN
+WHAT SIMUPHARM ACTUALLY DOES
+WHAT IS GENUINELY NOVEL
+WHAT CAN BE VALIDATED
+WHAT DATA EXISTS
+WHAT EVIDENCE IS MISSING
+AND WHAT PUBLICATION PATH IS SCIENTIFICALLY DEFENSIBLE.
+
+At the end, provide a concise:
+
+"PHASE 2 DECISION MEMO"
+
+containing:
+
+STRONGEST CONTRIBUTION:
+CURRENT NOVELTY LEVEL:
+BEST VALIDATION DATASET:
+MOST IMPORTANT EXPERIMENT:
+MOST DANGEROUS CLAIM:
+BEST PAPER CONCEPT:
+BEST TARGET JOURNAL:
+MINIMUM REQUIRED EVIDENCE:
+BIGGEST REASON FOR POSSIBLE REJECTION:
+NEXT PHASE:
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-04T10:46:05+05:30.
+</ADDITIONAL_METADATA>

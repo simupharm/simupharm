@@ -1,0 +1,24 @@
+{
+  "agent": "Agent 9 \u2014 Statistics & Validation Expert",
+  "role": "Senior Biostatistician & Analytical Validation Scientist",
+  "validation_gap_audit": {
+    "current_status": "Zero Quantitative Validation Against Ground Truth",
+    "necessary_statistical_framework": {
+      "regression_metrics": [
+        "Root Mean Squared Error (RMSE)",
+        "Mean Absolute Percentage Error (MAPE)",
+        "Coefficient of Determination (R^2) between simulated and experimental retention times"
+      ],
+      "chromatographic_metrics": [
+        "Peak Retention Factor Residual: Delta k = (k_sim - k_exp) / k_exp",
+        "Peak Width Resolution Error: Delta Rs = abs(Rs_sim - Rs_exp)",
+        "Plate Height Deviation: Delta H = abs(H_sim - H_exp)"
+      ],
+      "statistical_tests": [
+        "Two One-Sided Tests (TOST) for equivalence testing with epsilon = +/- 10%",
+        "Bland-Altman difference plotting for systematic bias detection",
+        "Paired Student's t-test / Wilcoxon signed-rank test for educational pre/post intervention study"
+      ]
+    }
+  }
+}

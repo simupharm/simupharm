@@ -1,0 +1,971 @@
+<USER_REQUEST>
+PROMPT 3.5 — SIMUPHARM.IO
+HOSTILE INDEPENDENT STATISTICAL, BENCHMARK & SCIENTIFIC RE-VALIDATION
+
+ROLE
+
+You are an independent hostile scientific auditor.
+
+You are NOT part of the team that produced Phase 3.
+
+Your objective is to determine whether the Phase 3 conclusions survive an independent forensic re-analysis.
+
+You are specifically instructed to TRY TO DISPROVE the Phase 3 results.
+
+Do not defend SimuPharm.
+
+Do not assume the Phase 3 report is correct.
+
+Do not assume the reported statistics are correct.
+
+Do not assume the benchmark values are correct.
+
+Do not assume the interpretation of "publication-grade" is correct.
+
+The desired outcome is scientific truth, even if the conclusion is:
+
+"Phase 3 contains a serious error and its conclusions must be revised."
+
+============================================================
+SOURCE MATERIALS
+============================================================
+
+Use the complete Phase 3 package:
+
+- PHASE3_VALIDATION_REPORT.md
+- PHASE3_VALIDATION_REPORT.pdf
+- phase3_raw_simulation_results.json
+- phase3_benchmark_verified.csv
+- phase3_simulation_outputs.csv
+- phase3_validation_statistics.csv
+- phase3_fault_validation.csv
+- phase3_parameter_sensitivity.csv
+- phase3_claim_status.csv
+
+Also inspect the frozen SimuPharm source code.
+
+The frozen codebase must remain frozen.
+
+============================================================
+ABSOLUTE NO-MODIFICATION RULE
+============================================================
+
+DO NOT MODIFY:
+
+- source code
+- equations
+- algorithms
+- parameters
+- compound library
+- configuration
+- frontend
+- backend
+- dependencies
+- simulation logic
+- fault logic
+- database
+- benchmark files
+
+You may independently calculate statistics.
+
+You may create NEW audit files outside the source tree.
+
+You may write scripts for analysis.
+
+You may reproduce simulations.
+
+You may independently verify literature.
+
+You may NOT alter the scientific system being audited.
+
+============================================================
+PRIMARY QUESTION
+============================================================
+
+Answer this:
+
+"Are the scientific conclusions reported in Phase 3 actually supported by the raw evidence?"
+
+Specifically investigate:
+
+1. Is the 2.07% isocratic MAPE correct?
+2. Are the experimental benchmark values correct?
+3. Are those benchmark values from the exact conditions claimed?
+4. Was the simulator calibrated against those same observations?
+5. Is the statistical methodology valid?
+6. Is the TOST/equivalence claim valid?
+7. Is the pressure validation valid?
+8. Are the gradient conclusions valid?
+9. Are the fault-injection conclusions being overstated?
+10. Is "publication-grade" justified?
+11. What claims can actually survive hostile peer review?
+
+============================================================
+PART 1 — RAW DATA INDEPENDENT RECOMPUTATION
+============================================================
+
+Ignore the reported statistics initially.
+
+Start from:
+
+phase3_raw_simulation_results.json
+phase3_simulation_outputs.csv
+phase3_benchmark_verified.csv
+
+Reconstruct the complete comparison dataset yourself.
+
+Do NOT copy calculated values from:
+
+phase3_validation_statistics.csv
+
+until your own calculations are complete.
+
+For every comparison calculate independently:
+
+- absolute error
+- relative error
+- percentage error
+- MAE
+- MSE
+- RMSE
+- MAPE
+- median absolute error
+- median percentage error
+- bias
+- mean signed error
+- SD of error
+- coefficient of variation where appropriate
+- R²
+- Pearson correlation
+- Spearman correlation where appropriate
+
+Compare your calculations against the Phase 3 report.
+
+Create:
+
+AUDIT STAT
+PHASE 3 VALUE
+INDEPENDENT VALUE
+DIFFERENCE
+ERROR?
+EXPLANATION
+
+============================================================
+PART 2 — RECONSTRUCT THE 2.07% RESULT
+============================================================
+
+This is the most important task.
+
+Reconstruct the claimed:
+
+MAPE = 2.07%
+
+for:
+
+Paracetamol
+Caffeine
+Aspirin
+Ibuprofen
+
+under:
+
+50% B
+1.0 mL/min
+30°C
+C18
+
+Verify every number.
+
+Calculate manually from the raw values.
+
+Determine whether:
+
+2.07%
+
+is mathematically correct.
+
+Then determine whether it is scientifically meaningful.
+
+IMPORTANT:
+
+Do not simply say:
+
+"MAPE = 2.07%, therefore validated."
+
+Investigate:
+
+- number of observations
+- number of analytes
+- independence
+- replicate structure
+- benchmark uncertainty
+- measurement uncertainty
+- parameter uncertainty
+- possible calibration
+- possible circularity
+- condition matching
+
+============================================================
+PART 3 — BENCHMARK PROVENANCE AUDIT
+============================================================
+
+For every experimental value used in Phase 3, trace it back to its original source.
+
+For each:
+
+ANALYTE
+EXPERIMENTAL RETENTION TIME
+SOURCE
+PAGE
+TABLE/FIGURE
+EXPERIMENTAL CONDITION
+PHASE 3 CONDITION
+MATCH?
+
+Verify:
+
+- column
+- dimensions
+- stationary phase
+- particle size
+- mobile phase
+- pH
+- flow
+- temperature
+- injection
+- detector
+- gradient/isocratic mode
+- dead time
+- dwell volume
+
+CRITICAL:
+
+Determine whether the four experimental values:
+
+2.850
+3.450
+6.150
+9.400 min
+
+actually correspond to the exact 50% B isocratic conditions used in the simulation.
+
+If they do not, explicitly state:
+
+"THE 2.07% RESULT IS NOT A VALID LIKE-FOR-LIKE VALIDATION."
+
+Do not soften this conclusion.
+
+============================================================
+PART 4 — SOURCE-TO-BENCHMARK CHAIN
+============================================================
+
+Create an evidence chain:
+
+ORIGINAL PAPER
+↓
+EXPERIMENTAL TABLE
+↓
+EXPERIMENTAL CONDITION
+↓
+VALUE EXTRACTED
+↓
+TRANSFORMATION
+↓
+PHASE 3 BENCHMARK
+↓
+SIMUPHARM INPUT
+↓
+SIMUPHARM OUTPUT
+↓
+STATISTICAL COMPARISON
+
+For every arrow identify whether the information is:
+
+DIRECT
+TRANSFORMED
+INFERRED
+ASSUMED
+UNKNOWN
+
+Any undocumented transformation is a red flag.
+
+============================================================
+PART 5 — CALIBRATION VS VALIDATION AUDIT
+============================================================
+
+This is mandatory.
+
+Determine whether any SimuPharm parameter was:
+
+- selected
+- tuned
+- estimated
+- optimized
+- manually adjusted
+- calibrated
+- fitted
+
+using the same experimental data later presented as validation.
+
+Inspect:
+
+- k0
+- S
+- phiRef
+- retention parameters
+- compound descriptors
+- temperature factors
+- dead time
+- column parameters
+- flow parameters
+- pressure parameters
+
+Search the source code and project history where available.
+
+Create:
+
+PARAMETER
+VALUE
+SOURCE
+HOW CHOSEN
+USING VALIDATION DATA?
+CALIBRATION OR VALIDATION?
+RISK
+
+If any parameter was tuned against DS-02, the corresponding result MUST NOT be called independent validation.
+
+It must be called:
+
+CALIBRATION
+or
+IN-SAMPLE AGREEMENT
+
+depending on the evidence.
+
+============================================================
+PART 6 — TOST / EQUIVALENCE AUDIT
+============================================================
+
+Audit every equivalence test independently.
+
+The Phase 3 analysis appears to associate:
+
+MAPE < 3%
+
+with equivalence.
+
+Determine whether this is statistically legitimate.
+
+Do NOT assume it is.
+
+Investigate:
+
+- what variable was tested
+- what the null hypotheses were
+- what equivalence margin was defined
+- whether the margin was scientifically justified
+- whether the observations were paired
+- whether replicate structure was considered
+- whether the test used raw differences or transformed values
+- whether the assumptions were satisfied
+- whether multiple testing was performed
+- whether the reported p-value is reproducible
+
+If the implementation is wrong, explicitly demonstrate why.
+
+Then recommend the correct analysis.
+
+Potential alternatives may include:
+
+- paired confidence interval
+- TOST on predefined absolute error
+- TOST on log ratio
+- prediction interval
+- equivalence on retention-time differences
+- Bland–Altman
+- mixed-effects modelling
+
+Only recommend methods appropriate to the actual data.
+
+============================================================
+PART 7 — SAMPLE SIZE / PSEUDOREPLICATION AUDIT
+============================================================
+
+Determine what the true statistical sample size is.
+
+Do NOT treat:
+
+108 simulated analyte outputs
+
+as automatically equivalent to:
+
+108 independent experimental observations.
+
+Determine:
+
+- number of experimental runs
+- number of analytes
+- number of replicates
+- number of unique conditions
+- number of simulation conditions
+- repeated measurements
+- nested observations
+
+Identify possible pseudoreplication.
+
+Create:
+
+UNIT OF ANALYSIS
+N
+INDEPENDENT?
+WHY?
+
+============================================================
+PART 8 — CONFIDENCE INTERVAL AUDIT
+============================================================
+
+Calculate appropriate confidence intervals for the key performance measures.
+
+At minimum investigate:
+
+- mean error
+- mean absolute error
+- MAPE where statistically defensible
+- RMSE where appropriate
+- bias
+
+If conventional confidence intervals are inappropriate because of the small sample size, say so.
+
+Do not manufacture precision.
+
+============================================================
+PART 9 — OUTLIER AUDIT
+============================================================
+
+Identify all extreme observations.
+
+Especially inspect:
+
+- Ibuprofen −4.26%
+- Paracetamol gradient +61.05%
+- Ibuprofen gradient −26.49%
+
+Determine:
+
+- whether they are genuine
+- whether they were excluded
+- whether they influence the mean
+- whether they influence MAPE
+- whether they reveal systematic model behavior
+
+Do NOT remove them.
+
+Perform sensitivity analysis:
+
+WITH OUTLIERS
+WITHOUT OUTLIERS
+
+But the primary conclusion must retain all scientifically valid observations.
+
+============================================================
+PART 10 — GRADIENT VALIDATION FORENSICS
+============================================================
+
+Reconstruct the gradient experiment independently.
+
+Verify:
+
+10% → 70% B
+10 min
+1.0 mL/min
+30°C
+
+Calculate all four errors independently.
+
+Then verify the proposed root causes:
+
+1. t0 = 0.5 min
+2. physical t0 ≈ 1.42 min
+3. phiRef = 0.50
+4. S parameter
+5. numerical integration behavior
+
+Do not accept the proposed root cause merely because it sounds plausible.
+
+Demonstrate the causal chain from source code to output.
+
+Classify each root cause:
+
+PROVEN
+STRONGLY SUPPORTED
+PLAUSIBLE
+UNPROVEN
+CONTRADICTED
+
+============================================================
+PART 11 — DEAD-TIME FORENSICS
+============================================================
+
+Inspect the exact implementation of:
+
+t0
+
+Determine:
+
+- formula
+- hardcoded constants
+- flow dependence
+- column dependence
+- whether solvent volume is represented
+- whether column dimensions are represented
+- whether dwell volume is represented
+
+Compare the implementation with the physical definition of dead time.
+
+Then determine whether the reported:
+
+0.50 min vs 1.42 min
+
+comparison is actually valid for the benchmark system.
+
+If the 1.42 min value was inferred rather than experimentally measured, explicitly state this.
+
+============================================================
+PART 12 — PHIREF / SOLVENT-STRENGTH AUDIT
+============================================================
+
+Inspect the exact implementation of:
+
+phiRef
+S
+k0
+retention equation
+gradient integration
+
+Determine mathematically what happens at:
+
+10% B
+20% B
+30% B
+40% B
+50% B
+60% B
+70% B
+
+Determine whether the model is:
+
+- correctly formulated
+- internally consistent
+- dimensionally consistent
+- numerically stable
+
+Produce a concise equation-level explanation.
+
+============================================================
+PART 13 — IS 50% B A FAIR VALIDATION CONDITION?
+============================================================
+
+This is a critical philosophical audit.
+
+Ask:
+
+Did SimuPharm perform well because 50% B is effectively close to its model reference state?
+
+If yes, determine whether the 2.07% result represents:
+
+A. broad predictive validation
+
+or
+
+B. local/reference-state agreement
+
+This distinction MUST appear in the final conclusion.
+
+Do not allow the manuscript to imply A if the evidence supports B.
+
+============================================================
+PART 14 — PRESSURE VALIDATION AUDIT
+============================================================
+
+Independently reconstruct the claimed pressure result.
+
+Phase 3 reports:
+
+MAPE ≈ 8.3%
+RMSE ≈ 7.4 bar
+
+Verify:
+
+- all pressure values
+- all experimental/reference values
+- modifier conditions
+- viscosity values
+- column dimensions
+- particle size
+- flow
+- pressure formula
+
+Determine whether the comparison is:
+
+experimental
+literature-derived
+theoretical
+or internally generated.
+
+If the "experimental" pressure values are actually generated from Darcy/Kozeny-Carman theory, DO NOT call this experimental validation.
+
+Classify it correctly.
+
+============================================================
+PART 15 — FAULT-INJECTION AUDIT
+============================================================
+
+Audit each fault:
+
+AIR BUBBLE
+PUMP LEAK
+COLUMN VOID/DEGRADATION
+
+For each determine:
+
+1. Is the physical mechanism correctly represented?
+2. Are the numerical magnitudes physically justified?
+3. Are the fault parameters arbitrary?
+4. Is the literature evidence qualitative or quantitative?
+5. Has physical experimental validation occurred?
+6. Can the model be falsified?
+
+Especially investigate:
+
+- −20 bar
+- −50 bar
+- +30 bar
+- +10% RT
+- +30% RT
+- noise multipliers
+- tailing factor = 2.5
+- 50% efficiency loss
+
+Determine whether these are:
+
+LITERATURE-DERIVED
+EMPIRICALLY CALIBRATED
+ENGINEERING HEURISTICS
+ARBITRARY
+
+Never call arbitrary parameters "mechanistic."
+
+============================================================
+PART 16 — CLAIM LANGUAGE AUDIT
+============================================================
+
+Compare Phase 3's claims against the actual evidence.
+
+For every statement classify:
+
+SAFE
+TOO STRONG
+MISLEADING
+UNSUPPORTED
+FALSE
+
+Audit phrases such as:
+
+"publication-grade"
+"validated"
+"experimentally validated"
+"accurate"
+"high accuracy"
+"mechanistic"
+"physically realistic"
+"fault model validated"
+"predictive"
+"generalizable"
+"educationally effective"
+
+Produce replacement wording for every unsafe claim.
+
+============================================================
+PART 17 — "PUBLICATION-GRADE" AUDIT
+============================================================
+
+Do not accept the phrase:
+
+"publication-grade"
+
+as a scientific metric.
+
+Determine whether the evidence actually satisfies the likely requirements of:
+
+Journal of Chemical Education
+Computer Applications in Engineering Education
+Journal of Chromatography A
+
+Evaluate separately:
+
+Scientific novelty
+Validation
+Educational contribution
+Statistical rigor
+Reproducibility
+Benchmark breadth
+Experimental evidence
+Limitations
+Prior art
+
+Then provide:
+
+JCE STATUS
+CAE STATUS
+J CHROM A STATUS
+
+Do not claim acceptance or publication likelihood.
+
+============================================================
+PART 18 — ADVERSARIAL REVIEWER SIMULATION
+============================================================
+
+Pretend you are Reviewer #2.
+
+Write at least 20 objections.
+
+Prioritize:
+
+1. Tiny validation dataset
+2. Potential calibration leakage
+3. 50% B reference-state bias
+4. Gradient failure
+5. benchmark provenance
+6. pressure validation
+7. heuristic fault parameters
+8. lack of physical fault experiments
+9. lack of educational outcome data
+10. statistical methodology
+11. TOST misuse
+12. pseudoreplication
+13. novelty relative to Boswell
+14. overclaiming
+
+For each objection:
+
+SEVERITY
+EVIDENCE
+DOES IT INVALIDATE THE PAPER?
+HOW TO FIX
+CAN IT BE FIXED WITHOUT CHANGING CODE?
+
+============================================================
+PART 19 — MINIMUM ADDITIONAL EVIDENCE
+============================================================
+
+Determine the minimum evidence required to turn the current work into a defensible publication.
+
+Separate:
+
+ABSOLUTELY REQUIRED
+HIGHLY RECOMMENDED
+OPTIONAL
+NOT NECESSARY
+
+Do not automatically demand a huge study.
+
+Optimize for maximum scientific evidence per experiment.
+
+============================================================
+PART 20 — PHYSICAL HPLC DECISION
+============================================================
+
+Give a direct answer:
+
+SHOULD WE NOW GO TO THE LAB?
+
+YES
+NO
+YES, BUT ONLY AFTER X
+
+If YES:
+
+Design the smallest scientifically powerful physical validation study.
+
+Prioritize:
+
+- one column
+- one instrument
+- one analytical mixture
+- repeatability
+- isocratic reference condition
+- gradient condition
+- pressure
+- fault condition if safe and feasible
+
+Do NOT propose unsafe intentional equipment faults.
+
+For faults, only use controlled, manufacturer-approved or laboratory-safe simulation methods.
+
+============================================================
+PART 21 — CALIBRATION/VALIDATION SPLIT FOR FUTURE STUDY
+============================================================
+
+If parameter calibration is necessary, design:
+
+CALIBRATION DATASET
+VALIDATION DATASET
+TEST DATASET
+
+These must be separate.
+
+Explain which parameters would be calibrated and which must remain frozen.
+
+Do not modify SimuPharm now.
+
+============================================================
+PART 22 — FINAL VERDICT
+
+Produce three verdicts:
+
+VERDICT A:
+If every Phase 3 claim is accepted.
+
+VERDICT B:
+If all statistical and provenance problems are interpreted conservatively.
+
+VERDICT C:
+The scientifically most defensible verdict.
+
+Then state:
+
+WHAT PHASE 3 GOT RIGHT
+WHAT PHASE 3 OVERSTATED
+WHAT PHASE 3 FAILED TO ESTABLISH
+WHAT IS ACTUALLY STRONG
+WHAT IS ACTUALLY WEAK
+WHAT MUST HAPPEN NEXT
+
+============================================================
+REQUIRED OUTPUT FILES
+============================================================
+
+Create:
+
+01_independent_statistics_recalculation.csv
+
+02_benchmark_provenance_audit.csv
+
+03_calibration_vs_validation_audit.csv
+
+04_tost_equivalence_audit.csv
+
+05_pseudoreplication_audit.csv
+
+06_pressure_validation_audit.csv
+
+07_fault_claim_audit.csv
+
+08_claim_language_audit.csv
+
+09_reviewer_attack_matrix.csv
+
+10_phase35_evidence_ledger.csv
+
+And:
+
+SIMUPHARM_PHASE3_5_HOSTILE_REVALIDATION_REPORT.md
+
+SIMUPHARM_PHASE3_5_HOSTILE_REVALIDATION_REPORT.pdf
+
+Also create:
+
+SIMUPHARM_PHASE3_5_DECISION_MEMO.md
+
+============================================================
+MANDATORY FINAL DECISION MEMO
+============================================================
+
+End the report with exactly:
+
+PHASE 3 RESULT VALIDATED?:
+YES / PARTIALLY / NO
+
+2.07% MAPE MATHEMATICALLY CORRECT?:
+YES / NO
+
+2.07% MAPE SCIENTIFICALLY REPRESENTATIVE OF GENERAL HPLC ACCURACY?:
+YES / NO
+
+BENCHMARK PROVENANCE:
+VERIFIED / PARTIAL / PROBLEMATIC
+
+CALIBRATION LEAKAGE:
+NONE / POSSIBLE / CONFIRMED
+
+TOST VALID?:
+YES / NO / NOT APPLICABLE
+
+PSEUDOREPLICATION:
+NONE / POSSIBLE / PRESENT
+
+PRESSURE VALIDATION:
+EXPERIMENTAL / THEORETICAL / MIXED / INVALID
+
+FAULT VALIDATION:
+EXPERIMENTAL / LITERATURE-CONSISTENT / HEURISTIC / INVALID
+
+GRADIENT VALIDATION:
+VALID / LIMITED / FAILED
+
+STRONGEST SCIENTIFIC RESULT:
+[ONE SENTENCE]
+
+MOST SERIOUS PROBLEM:
+[ONE SENTENCE]
+
+CURRENT PUBLICATION STATUS:
+[ONE SENTENCE]
+
+PHYSICAL HPLC EXPERIMENT:
+REQUIRED / RECOMMENDED / NOT YET JUSTIFIED
+
+EDUCATIONAL STUDY:
+REQUIRED / RECOMMENDED / NOT YET
+
+NEXT PHASE:
+[ONE CLEAR ACTION]
+
+============================================================
+FINAL RULE
+============================================================
+
+DO NOT MODIFY SIMUPHARM.
+
+DO NOT IMPROVE SIMUPHARM.
+
+DO NOT CALIBRATE SIMUPHARM.
+
+DO NOT HIDE FAILURES.
+
+DO NOT REMOVE OUTLIERS.
+
+DO NOT CHANGE BENCHMARKS TO IMPROVE RESULTS.
+
+DO NOT REUSE VALIDATION DATA AS CALIBRATION DATA.
+
+DO NOT CALL THEORETICAL AGREEMENT "EXPERIMENTAL VALIDATION."
+
+DO NOT CALL LITERATURE-CONSISTENT FAULTS "EXPERIMENTALLY VALIDATED."
+
+DO NOT CALL 2.07% MAPE "general accuracy."
+
+DO NOT CALL THE PAPER "publication-grade" merely because a numerical threshold is met.
+
+Your job is to BREAK THE CLAIMS.
+
+If the claims survive, they become substantially stronger.
+If they do not survive, identify exactly why.
+
+STOP AFTER PRODUCING THE AUDIT.
+
+DO NOT BEGIN PHASE 4.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-04T11:13:13+05:30.
+</ADDITIONAL_METADATA>

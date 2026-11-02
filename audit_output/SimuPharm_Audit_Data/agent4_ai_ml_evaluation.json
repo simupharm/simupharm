@@ -1,0 +1,30 @@
+{
+  "agent": "Agent 4 \u2014 AI / Machine Learning Expert",
+  "role": "Senior AI/ML Researcher",
+  "findings": {
+    "ai_classification": "Software Integration & Rule-Based Orchestration (Zero Novel Algorithmic AI)",
+    "component_analysis": {
+      "adaptive_engine.py": {
+        "claimed_technology": "Bayesian Knowledge Tracing (BKT)",
+        "actual_implementation": "First-order Exponential Moving Average (EMA): M_t = M_{t-1} + alpha * (S - M_{t-1})",
+        "scientific_verdict": "Terminology inflation. No Bayesian inference, no Hidden Markov Model, no latent state parameter estimation (P(L0), P(T), P(G), P(S))."
+      },
+      "ml_analyzer.py": {
+        "claimed_technology": "Machine Learning Spectral Matching Engine",
+        "actual_implementation": "Rule-based peak-count thresholding within fixed delta-lambda windows. The defined 'cosine_similarity' function is dead code (never called).",
+        "scientific_verdict": "Terminology inflation. No machine learning models, no trained weights, no vector embeddings, no supervised or unsupervised clustering."
+      },
+      "lab_agent.py": {
+        "claimed_technology": "Autonomous Lab Agent / Core Intelligence",
+        "actual_implementation": "Declarative tool schemas (12 tools) formatted for commercial LLM function calling (Gemini / OpenAI API)",
+        "scientific_verdict": "Standard tool-calling software wrapper. While useful as an educational interface, it does not represent an independent AI research contribution."
+      },
+      "ai/router.py": {
+        "claimed_technology": "Universal AI Provider Router",
+        "actual_implementation": "HTTP proxy with fallback failover across commercial LLMs (Groq, Gemini, OpenRouter, OpenAI)",
+        "scientific_verdict": "Infrastructure routing utility."
+      }
+    },
+    "recommendation_for_manuscript": "STRIP ALL UNSUPPORTED AI CLAIMS. Frame SimuPharm as a 'mechanistic computational simulation platform' rather than an 'AI system'. Any paper attempting to claim novel AI will be mercilessly rejected by reviewers."
+  }
+}

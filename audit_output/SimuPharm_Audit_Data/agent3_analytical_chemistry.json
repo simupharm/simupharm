@@ -1,0 +1,16 @@
+{
+  "agent": "Agent 3 \u2014 Analytical Chemistry Expert",
+  "role": "Senior Analytical Chemist",
+  "findings": {
+    "most_viable_instrument": "HPLC Simulator (hplc_simulator_script.js)",
+    "analytical_rationale": "The HPLC module captures genuine chromatographic phenomena: mobile phase polarity shifts, gradient delay/dwell effects, Van Deemter plate height minimization, column stationary phase selectivity (C18 vs C8 vs Phenyl vs HILIC), and system suitability metrics (USP tailing, resolution, theoretical plates).",
+    "missing_analytical_variables": [
+      "Secondary chemical equilibria (solute ionization vs mobile phase pH via Henderson-Hasselbalch)",
+      "Dwell volume (gradient delay volume V_D) distortion on early-eluting peaks",
+      "Sample solvent mismatch (viscous fingering / breakthrough from injection solvent stronger than initial mobile phase)",
+      "Column temperature axial and radial thermal gradients caused by frictional heating at high pressures"
+    ],
+    "required_experimental_validation": "Direct chromatographic comparison against standard analytical test mixtures (e.g., Uracil + Acetophenone + Benzene + Toluene + Naphthalene on Agilent Eclipse Plus C18, 4.6 x 150 mm, 5 um) across 5 isocratic mobile phase compositions (40%, 50%, 60%, 70%, 80% ACN) and 3 linear gradient ramps.",
+    "publication_opportunity": "High in chemical education and analytical pedagogy journals (Journal of Chemical Education, Computer Applications in Engineering Education), or specialized chromatographic modeling venues if coupled with real experimental retention calibration data."
+  }
+}

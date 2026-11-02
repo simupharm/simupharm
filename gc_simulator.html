@@ -1,0 +1,2845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimuPharma - Advanced GC Digital Twin | Professional Edition</title>
+    <link rel="stylesheet" href="gc_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1/dist/chartjs-plugin-zoom.min.js"></script>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <div class="instrument-logo">
+                <i class="fas fa-fire"></i>
+            </div>
+            <h1>SimuPharma GC</h1>
+            <h2>Digital Twin Professional Edition</h2>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p class="loading-text">Initializing instrument systems...</p>
+            <div class="loading-checklist">
+                <div class="check-item" data-step="1"><i class="fas fa-circle"></i> Checking carrier gas supply</div>
+                <div class="check-item" data-step="2"><i class="fas fa-circle"></i> Heating injection port</div>
+                <div class="check-item" data-step="3"><i class="fas fa-circle"></i> Conditioning column oven</div>
+                <div class="check-item" data-step="4"><i class="fas fa-circle"></i> Igniting FID detector</div>
+                <div class="check-item" data-step="5"><i class="fas fa-circle"></i> System ready</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification System -->
+    <div id="notification-container"></div>
+
+    <!-- Main Application Container -->
+    <div id="app-container">
+
+        <!-- ========== VIEW 1: MAIN INSTRUMENT VIEW ========== -->
+        <div id="gc-main-view" class="view active">
+            <!-- Header Bar -->
+            <header class="instrument-header">
+                <div class="header-left">
+                    <div class="brand-logo">
+                        <i class="fas fa-fire"></i>
+                        <span>SimuPharma</span>
+                    </div>
+                    <div class="instrument-model">GC-7890 Series | Digital Twin</div>
+                </div>
+                <div class="header-center">
+                    <div class="instrument-status" id="main-instrument-status">
+                        <div class="status-indicator online"></div>
+                        <span>System Online</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn" id="help-btn" title="Help & Tutorials">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                    <button class="header-btn" id="settings-btn" title="System Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Operator</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Instrument Display -->
+            <div class="instrument-display-area">
+                <img src="images/gc_main_view.png" alt="GC Main View" class="instrument-bg-image"
+                    id="main-instrument-image">
+
+                <!-- Instrument Status Overlay -->
+                <div class="instrument-overlay-status">
+                    <div class="overlay-panel left-panel">
+                        <h4><i class="fas fa-microchip"></i> System Status</h4>
+                        <div class="status-row">
+                            <span>Carrier Gas</span>
+                            <span class="status-value active"><i class="fas fa-circle"></i> Helium</span>
+                        </div>
+                        <div class="status-row">
+                            <span>Inlet Pressure</span>
+                            <span class="status-value">18.5 psi</span>
+                        </div>
+                        <div class="status-row">
+                            <span>Injector Temp</span>
+                            <span class="status-value">250°C</span>
+                        </div>
+                        <div class="status-row">
+                            <span>Oven Temp</span>
+                            <span class="status-value">50°C</span>
+                        </div>
+                        <div class="status-row">
+                            <span>FID Temp</span>
+                            <span class="status-value">300°C</span>
+                        </div>
+                    </div>
+
+                    <div class="overlay-panel right-panel">
+                        <h4><i class="fas fa-history"></i> Recent Activity</h4>
+                        <div class="activity-list" id="activity-list">
+                            <div class="activity-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>System startup complete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Hotspots -->
+                <div class="hotspot" id="hotspot-screen" data-view="software">
+                    <div class="hotspot-pulse"></div>
+                    <div class="hotspot-label">
+                        <div class="hotspot-icon"><i class="fas fa-desktop"></i></div>
+                        <div class="hotspot-text">
+                            <div class="hotspot-title">Instrument Control</div>
+                            <div class="hotspot-desc">Access ChemStation software</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hotspot" id="hotspot-injector" data-modal="injector-modal">
+                    <div class="hotspot-pulse"></div>
+                    <div class="hotspot-label">
+                        <div class="hotspot-icon"><i class="fas fa-syringe"></i></div>
+                        <div class="hotspot-text">
+                            <div class="hotspot-title">Injection Port</div>
+                            <div class="hotspot-desc">Split/Splitless Inlet</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hotspot" id="hotspot-oven" data-modal="oven-modal">
+                    <div class="hotspot-pulse"></div>
+                    <div class="hotspot-label">
+                        <div class="hotspot-icon"><i class="fas fa-temperature-high"></i></div>
+                        <div class="hotspot-text">
+                            <div class="hotspot-title">Column Oven</div>
+                            <div class="hotspot-desc">Temperature-controlled chamber</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hotspot" id="hotspot-detector" data-modal="detector-modal">
+                    <div class="hotspot-pulse"></div>
+                    <div class="hotspot-label">
+                        <div class="hotspot-icon"><i class="fas fa-fire-alt"></i></div>
+                        <div class="hotspot-text">
+                            <div class="hotspot-title">FID Detector</div>
+                            <div class="hotspot-desc">Flame Ionization Detector</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hotspot" id="hotspot-gas" data-modal="gas-modal">
+                    <div class="hotspot-pulse"></div>
+                    <div class="hotspot-label">
+                        <div class="hotspot-icon"><i class="fas fa-wind"></i></div>
+                        <div class="hotspot-text">
+                            <div class="hotspot-title">Carrier Gas</div>
+                            <div class="hotspot-desc">Gas supply & flow control</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hotspot" id="hotspot-column" data-modal="column-modal">
+                    <div class="hotspot-pulse"></div>
+                    <div class="hotspot-label">
+                        <div class="hotspot-icon"><i class="fas fa-ring"></i></div>
+                        <div class="hotspot-text">
+                            <div class="hotspot-title">Capillary Column</div>
+                            <div class="hotspot-desc">View column specifications</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions Footer -->
+            <footer class="instrument-footer">
+                <div class="quick-actions">
+                    <button class="quick-action-btn" id="quick-new-run">
+                        <i class="fas fa-play-circle"></i>
+                        <span>New Run</span>
+                    </button>
+                    <button class="quick-action-btn" id="quick-diagnostics">
+                        <i class="fas fa-stethoscope"></i>
+                        <span>Diagnostics</span>
+                    </button>
+                    <button class="quick-action-btn" id="quick-library">
+                        <i class="fas fa-book"></i>
+                        <span>Compound Library</span>
+                    </button>
+                    <button class="quick-action-btn" id="quick-reports">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Reports</span>
+                    </button>
+                </div>
+                <div class="footer-info">
+                    <span id="current-datetime"></span>
+                    <span class="separator">|</span>
+                    <span>Firmware v5.1.3</span>
+                    <span class="separator">|</span>
+                    <span id="session-time">Session: 00:00:00</span>
+                </div>
+            </footer>
+        </div>
+
+        <!-- ========== VIEW 2: SOFTWARE INTERFACE ========== -->
+        <div id="software-screen-view" class="view">
+            <!-- Software Header -->
+            <div id="software-header">
+                <div class="software-title">
+                    <i class="fas fa-fire"></i>
+                    <span>ChemStation GC Software</span>
+                    <span class="version-tag">v3.2 Simulation</span>
+                </div>
+                <div class="software-toolbar">
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" id="toolbar-new" title="New Method">
+                            <i class="fas fa-file"></i>
+                        </button>
+                        <button class="toolbar-btn" id="toolbar-open" title="Open Chromatogram">
+                            <i class="fas fa-folder-open"></i>
+                        </button>
+                        <button class="toolbar-btn" id="toolbar-save" title="Save Chromatogram" disabled>
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </div>
+                    <div class="toolbar-separator"></div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" id="toolbar-zoom-in" title="Zoom In">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button class="toolbar-btn" id="toolbar-zoom-out" title="Zoom Out">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button class="toolbar-btn" id="toolbar-reset-zoom" title="Reset View">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                    <div class="toolbar-separator"></div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" id="toolbar-overlay" title="Overlay Chromatograms" disabled>
+                            <i class="fas fa-layer-group"></i>
+                        </button>
+                        <button class="toolbar-btn" id="toolbar-integrate" title="Manual Integration" disabled>
+                            <i class="fas fa-chart-area"></i>
+                        </button>
+                    </div>
+                    <div class="toolbar-separator"></div>
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" id="toolbar-export" title="Export Data" disabled>
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="toolbar-btn" id="toolbar-print" title="Print Report" disabled>
+                            <i class="fas fa-print"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="software-status-indicator">
+                    <div class="status-led" id="software-status-led"></div>
+                    <span id="software-status-text">Ready</span>
+                </div>
+            </div>
+
+            <!-- Main Software Content -->
+            <div id="software-content-wrapper">
+                <!-- Left Control Panel -->
+                <div id="software-left-panel">
+                    <div class="panel-content">
+                        <!-- Method Setup Section -->
+                        <div class="panel-section collapsible" data-section="method">
+                            <div class="section-header">
+                                <i class="fas fa-flask"></i>
+                                <span>Method Setup</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="section-content">
+                                <div class="control-group">
+                                    <label for="method-select">Method</label>
+                                    <select id="method-select">
+                                        <option value="default">Default Method</option>
+                                        <option value="volatiles">Volatile Organics</option>
+                                        <option value="hydrocarbons">Hydrocarbon Analysis</option>
+                                        <option value="fatty-acids">Fatty Acid Methyl Esters</option>
+                                        <option value="residual-solvents">Residual Solvents (USP)</option>
+                                        <option value="custom">Custom Method...</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="sample-select">Sample</label>
+                                    <select id="sample-select">
+                                        <optgroup label="Alkanes">
+                                            <option value="Alkane Mix C5-C12">Alkane Mix (C5-C12)</option>
+                                            <option value="Hexane">n-Hexane</option>
+                                            <option value="Heptane">n-Heptane</option>
+                                            <option value="Octane">n-Octane</option>
+                                            <option value="Decane">n-Decane</option>
+                                        </optgroup>
+                                        <optgroup label="Aromatics">
+                                            <option value="BTEX Mix">BTEX Mix (Benzene, Toluene, Ethylbenzene, Xylenes)
+                                            </option>
+                                            <option value="Benzene">Benzene</option>
+                                            <option value="Toluene">Toluene</option>
+                                            <option value="Xylene">Xylene (mixed isomers)</option>
+                                        </optgroup>
+                                        <optgroup label="Alcohols">
+                                            <option value="Alcohol Mix">Alcohol Mix (C1-C4)</option>
+                                            <option value="Methanol">Methanol</option>
+                                            <option value="Ethanol">Ethanol</option>
+                                            <option value="Isopropanol">Isopropanol</option>
+                                            <option value="Butanol">n-Butanol</option>
+                                        </optgroup>
+                                        <optgroup label="Ketones & Esters">
+                                            <option value="Acetone">Acetone</option>
+                                            <option value="MEK">Methyl Ethyl Ketone (MEK)</option>
+                                            <option value="Ethyl Acetate">Ethyl Acetate</option>
+                                        </optgroup>
+                                        <optgroup label="Residual Solvents (ICH)">
+                                            <option value="ICH Class 2 Mix">ICH Class 2 Solvent Mix</option>
+                                            <option value="ICH Class 3 Mix">ICH Class 3 Solvent Mix</option>
+                                            <option value="Dichloromethane">Dichloromethane</option>
+                                            <option value="Chloroform">Chloroform</option>
+                                        </optgroup>
+                                        <optgroup label="Essential Oils">
+                                            <option value="Peppermint Oil">Peppermint Oil</option>
+                                            <option value="Eucalyptus Oil">Eucalyptus Oil</option>
+                                            <option value="Lavender Oil">Lavender Oil</option>
+                                        </optgroup>
+                                        <optgroup label="Special">
+                                            <option value="Unknown">Unknown Sample</option>
+                                            <option value="Gasoline">Gasoline (Complex Mix)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="sample-id-input">Sample ID</label>
+                                    <input type="text" id="sample-id-input" placeholder="Enter sample identifier...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inlet Parameters Section -->
+                        <div class="panel-section collapsible" data-section="inlet">
+                            <div class="section-header">
+                                <i class="fas fa-syringe"></i>
+                                <span>Inlet Parameters</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="section-content">
+                                <div class="control-group">
+                                    <label for="injection-mode">Injection Mode</label>
+                                    <select id="injection-mode">
+                                        <option value="split">Split</option>
+                                        <option value="splitless">Splitless</option>
+                                        <option value="pulsed-split">Pulsed Split</option>
+                                        <option value="pulsed-splitless">Pulsed Splitless</option>
+                                    </select>
+                                </div>
+                                <div class="control-group" id="split-ratio-group">
+                                    <label for="split-ratio">Split Ratio</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" id="split-ratio" value="50" min="1" max="500" step="1">
+                                        <span class="unit">:1</span>
+                                    </div>
+                                    <div class="param-hint">Higher ratio = less sample enters column</div>
+                                </div>
+                                <div class="control-group">
+                                    <label for="inlet-temp">Inlet Temperature</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" id="inlet-temp" value="250" min="50" max="400" step="5">
+                                        <span class="unit">°C</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label for="injection-volume">Injection Volume</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" id="injection-volume" value="1.0" min="0.1" max="10"
+                                            step="0.1">
+                                        <span class="unit">µL</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column & Carrier Gas Section -->
+                        <div class="panel-section collapsible" data-section="column">
+                            <div class="section-header">
+                                <i class="fas fa-wind"></i>
+                                <span>Column & Carrier Gas</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="section-content">
+                                <div class="control-group">
+                                    <label for="column-select">Column</label>
+                                    <select id="column-select">
+                                        <optgroup label="Non-Polar">
+                                            <option value="HP-5ms">HP-5ms (5% Phenyl)</option>
+                                            <option value="DB-1">DB-1 (100% Dimethylpolysiloxane)</option>
+                                            <option value="HP-1">HP-1 (100% Dimethylpolysiloxane)</option>
+                                        </optgroup>
+                                        <optgroup label="Mid-Polarity">
+                                            <option value="DB-624">DB-624 (Volatiles)</option>
+                                            <option value="DB-WAX">DB-WAX (Polyethylene Glycol)</option>
+                                        </optgroup>
+                                        <optgroup label="Polar">
+                                            <option value="HP-INNOWax">HP-INNOWax (PEG)</option>
+                                            <option value="DB-FFAP">DB-FFAP (Fatty Acids)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="column-specs" id="column-specs">
+                                    <div class="spec-row">
+                                        <span>Dimensions:</span>
+                                        <span id="column-dimensions">30m × 0.25mm × 0.25µm</span>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span>Max Temp:</span>
+                                        <span id="column-max-temp">325°C</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label for="carrier-gas">Carrier Gas</label>
+                                    <select id="carrier-gas">
+                                        <option value="helium">Helium (He)</option>
+                                        <option value="hydrogen">Hydrogen (H₂)</option>
+                                        <option value="nitrogen">Nitrogen (N₂)</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="flow-mode">Flow Mode</label>
+                                    <select id="flow-mode">
+                                        <option value="constant-flow">Constant Flow</option>
+                                        <option value="constant-pressure">Constant Pressure</option>
+                                        <option value="ramped-flow">Ramped Flow</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="flow-rate">Flow Rate</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" id="flow-rate" value="1.0" min="0.1" max="10" step="0.1">
+                                        <span class="unit">mL/min</span>
+                                    </div>
+                                    <div class="param-hint" id="linear-velocity">Linear velocity: ~36 cm/sec</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Oven Temperature Program Section -->
+                        <div class="panel-section collapsible" data-section="oven">
+                            <div class="section-header">
+                                <i class="fas fa-temperature-high"></i>
+                                <span>Oven Temperature</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="section-content">
+                                <div class="control-group">
+                                    <label for="oven-mode">Temperature Mode</label>
+                                    <select id="oven-mode">
+                                        <option value="isothermal">Isothermal</option>
+                                        <option value="programmed" selected>Temperature Program</option>
+                                    </select>
+                                </div>
+
+                                <!-- Isothermal Settings -->
+                                <div class="isothermal-settings hidden" id="isothermal-settings">
+                                    <div class="control-group">
+                                        <label for="isothermal-temp">Oven Temperature</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="isothermal-temp" value="150" min="30" max="350"
+                                                step="5">
+                                            <span class="unit">°C</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Temperature Program Settings -->
+                                <div class="program-settings" id="program-settings">
+                                    <div class="temp-program-header">
+                                        <span>Temperature Program</span>
+                                        <button class="btn-icon" id="add-ramp-btn" title="Add Ramp">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="temp-program-table" id="temp-program-table">
+                                        <div class="program-row header-row">
+                                            <span>Rate (°C/min)</span>
+                                            <span>Final Temp (°C)</span>
+                                            <span>Hold (min)</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="program-row" data-ramp="0">
+                                            <span class="rate-cell">Initial</span>
+                                            <input type="number" class="temp-input" value="50" min="30" max="350">
+                                            <input type="number" class="hold-input" value="2" min="0" max="60"
+                                                step="0.5">
+                                            <span></span>
+                                        </div>
+                                        <div class="program-row" data-ramp="1">
+                                            <input type="number" class="rate-input" value="10" min="1" max="50">
+                                            <input type="number" class="temp-input" value="150" min="30" max="350">
+                                            <input type="number" class="hold-input" value="0" min="0" max="60"
+                                                step="0.5">
+                                            <button class="btn-icon-sm remove-ramp" title="Remove"><i
+                                                    class="fas fa-times"></i></button>
+                                        </div>
+                                        <div class="program-row" data-ramp="2">
+                                            <input type="number" class="rate-input" value="15" min="1" max="50">
+                                            <input type="number" class="temp-input" value="250" min="30" max="350">
+                                            <input type="number" class="hold-input" value="5" min="0" max="60"
+                                                step="0.5">
+                                            <button class="btn-icon-sm remove-ramp" title="Remove"><i
+                                                    class="fas fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="program-summary">
+                                        <span>Total Run Time: <strong id="total-run-time">22.0 min</strong></span>
+                                    </div>
+                                    <!-- Temperature Profile Visualization -->
+                                    <div class="temp-profile-preview">
+                                        <canvas id="temp-profile-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detector Section -->
+                        <div class="panel-section collapsible" data-section="detector">
+                            <div class="section-header">
+                                <i class="fas fa-fire-alt"></i>
+                                <span>Detector</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="section-content">
+                                <div class="control-group">
+                                    <label for="detector-type">Detector Type</label>
+                                    <select id="detector-type">
+                                        <option value="FID">FID (Flame Ionization)</option>
+                                        <option value="TCD">TCD (Thermal Conductivity)</option>
+                                        <option value="ECD">ECD (Electron Capture)</option>
+                                        <option value="MS">MS (Mass Spectrometer)</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="detector-temp">Detector Temperature</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" id="detector-temp" value="300" min="150" max="400"
+                                            step="5">
+                                        <span class="unit">°C</span>
+                                    </div>
+                                </div>
+
+                                <!-- FID-specific settings -->
+                                <div class="detector-settings fid-settings" id="fid-settings">
+                                    <div class="control-group">
+                                        <label for="h2-flow">H₂ Flow</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="h2-flow" value="40" min="20" max="60" step="1">
+                                            <span class="unit">mL/min</span>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="air-flow">Air Flow</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="air-flow" value="400" min="300" max="500"
+                                                step="10">
+                                            <span class="unit">mL/min</span>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="makeup-flow">Makeup Gas Flow</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="makeup-flow" value="25" min="0" max="50" step="1">
+                                            <span class="unit">mL/min</span>
+                                        </div>
+                                    </div>
+                                    <div class="flame-status" id="flame-status">
+                                        <i class="fas fa-fire"></i>
+                                        <span>Flame: <strong>ON</strong></span>
+                                    </div>
+                                </div>
+
+                                <!-- TCD-specific settings -->
+                                <div class="detector-settings tcd-settings hidden" id="tcd-settings">
+                                    <div class="control-group">
+                                        <label for="reference-flow">Reference Flow</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="reference-flow" value="20" min="10" max="50"
+                                                step="1">
+                                            <span class="unit">mL/min</span>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="filament-temp">Filament Temperature</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="filament-temp" value="250" min="150" max="350"
+                                                step="10">
+                                            <span class="unit">°C</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Signal & Data Section -->
+                        <div class="panel-section collapsible" data-section="signal">
+                            <div class="section-header">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Signal & Data</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="section-content">
+                                <div class="control-group">
+                                    <label for="data-rate">Data Collection Rate</label>
+                                    <select id="data-rate">
+                                        <option value="5">5 Hz</option>
+                                        <option value="10">10 Hz</option>
+                                        <option value="20" selected>20 Hz</option>
+                                        <option value="50">50 Hz</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="signal-range">Signal Range</label>
+                                    <select id="signal-range">
+                                        <option value="auto">Auto Range</option>
+                                        <option value="1">Range 1 (0-1 V)</option>
+                                        <option value="2">Range 2 (0-10 V)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Integration Parameters Section -->
+                        <div class="panel-section collapsible collapsed" data-section="integration">
+                            <div class="section-header">
+                                <i class="fas fa-calculator"></i>
+                                <span>Integration</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="section-content">
+                                <div class="control-group">
+                                    <label for="slope-sensitivity">Slope Sensitivity</label>
+                                    <input type="range" id="slope-sensitivity" min="1" max="100" value="50">
+                                    <div class="range-labels">
+                                        <span>Sensitive</span>
+                                        <span>Standard</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label for="peak-width">Expected Peak Width</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" id="peak-width" value="0.04" min="0.01" max="1"
+                                            step="0.01">
+                                        <span class="unit">min</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label for="area-reject">Area Reject</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" id="area-reject" value="1" min="0" max="100" step="0.1">
+                                        <span class="unit">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Log Panel -->
+                    <div id="log-panel-container">
+                        <div class="log-header">
+                            <i class="fas fa-terminal"></i>
+                            <span>System Log</span>
+                            <button class="log-clear-btn" id="clear-log-btn" title="Clear Log">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div id="gc-log-panel"></div>
+                    </div>
+
+                    <!-- Action Buttons Footer -->
+                    <div class="panel-footer">
+                        <button id="start-run-button" class="btn btn-primary btn-large">
+                            <i class="fas fa-play"></i> Start Run
+                        </button>
+                        <div class="secondary-actions">
+                            <button id="integrate-button" class="btn btn-secondary" disabled title="Integrate Peaks">
+                                <i class="fas fa-chart-area"></i> Integrate
+                            </button>
+                            <button id="identify-button" class="btn btn-secondary" disabled title="Identify Compounds">
+                                <i class="fas fa-database"></i> Identify
+                            </button>
+                            <button id="report-button" class="btn btn-secondary" disabled title="Generate Report">
+                                <i class="fas fa-file-pdf"></i> Report
+                            </button>
+                        </div>
+                        <button id="exit-software-button" class="btn btn-exit">
+                            <i class="fas fa-sign-out-alt"></i> Exit
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Chart Area -->
+                <div id="software-main-content">
+                    <!-- Tabs for multiple chromatograms -->
+                    <div class="spectrum-tabs" id="chromatogram-tabs">
+                        <div class="tab active" data-chromatogram="current">
+                            <span>Current Run</span>
+                            <button class="tab-close hidden"><i class="fas fa-times"></i></button>
+                        </div>
+                        <button class="add-tab-btn" id="add-comparison-tab" title="Add Reference Chromatogram" disabled>
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <!-- Chart Container -->
+                    <div class="software-chart-area" id="main-chart-area">
+                        <!-- Run Status Overlay -->
+                        <div id="run-status-overlay" class="run-overlay hidden">
+                            <div class="run-animation">
+                                <div class="run-progress-visual">
+                                    <div class="oven-temp-display">
+                                        <i class="fas fa-temperature-high"></i>
+                                        <span id="current-oven-temp">50°C</span>
+                                    </div>
+                                    <div class="run-time-display">
+                                        <i class="fas fa-clock"></i>
+                                        <span id="current-run-time">0.00 min</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="run-info">
+                                <div class="spinner"></div>
+                                <div id="run-status-text">Acquiring data...</div>
+                                <div class="run-progress-container">
+                                    <div class="run-progress-bar" id="run-progress-bar"></div>
+                                </div>
+                                <div id="run-details"></div>
+                                <button id="abort-run-button" class="btn btn-danger">
+                                    <i class="fas fa-stop"></i> Abort Run
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Real-time Chromatogram Display (during run) -->
+                        <div id="realtime-panel" class="mini-panel hidden">
+                            <div class="mini-panel-header">
+                                <span>Real-time Signal</span>
+                                <div class="signal-value" id="realtime-signal">0.00 pA</div>
+                            </div>
+                        </div>
+
+                        <!-- Main Chromatogram Chart -->
+                        <canvas id="gc-chart"></canvas>
+
+                        <!-- Peak Info Popup -->
+                        <div id="peak-info-popup" class="hidden">
+                            <div class="popup-header">
+                                <strong id="popup-rt"></strong>
+                                <span id="popup-area"></span>
+                            </div>
+                            <div class="popup-body">
+                                <div id="popup-compound"></div>
+                                <ul id="popup-details"></ul>
+                            </div>
+                        </div>
+
+                        <!-- Chart Cursor Info -->
+                        <div id="cursor-info" class="hidden">
+                            <span id="cursor-time">-- min</span>
+                            <span id="cursor-signal">-- pA</span>
+                        </div>
+                    </div>
+
+                    <!-- Chromatogram Info Bar -->
+                    <div class="spectrum-info-bar" id="chromatogram-info-bar">
+                        <div class="info-item">
+                            <i class="fas fa-flask"></i>
+                            <span id="info-sample-name">No sample</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-ring"></i>
+                            <span id="info-column">HP-5ms</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-fire-alt"></i>
+                            <span id="info-detector">FID</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="info-runtime">-- min</span>
+                        </div>
+                        <div class="info-item quality-indicator" id="quality-indicator">
+                            <i class="fas fa-signal"></i>
+                            <span>Peaks: --</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel (Analysis Results) -->
+                <div id="software-right-panel" class="collapsed">
+                    <button class="panel-toggle" id="right-panel-toggle">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="panel-content">
+                        <h3><i class="fas fa-microscope"></i> Analysis Results</h3>
+
+                        <div class="results-section" id="peak-table-section">
+                            <h4>Integrated Peaks</h4>
+                            <div class="peak-table-container">
+                                <table id="peak-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>RT (min)</th>
+                                            <th>Area</th>
+                                            <th>Area %</th>
+                                            <th>Height</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="peak-table-body">
+                                        <tr class="empty-row">
+                                            <td colspan="5">No peaks detected</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="results-section" id="identification-section">
+                            <h4>Compound Identification</h4>
+                            <div id="identification-results">
+                                <p class="no-data">Run analysis to see results</p>
+                            </div>
+                        </div>
+
+                        <div class="results-section" id="calculations-section">
+                            <h4>Chromatographic Parameters</h4>
+                            <div id="chrom-parameters">
+                                <div class="param-row">
+                                    <span>Retention Factor (k):</span>
+                                    <span id="calc-k">--</span>
+                                </div>
+                                <div class="param-row">
+                                    <span>Resolution (Rs):</span>
+                                    <span id="calc-rs">--</span>
+                                </div>
+                                <div class="param-row">
+                                    <span>Plates (N):</span>
+                                    <span id="calc-n">--</span>
+                                </div>
+                                <div class="param-row">
+                                    <span>Asymmetry (As):</span>
+                                    <span id="calc-as">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODALS ========== -->
+    <div id="modal-backdrop" class="hidden"></div>
+
+    <!-- Injection Port Modal -->
+    <div id="injector-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-syringe"></i> Split/Splitless Injection Port</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-image-container">
+                <img src="images/injection_port.png" class="modal-image static" alt="Injection Port">
+                <video src="images/sample_injection.mp4" class="modal-image video" loop muted playsinline></video>
+                <div class="video-controls">
+                    <button class="play-btn"><i class="fas fa-play"></i></button>
+                </div>
+            </div>
+            <div class="modal-info">
+                <div class="info-tabs">
+                    <button class="info-tab active" data-tab="overview">Overview</button>
+                    <button class="info-tab" data-tab="modes">Injection Modes</button>
+                    <button class="info-tab" data-tab="maintenance">Maintenance</button>
+                </div>
+                <div class="info-content">
+                    <div class="tab-content active" data-tab="overview">
+                        <p>The Split/Splitless inlet is the most versatile GC inlet. It vaporizes liquid samples
+                            instantly and introduces them into the carrier gas stream. The inlet temperature must be
+                            high enough to vaporize all sample components rapidly.</p>
+                        <h4>Key Components:</h4>
+                        <ul>
+                            <li><strong>Septum:</strong> Self-sealing rubber disc for needle penetration</li>
+                            <li><strong>Liner:</strong> Glass insert where vaporization occurs</li>
+                            <li><strong>Split Vent:</strong> Outlet for excess sample in split mode</li>
+                            <li><strong>Septum Purge:</strong> Removes septum bleed contaminants</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content" data-tab="modes">
+                        <h4>Split Mode:</h4>
+                        <p>Only a fraction (1/split ratio) enters the column. Used for concentrated samples. Typical
+                            split ratios: 10:1 to 100:1.</p>
+
+                        <h4>Splitless Mode:</h4>
+                        <p>Nearly all sample enters column. Used for trace analysis. The split vent opens after ~1
+                            minute to purge remaining vapors.</p>
+
+                        <h4>Pulsed Modes:</h4>
+                        <p>Momentary pressure increase during injection improves sample transfer and reduces
+                            discrimination for high-boiling compounds.</p>
+
+                        <div class="mode-comparison">
+                            <table class="specs-table">
+                                <tr>
+                                    <td>Mode</td>
+                                    <td>Best For</td>
+                                    <td>Sensitivity</td>
+                                </tr>
+                                <tr>
+                                    <td>Split</td>
+                                    <td>Concentrated samples</td>
+                                    <td>Lower</td>
+                                </tr>
+                                <tr>
+                                    <td>Splitless</td>
+                                    <td>Trace analysis</td>
+                                    <td>Higher</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-content" data-tab="maintenance">
+                        <h4>Regular Maintenance:</h4>
+                        <ol>
+                            <li><strong>Septum:</strong> Replace every 50-100 injections</li>
+                            <li><strong>Liner:</strong> Inspect and replace when contaminated</li>
+                            <li><strong>O-rings:</strong> Replace if leaks detected</li>
+                            <li><strong>Gold Seal:</strong> Check for proper seating</li>
+                        </ol>
+                        <div class="warning-box">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Always cool the inlet before maintenance. Hot surfaces can cause burns!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Column Oven Modal -->
+    <div id="oven-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-temperature-high"></i> Column Oven</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-image-container">
+                <img src="images/column_oven.png" class="modal-image static" alt="Column Oven">
+                <video src="images/oven_heating.mp4" class="modal-image video" loop muted playsinline></video>
+                <div class="video-controls">
+                    <button class="play-btn"><i class="fas fa-play"></i></button>
+                </div>
+            </div>
+            <div class="modal-info">
+                <div class="info-tabs">
+                    <button class="info-tab active" data-tab="overview">Overview</button>
+                    <button class="info-tab" data-tab="programming">Temperature Programming</button>
+                    <button class="info-tab" data-tab="column-care">Column Care</button>
+                </div>
+                <div class="info-content">
+                    <div class="tab-content active" data-tab="overview">
+                        <p>The column oven maintains precise temperature control for the analytical column. Temperature
+                            directly affects retention times and separation quality. Modern ovens can heat at rates up
+                            to 50°C/min and cool rapidly with cryogenic options.</p>
+                        <h4>Specifications:</h4>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Temperature Range</td>
+                                <td>Ambient +4°C to 450°C</td>
+                            </tr>
+                            <tr>
+                                <td>Programming Rate</td>
+                                <td>0.1-50°C/min</td>
+                            </tr>
+                            <tr>
+                                <td>Temperature Accuracy</td>
+                                <td>±0.1°C</td>
+                            </tr>
+                            <tr>
+                                <td>Cooling</td>
+                                <td>Air-cooled (optional cryo)</td>
+                            </tr>
+                            <tr>
+                                <td>Volume</td>
+                                <td>~8.5 liters</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="tab-content" data-tab="programming">
+                        <h4>Isothermal vs. Programmed:</h4>
+                        <p><strong>Isothermal:</strong> Constant temperature. Simple but limited resolution for wide
+                            boiling range samples.</p>
+                        <p><strong>Temperature Programmed:</strong> Temperature increases during run. Better resolution,
+                            shorter run times, handles wide boiling range.</p>
+
+                        <h4>Programming Guidelines:</h4>
+                        <ul>
+                            <li>Start 10-20°C below first analyte's boiling point</li>
+                            <li>Typical ramp: 5-15°C/min for good resolution</li>
+                            <li>Fast ramps (>20°C/min) reduce resolution</li>
+                            <li>Final temp should elute all compounds</li>
+                            <li>Add hold time at end to clear late eluters</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content" data-tab="column-care">
+                        <h4>Column Installation:</h4>
+                        <ol>
+                            <li>Cut column end square with ceramic cutter</li>
+                            <li>Insert through fitting with proper depth</li>
+                            <li>Tighten ferrule to finger-tight + ¼ turn</li>
+                            <li>Check for leaks with electronic leak detector</li>
+                            <li>Condition column before first use</li>
+                        </ol>
+                        <h4>Column Positioning:</h4>
+                        <ul>
+                            <li>Inlet end: 4-6 mm past ferrule</li>
+                            <li>Detector end: Follow detector specifications</li>
+                        </ul>
+                        <div class="warning-box">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Never exceed column maximum temperature. This causes irreversible stationary phase
+                                damage (column bleed).</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Detector Modal -->
+    <div id="detector-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-fire-alt"></i> Flame Ionization Detector (FID)</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-image-container">
+                <img src="images/fid_detector.png" class="modal-image static" alt="FID Detector">
+                <video src="images/fid_ignition.mp4" class="modal-image video" loop muted playsinline></video>
+                <div class="video-controls">
+                    <button class="play-btn"><i class="fas fa-play"></i></button>
+                </div>
+            </div>
+            <div class="modal-info">
+                <div class="info-tabs">
+                    <button class="info-tab active" data-tab="overview">Overview</button>
+                    <button class="info-tab" data-tab="operation">Operation</button>
+                    <button class="info-tab" data-tab="comparison">Detector Comparison</button>
+                </div>
+                <div class="info-content">
+                    <div class="tab-content active" data-tab="overview">
+                        <p>The FID is the most widely used GC detector. It burns organic compounds in a hydrogen/air
+                            flame, producing ions that are collected by an electrode. The resulting current is
+                            proportional to the amount of carbon entering the detector.</p>
+                        <h4>Characteristics:</h4>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Sensitivity</td>
+                                <td>~10⁻¹² g/s (picogram level)</td>
+                            </tr>
+                            <tr>
+                                <td>Linear Range</td>
+                                <td>10⁷ (excellent)</td>
+                            </tr>
+                            <tr>
+                                <td>Selectivity</td>
+                                <td>Organic compounds with C-H bonds</td>
+                            </tr>
+                            <tr>
+                                <td>Destructive</td>
+                                <td>Yes (burns sample)</td>
+                            </tr>
+                            <tr>
+                                <td>Response</td>
+                                <td>~Equal per carbon atom</td>
+                            </tr>
+                        </table>
+                        <h4>No/Low Response:</h4>
+                        <ul>
+                            <li>Inorganic gases (N₂, O₂, CO₂, H₂O, H₂S)</li>
+                            <li>Noble gases</li>
+                            <li>Fully halogenated compounds (CCl₄, CF₄)</li>
+                            <li>Formic acid, formaldehyde (low response)</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content" data-tab="operation">
+                        <h4>Gas Requirements:</h4>
+                        <ul>
+                            <li><strong>Hydrogen:</strong> 30-40 mL/min (fuel)</li>
+                            <li><strong>Air:</strong> 300-450 mL/min (oxidant)</li>
+                            <li><strong>Makeup Gas:</strong> He or N₂, 25-30 mL/min</li>
+                        </ul>
+                        <h4>Optimal H₂:Air Ratio:</h4>
+                        <p>Approximately 1:10 ratio for maximum sensitivity. The flame should be barely visible (pale
+                            blue).</p>
+                        <h4>Ignition Procedure:</h4>
+                        <ol>
+                            <li>Ensure detector is at operating temperature</li>
+                            <li>Set gas flows to proper values</li>
+                            <li>Press ignite button</li>
+                            <li>Verify flame by checking for water condensation on cold mirror</li>
+                        </ol>
+                    </div>
+                    <div class="tab-content" data-tab="comparison">
+                        <h4>Common GC Detectors:</h4>
+                        <table class="specs-table">
+                            <tr>
+                                <th>Detector</th>
+                                <th>Selectivity</th>
+                                <th>Sensitivity</th>
+                            </tr>
+                            <tr>
+                                <td>FID</td>
+                                <td>Organics (C-H)</td>
+                                <td>10⁻¹² g/s</td>
+                            </tr>
+                            <tr>
+                                <td>TCD</td>
+                                <td>Universal</td>
+                                <td>10⁻⁸ g/s</td>
+                            </tr>
+                            <tr>
+                                <td>ECD</td>
+                                <td>Halogens</td>
+                                <td>10⁻¹⁴ g/s</td>
+                            </tr>
+                            <tr>
+                                <td>NPD</td>
+                                <td>N, P compounds</td>
+                                <td>10⁻¹³ g/s</td>
+                            </tr>
+                            <tr>
+                                <td>MS</td>
+                                <td>Universal + ID</td>
+                                <td>10⁻¹² g/s</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Carrier Gas Modal -->
+    <div id="gas-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-wind"></i> Carrier Gas System</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-image-container">
+                <img src="images/carrier_gas.png" class="modal-image static" alt="Carrier Gas System">
+            </div>
+            <div class="modal-info">
+                <div class="info-tabs">
+                    <button class="info-tab active" data-tab="overview">Overview</button>
+                    <button class="info-tab" data-tab="gases">Gas Selection</button>
+                    <button class="info-tab" data-tab="safety">Safety</button>
+                </div>
+                <div class="info-content">
+                    <div class="tab-content active" data-tab="overview">
+                        <p>The carrier gas (mobile phase) transports the sample through the column. It must be inert,
+                            high purity, and compatible with the detector. Flow is precisely controlled by electronic
+                            pneumatic control (EPC).</p>
+                        <h4>System Components:</h4>
+                        <ul>
+                            <li><strong>Gas Cylinder:</strong> High-pressure supply (2000+ psi)</li>
+                            <li><strong>Regulator:</strong> Two-stage pressure reduction</li>
+                            <li><strong>Gas Purifier:</strong> Removes O₂, H₂O, hydrocarbons</li>
+                            <li><strong>EPC Module:</strong> Electronic flow/pressure control</li>
+                        </ul>
+                        <h4>Purity Requirements:</h4>
+                        <p>Minimum 99.995% (Grade 4.5) or better. Oxygen and water are the most harmful contaminants,
+                            causing column degradation and baseline noise.</p>
+                    </div>
+                    <div class="tab-content" data-tab="gases">
+                        <h4>Carrier Gas Comparison:</h4>
+                        <table class="specs-table">
+                            <tr>
+                                <th>Property</th>
+                                <th>Helium</th>
+                                <th>Hydrogen</th>
+                                <th>Nitrogen</th>
+                            </tr>
+                            <tr>
+                                <td>Optimal Velocity</td>
+                                <td>20-40 cm/s</td>
+                                <td>40-60 cm/s</td>
+                                <td>10-20 cm/s</td>
+                            </tr>
+                            <tr>
+                                <td>Efficiency</td>
+                                <td>Good</td>
+                                <td>Excellent</td>
+                                <td>Good</td>
+                            </tr>
+                            <tr>
+                                <td>Speed</td>
+                                <td>Fast</td>
+                                <td>Fastest</td>
+                                <td>Slow</td>
+                            </tr>
+                            <tr>
+                                <td>Cost</td>
+                                <td>High</td>
+                                <td>Low</td>
+                                <td>Low</td>
+                            </tr>
+                            <tr>
+                                <td>Safety</td>
+                                <td>Inert</td>
+                                <td>Flammable</td>
+                                <td>Inert</td>
+                            </tr>
+                            <tr>
+                                <td>FID Compatible</td>
+                                <td>Yes</td>
+                                <td>Yes</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>TCD Compatible</td>
+                                <td>Yes</td>
+                                <td>Caution</td>
+                                <td>Limited</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="tab-content" data-tab="safety">
+                        <h4>General Safety:</h4>
+                        <ul>
+                            <li>Secure all cylinders with chains or straps</li>
+                            <li>Use appropriate regulators for each gas</li>
+                            <li>Check for leaks regularly with leak detector</li>
+                            <li>Ensure adequate ventilation in laboratory</li>
+                        </ul>
+                        <div class="warning-box danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span><strong>Hydrogen Safety:</strong> H₂ is flammable and explosive. Use hydrogen
+                                generators or ensure proper ventilation. Never exceed flow rates that could accumulate
+                                dangerous concentrations.</span>
+                        </div>
+                        <div class="warning-box">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span><strong>Asphyxiation Risk:</strong> All carrier gases can displace oxygen. Never enter
+                                a confined space with potential gas accumulation.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Column Modal -->
+    <div id="column-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-ring"></i> Capillary Column</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-image-container">
+                <img src="images/column_types.png" class="modal-image static" alt="GC Columns">
+            </div>
+            <div class="modal-info">
+                <div class="info-tabs">
+                    <button class="info-tab active" data-tab="overview">Overview</button>
+                    <button class="info-tab" data-tab="phases">Stationary Phases</button>
+                    <button class="info-tab" data-tab="selection">Column Selection</button>
+                </div>
+                <div class="info-content">
+                    <div class="tab-content active" data-tab="overview">
+                        <p>Capillary columns are the heart of modern GC. They consist of a fused silica tube with a thin
+                            layer of stationary phase bonded to the inner wall. Separation occurs as compounds partition
+                            between the mobile (carrier gas) and stationary phases.</p>
+                        <h4>Column Dimensions:</h4>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Length</td>
+                                <td>15, 30, 60 meters typical</td>
+                            </tr>
+                            <tr>
+                                <td>Inner Diameter</td>
+                                <td>0.10, 0.25, 0.32, 0.53 mm</td>
+                            </tr>
+                            <tr>
+                                <td>Film Thickness</td>
+                                <td>0.1-5.0 µm</td>
+                            </tr>
+                            <tr>
+                                <td>Material</td>
+                                <td>Fused silica with polyimide coating</td>
+                            </tr>
+                        </table>
+                        <h4>Effects of Dimensions:</h4>
+                        <ul>
+                            <li><strong>Longer column:</strong> More plates, better resolution, longer runtime</li>
+                            <li><strong>Smaller ID:</strong> Higher efficiency, lower capacity</li>
+                            <li><strong>Thicker film:</strong> More retention, handles more sample</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content" data-tab="phases">
+                        <h4>Common Stationary Phases:</h4>
+                        <table class="specs-table">
+                            <tr>
+                                <th>Phase</th>
+                                <th>Polarity</th>
+                                <th>Applications</th>
+                            </tr>
+                            <tr>
+                                <td>100% Dimethylpolysiloxane (DB-1)</td>
+                                <td>Non-polar</td>
+                                <td>General purpose, hydrocarbons</td>
+                            </tr>
+                            <tr>
+                                <td>5% Phenyl (HP-5, DB-5)</td>
+                                <td>Low polarity</td>
+                                <td>Semi-volatiles, drugs, pesticides</td>
+                            </tr>
+                            <tr>
+                                <td>6% Cyanopropyl (DB-624)</td>
+                                <td>Mid-polar</td>
+                                <td>Volatile organics, solvents</td>
+                            </tr>
+                            <tr>
+                                <td>PEG (DB-WAX)</td>
+                                <td>Polar</td>
+                                <td>Alcohols, aldehydes, esters</td>
+                            </tr>
+                            <tr>
+                                <td>FFAP</td>
+                                <td>Polar (acidic)</td>
+                                <td>Fatty acids, organic acids</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="tab-content" data-tab="selection">
+                        <h4>Selection Guidelines:</h4>
+                        <ol>
+                            <li><strong>Match polarity:</strong> "Like dissolves like" - use similar polarity to
+                                analytes</li>
+                            <li><strong>Temperature limits:</strong> Ensure max temp covers your program</li>
+                            <li><strong>Column length:</strong> Start with 30m for unknown samples</li>
+                            <li><strong>Film thickness:</strong> Thin (0.25µm) for general, thick (1-5µm) for volatiles
+                            </li>
+                            <li><strong>ID selection:</strong> 0.25mm general, 0.32mm for dirty samples, 0.53mm for
+                                packed column replacement</li>
+                        </ol>
+                        <h4>Column Break-In (Conditioning):</h4>
+                        <p>Heat new column 20°C above intended max use temperature for 1-2 hours with carrier gas flow
+                            (no detector). This removes residual solvents and volatiles.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Analysis Results Modal -->
+    <div id="analysis-modal" class="modal hidden large-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-database"></i> Library Search Results</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body analysis-body">
+            <div class="analysis-chart-container">
+                <div class="chart-header">
+                    <span>Chromatogram Comparison</span>
+                    <div class="chart-legend">
+                        <span class="legend-item sample"><i class="fas fa-minus"></i> Sample</span>
+                        <span class="legend-item reference hidden"><i class="fas fa-minus"></i> Reference</span>
+                    </div>
+                </div>
+                <canvas id="analysis-chart"></canvas>
+            </div>
+            <div class="analysis-results-panel">
+                <div class="results-header">
+                    <h4>Peak Identification</h4>
+                </div>
+                <div id="match-list" class="match-list">
+                    <!-- Results populated dynamically -->
+                </div>
+                <div class="match-details" id="match-details">
+                    <h4>Compound Details</h4>
+                    <div id="compound-details-content">
+                        <p class="no-data">Click a peak to see identification</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="export-results">
+                <i class="fas fa-download"></i> Export Results
+            </button>
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="report-modal" class="modal hidden large-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-file-alt"></i> Analysis Report</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body report-body">
+            <div class="report-preview" id="report-preview">
+                <div class="report-page">
+                    <div class="report-letterhead">
+                        <div class="company-logo">
+                            <i class="fas fa-fire"></i>
+                            <span>SimuPharma</span>
+                        </div>
+                        <div class="report-title">GC Analysis Report</div>
+                    </div>
+                    <div class="report-section">
+                        <h4>Sample Information</h4>
+                        <table class="report-table">
+                            <tr>
+                                <td>Sample ID:</td>
+                                <td id="report-sample-id">--</td>
+                            </tr>
+                            <tr>
+                                <td>Sample Name:</td>
+                                <td id="report-sample-name">--</td>
+                            </tr>
+                            <tr>
+                                <td>Date/Time:</td>
+                                <td id="report-datetime">--</td>
+                            </tr>
+                            <tr>
+                                <td>Operator:</td>
+                                <td id="report-operator">Operator</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="report-section">
+                        <h4>Instrument Parameters</h4>
+                        <table class="report-table">
+                            <tr>
+                                <td>Column:</td>
+                                <td id="report-column">--</td>
+                            </tr>
+                            <tr>
+                                <td>Carrier Gas:</td>
+                                <td id="report-carrier">--</td>
+                            </tr>
+                            <tr>
+                                <td>Injection Mode:</td>
+                                <td id="report-injection">--</td>
+                            </tr>
+                            <tr>
+                                <td>Detector:</td>
+                                <td id="report-detector">--</td>
+                            </tr>
+                            <tr>
+                                <td>Inlet Temp:</td>
+                                <td id="report-inlet-temp">--</td>
+                            </tr>
+                            <tr>
+                                <td>Detector Temp:</td>
+                                <td id="report-detector-temp">--</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="report-section">
+                        <h4>Temperature Program</h4>
+                        <div id="report-temp-program">--</div>
+                    </div>
+                    <div class="report-section">
+                        <h4>Chromatogram</h4>
+                        <div class="report-spectrum-container">
+                            <canvas id="report-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="report-section">
+                        <h4>Peak Results</h4>
+                        <div id="report-peak-table">
+                            <p class="no-data">No peaks detected</p>
+                        </div>
+                    </div>
+                    <div class="report-footer">
+                        <p>This report was generated by SimuPharma GC Digital Twin</p>
+                        <p>For educational and training purposes only</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="print-report">
+                <i class="fas fa-print"></i> Print
+            </button>
+            <button class="btn btn-secondary" id="export-pdf">
+                <i class="fas fa-file-pdf"></i> Export PDF
+            </button>
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-cog"></i> System Settings</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="settings-tabs">
+                <button class="settings-tab active" data-tab="display">Display</button>
+                <button class="settings-tab" data-tab="simulation">Simulation</button>
+                <button class="settings-tab" data-tab="integration">Integration</button>
+                <button class="settings-tab" data-tab="advanced">Advanced</button>
+            </div>
+            <div class="settings-content">
+                <div class="settings-panel active" data-tab="display">
+                    <div class="setting-group">
+                        <label>Theme</label>
+                        <select id="theme-select">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="high-contrast">High Contrast</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label>Chart Line Width</label>
+                        <input type="range" id="line-width" min="1" max="5" value="2">
+                    </div>
+                    <div class="setting-group">
+                        <label>Show Grid</label>
+                        <label class="switch">
+                            <input type="checkbox" id="show-grid" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-group">
+                        <label>Auto-scale Y-axis</label>
+                        <label class="switch">
+                            <input type="checkbox" id="auto-scale" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-panel" data-tab="simulation">
+                    <div class="setting-group">
+                        <label>Simulation Speed</label>
+                        <select id="sim-speed">
+                            <option value="fast">Fast (Demo) - 10x speed</option>
+                            <option value="normal" selected>Normal - 5x speed</option>
+                            <option value="realistic">Realistic - Real time</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label>Noise Level</label>
+                        <select id="noise-level">
+                            <option value="none">None (Ideal)</option>
+                            <option value="low" selected>Low (New instrument)</option>
+                            <option value="medium">Medium (Normal)</option>
+                            <option value="high">High (Old instrument)</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label>Show Real-time Signal</label>
+                        <label class="switch">
+                            <input type="checkbox" id="show-realtime" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-panel" data-tab="integration">
+                    <div class="setting-group">
+                        <label>Default Integration Method</label>
+                        <select id="integration-method">
+                            <option value="auto">Automatic</option>
+                            <option value="tangent">Tangent Skim</option>
+                            <option value="perpendicular">Perpendicular Drop</option>
+                            <option value="valley">Valley-to-Valley</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label>Area Calculation</label>
+                        <select id="area-calc">
+                            <option value="percent">Area Percent</option>
+                            <option value="normalized">Normalized Percent</option>
+                            <option value="external">External Standard</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-panel" data-tab="advanced">
+                    <div class="setting-group">
+                        <label>Enable Sound Effects</label>
+                        <label class="switch">
+                            <input type="checkbox" id="sound-effects">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-group">
+                        <label>Show Tutorial Hints</label>
+                        <label class="switch">
+                            <input type="checkbox" id="show-hints" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-group">
+                        <button class="btn btn-secondary" id="reset-settings">Reset to Defaults</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancel-settings">Cancel</button>
+            <button class="btn btn-primary" id="save-settings">Save Settings</button>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal hidden large-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-question-circle"></i> Help & Tutorials</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body help-body">
+            <div class="help-sidebar">
+                <div class="help-nav">
+                    <button class="help-nav-item active" data-topic="getting-started">
+                        <i class="fas fa-rocket"></i> Getting Started
+                    </button>
+                    <button class="help-nav-item" data-topic="instrument">
+                        <i class="fas fa-microscope"></i> Instrument Overview
+                    </button>
+                    <button class="help-nav-item" data-topic="method">
+                        <i class="fas fa-cogs"></i> Method Development
+                    </button>
+                    <button class="help-nav-item" data-topic="running">
+                        <i class="fas fa-play-circle"></i> Running Samples
+                    </button>
+                    <button class="help-nav-item" data-topic="integration">
+                        <i class="fas fa-chart-area"></i> Peak Integration
+                    </button>
+                    <button class="help-nav-item" data-topic="troubleshooting">
+                        <i class="fas fa-wrench"></i> Troubleshooting
+                    </button>
+                    <button class="help-nav-item" data-topic="theory">
+                        <i class="fas fa-graduation-cap"></i> GC Theory
+                    </button>
+                    <button class="help-nav-item" data-topic="shortcuts">
+                        <i class="fas fa-keyboard"></i> Keyboard Shortcuts
+                    </button>
+                </div>
+            </div>
+            <div class="help-content">
+                <div class="help-topic active" data-topic="getting-started">
+                    <h2>Getting Started with GC</h2>
+                    <div class="tutorial-steps">
+                        <div class="tutorial-step">
+                            <div class="step-icon"><i class="fas fa-cogs"></i></div>
+                            <div class="step-content">
+                                <h4>Step 1: Set Up Method</h4>
+                                <p>Configure the inlet temperature, column, oven temperature program, and detector
+                                    parameters based on your analytes.</p>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="step-icon"><i class="fas fa-wind"></i></div>
+                            <div class="step-content">
+                                <h4>Step 2: Verify Gas Flows</h4>
+                                <p>Ensure carrier gas is flowing and detector gases (H₂ and air for FID) are set
+                                    correctly. Check for leaks.</p>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="step-icon"><i class="fas fa-temperature-high"></i></div>
+                            <div class="step-content">
+                                <h4>Step 3: Wait for Ready</h4>
+                                <p>Allow the inlet, oven, and detector to reach setpoint temperatures. The system will
+                                    indicate "Ready" status.</p>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="step-icon"><i class="fas fa-syringe"></i></div>
+                            <div class="step-content">
+                                <h4>Step 4: Inject Sample</h4>
+                                <p>Draw sample into syringe, insert through septum, inject quickly, and remove needle
+                                    smoothly.</p>
+                            </div>
+                        </div>
+                        <div class="tutorial-step">
+                            <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="step-content">
+                                <h4>Step 5: Analyze Results</h4>
+                                <p>After the run completes, integrate peaks, identify compounds, and generate reports.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="help-topic" data-topic="instrument">
+                    <h2>Instrument Overview</h2>
+                    <p>The SimuPharma GC-7890 is a digital twin simulation of a modern gas chromatograph with
+                        split/splitless inlet and FID detector.</p>
+                    <h3>Major Components:</h3>
+                    <ul>
+                        <li><strong>Inlet:</strong> Vaporizes liquid samples for introduction to column</li>
+                        <li><strong>Column:</strong> Separates compounds based on boiling point and polarity</li>
+                        <li><strong>Oven:</strong> Precisely controls column temperature</li>
+                        <li><strong>Detector:</strong> Measures separated compounds as they elute</li>
+                    </ul>
+                </div>
+                <div class="help-topic" data-topic="method">
+                    <h2>Method Development</h2>
+                    <h3>Key Parameters:</h3>
+                    <ul>
+                        <li><strong>Column Selection:</strong> Match polarity to your analytes</li>
+                        <li><strong>Temperature Program:</strong> Start below first eluter, ramp to elute all</li>
+                        <li><strong>Flow Rate:</strong> Optimize for efficiency (use Van Deemter plot)</li>
+                        <li><strong>Injection:</strong> Split for concentrated, splitless for trace</li>
+                    </ul>
+                </div>
+                <div class="help-topic" data-topic="running">
+                    <h2>Running Samples</h2>
+                    <h3>Injection Technique:</h3>
+                    <ol>
+                        <li>Rinse syringe 3x with sample</li>
+                        <li>Draw slightly more than needed, expel to target volume</li>
+                        <li>Wipe needle exterior (don't touch tip)</li>
+                        <li>Pierce septum smoothly</li>
+                        <li>Inject quickly and smoothly</li>
+                        <li>Wait 1-2 seconds, then remove</li>
+                    </ol>
+                </div>
+                <div class="help-topic" data-topic="integration">
+                    <h2>Peak Integration</h2>
+                    <h3>Integration Methods:</h3>
+                    <ul>
+                        <li><strong>Baseline-Baseline:</strong> For isolated peaks</li>
+                        <li><strong>Valley-to-Valley:</strong> For resolved peaks</li>
+                        <li><strong>Tangent Skim:</strong> For peaks on tail of larger peak</li>
+                        <li><strong>Perpendicular Drop:</strong> For fused peaks</li>
+                    </ul>
+                </div>
+                <div class="help-topic" data-topic="troubleshooting">
+                    <h2>Troubleshooting</h2>
+                    <div class="trouble-item">
+                        <h4>No Peaks</h4>
+                        <p>Check: Sample injection, detector flame (FID), gas flows, method parameters.</p>
+                    </div>
+                    <div class="trouble-item">
+                        <h4>Tailing Peaks</h4>
+                        <p>Causes: Active sites in inlet/column, cold spots, overloading. Try: Lower injection volume,
+                            higher inlet temp, deactivated liner.</p>
+                    </div>
+                    <div class="trouble-item">
+                        <h4>Ghost Peaks</h4>
+                        <p>Causes: Septum bleed, column bleed, contamination. Try: Replace septum, condition column, run
+                            blank.</p>
+                    </div>
+                    <div class="trouble-item">
+                        <h4>Baseline Drift</h4>
+                        <p>Causes: Column bleed at high temps, detector contamination. Try: Lower max temp, clean
+                            detector.</p>
+                    </div>
+                </div>
+                <div class="help-topic" data-topic="theory">
+                    <h2>GC Theory</h2>
+                    <h3>Key Equations:</h3>
+                    <div class="equation-box">
+                        <strong>Retention Factor (k):</strong>
+                        <p>k = (t<sub>R</sub> - t<sub>M</sub>) / t<sub>M</sub></p>
+                    </div>
+                    <div class="equation-box">
+                        <strong>Resolution (Rs):</strong>
+                        <p>Rs = 2(t<sub>R2</sub> - t<sub>R1</sub>) / (W<sub>1</sub> + W<sub>2</sub>)</p>
+                    </div>
+                    <div class="equation-box">
+                        <strong>Plate Number (N):</strong>
+                        <p>N = 16(t<sub>R</sub> / W)<sup>2</sup> = 5.54(t<sub>R</sub> / W<sub>½</sub>)<sup>2</sup></p>
+                    </div>
+                    <div class="equation-box">
+                        <strong>Van Deemter Equation:</strong>
+                        <p>H = A + B/u + Cu</p>
+                        <p>Where: A = eddy diffusion, B = longitudinal diffusion, C = mass transfer</p>
+                    </div>
+                    <div class="equation-box">
+                        <strong>Golay Equation (Capillary):</strong>
+                        <p>H = B/u + (C<sub>g</sub> + C<sub>s</sub>)u</p>
+                    </div>
+                </div>
+                <div class="help-topic" data-topic="shortcuts">
+                    <h2>Keyboard Shortcuts</h2>
+                    <table class="shortcuts-table">
+                        <tr>
+                            <td><kbd>Ctrl</kbd> + <kbd>R</kbd></td>
+                            <td>Start Run</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Ctrl</kbd> + <kbd>I</kbd></td>
+                            <td>Integrate Peaks</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Ctrl</kbd> + <kbd>D</kbd></td>
+                            <td>Identify Compounds</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Ctrl</kbd> + <kbd>P</kbd></td>
+                            <td>Generate Report</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>+</kbd> / <kbd>-</kbd></td>
+                            <td>Zoom In / Out</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Home</kbd></td>
+                            <td>Reset View</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Esc</kbd></td>
+                            <td>Close Modal / Abort Run</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="start-tutorial">
+                <i class="fas fa-play"></i> Start Interactive Tutorial
+            </button>
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Diagnostics Modal -->
+    <div id="diagnostics-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-stethoscope"></i> System Diagnostics</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="diagnostics-grid">
+                <div class="diag-card">
+                    <div class="diag-icon"><i class="fas fa-wind"></i></div>
+                    <div class="diag-info">
+                        <h4>Carrier Gas</h4>
+                        <div class="diag-status pass"><i class="fas fa-check-circle"></i> OK</div>
+                        <p>Pressure: 18.5 psi</p>
+                        <p>Flow: 1.0 mL/min</p>
+                    </div>
+                </div>
+                <div class="diag-card">
+                    <div class="diag-icon"><i class="fas fa-syringe"></i></div>
+                    <div class="diag-info">
+                        <h4>Inlet</h4>
+                        <div class="diag-status pass"><i class="fas fa-check-circle"></i> OK</div>
+                        <p>Temp: 250°C</p>
+                        <p>Septum: Good</p>
+                    </div>
+                </div>
+                <div class="diag-card">
+                    <div class="diag-icon"><i class="fas fa-temperature-high"></i></div>
+                    <div class="diag-info">
+                        <h4>Oven</h4>
+                        <div class="diag-status pass"><i class="fas fa-check-circle"></i> OK</div>
+                        <p>Temp: 50°C</p>
+                        <p>Stability: ±0.1°C</p>
+                    </div>
+                </div>
+                <div class="diag-card">
+                    <div class="diag-icon"><i class="fas fa-fire-alt"></i></div>
+                    <div class="diag-info">
+                        <h4>FID Detector</h4>
+                        <div class="diag-status pass"><i class="fas fa-check-circle"></i> OK</div>
+                        <p>Temp: 300°C</p>
+                        <p>Flame: Lit</p>
+                    </div>
+                </div>
+                <div class="diag-card">
+                    <div class="diag-icon"><i class="fas fa-ring"></i></div>
+                    <div class="diag-info">
+                        <h4>Column</h4>
+                        <div class="diag-status pass"><i class="fas fa-check-circle"></i> OK</div>
+                        <p>HP-5ms</p>
+                        <p>30m × 0.25mm</p>
+                    </div>
+                </div>
+                <div class="diag-card">
+                    <div class="diag-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="diag-info">
+                        <h4>Calibration</h4>
+                        <div class="diag-status pass"><i class="fas fa-check-circle"></i> OK</div>
+                        <p>Last: 2024-01-15</p>
+                        <p>Next: 2024-07-15</p>
+                    </div>
+                </div>
+            </div>
+            <div class="diagnostics-actions">
+                <button class="btn btn-secondary" id="run-leak-test">
+                    <i class="fas fa-tint"></i> Leak Test
+                </button>
+                <button class="btn btn-secondary" id="run-baseline-test">
+                    <i class="fas fa-chart-line"></i> Baseline Test
+                </button>
+                <button class="btn btn-secondary" id="run-checkout">
+                    <i class="fas fa-certificate"></i> System Checkout
+                </button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="export-diagnostics">
+                <i class="fas fa-download"></i> Export Report
+            </button>
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Library Browser Modal -->
+    <div id="library-modal" class="modal hidden large-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-book"></i> Compound Library</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body library-body">
+            <div class="library-sidebar">
+                <div class="library-search">
+                    <input type="text" id="library-search-input" placeholder="Search compounds...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="library-categories">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li class="active" data-category="all"><i class="fas fa-globe"></i> All Compounds</li>
+                        <li data-category="alkanes"><i class="fas fa-link"></i> Alkanes</li>
+                        <li data-category="aromatics"><i class="fas fa-ring"></i> Aromatics</li>
+                        <li data-category="alcohols"><i class="fas fa-wine-bottle"></i> Alcohols</li>
+                        <li data-category="ketones"><i class="fas fa-flask"></i> Ketones & Esters</li>
+                        <li data-category="halogenated"><i class="fas fa-atom"></i> Halogenated</li>
+                        <li data-category="terpenes"><i class="fas fa-leaf"></i> Terpenes</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="library-main">
+                <div class="compound-list" id="compound-list">
+                    <!-- Populated dynamically -->
+                </div>
+                <div class="compound-preview">
+                    <h4 id="preview-compound-name">Select a compound</h4>
+                    <div class="preview-chart-container">
+                        <canvas id="library-preview-chart"></canvas>
+                    </div>
+                    <div class="compound-info" id="compound-info">
+                        <p class="no-data">Click a compound to view its properties</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="load-reference" disabled>
+                <i class="fas fa-layer-group"></i> Load as Reference
+            </button>
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-download"></i> Export Data</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="export-options">
+                <h4>Select Export Format</h4>
+                <div class="export-format-grid">
+                    <label class="export-option">
+                        <input type="radio" name="export-format" value="csv" checked>
+                        <div class="option-card">
+                            <i class="fas fa-file-csv"></i>
+                            <span>CSV</span>
+                            <small>Comma-separated values</small>
+                        </div>
+                    </label>
+                    <label class="export-option">
+                        <input type="radio" name="export-format" value="txt">
+                        <div class="option-card">
+                            <i class="fas fa-file-alt"></i>
+                            <span>TXT</span>
+                            <small>Plain text (XY data)</small>
+                        </div>
+                    </label>
+                    <label class="export-option">
+                        <input type="radio" name="export-format" value="json">
+                        <div class="option-card">
+                            <i class="fas fa-file-code"></i>
+                            <span>JSON</span>
+                            <small>JavaScript Object Notation</small>
+                        </div>
+                    </label>
+                    <label class="export-option">
+                        <input type="radio" name="export-format" value="aia">
+                        <div class="option-card">
+                            <i class="fas fa-file"></i>
+                            <span>AIA/ANDI</span>
+                            <small>Standard chromatography format</small>
+                        </div>
+                    </label>
+                </div>
+                <h4>Export Options</h4>
+                <div class="export-settings">
+                    <label class="checkbox-option">
+                        <input type="checkbox" id="export-include-metadata" checked>
+                        <span>Include metadata</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" id="export-include-peaks" checked>
+                        <span>Include peak table</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" id="export-include-method">
+                        <span>Include method parameters</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancel-export">Cancel</button>
+            <button class="btn btn-primary" id="confirm-export">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Kovats Index Reference Modal -->
+    <div id="kovats-modal" class="modal hidden large-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-list-ol"></i> Kovats Retention Index Reference</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="kovats-info">
+                <p>The Kovats Retention Index (RI) is a system-independent way to report retention. It normalizes
+                    retention times relative to n-alkanes, making data comparable across different instruments and
+                    conditions.</p>
+                <div class="equation-box">
+                    <strong>Kovats Index (Isothermal):</strong>
+                    <p>I = 100 × [n + (log t'<sub>R(unknown)</sub> - log t'<sub>R(n)</sub>) / (log t'<sub>R(n+1)</sub> -
+                        log t'<sub>R(n)</sub>)]</p>
+                </div>
+            </div>
+            <div class="kovats-table-container">
+                <table class="kovats-table" id="kovats-reference-table">
+                    <thead>
+                        <tr>
+                            <th>Compound</th>
+                            <th>RI (Non-polar)</th>
+                            <th>RI (Polar)</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Methanol</td>
+                            <td>--</td>
+                            <td>903</td>
+                            <td>Alcohol</td>
+                        </tr>
+                        <tr>
+                            <td>Ethanol</td>
+                            <td>--</td>
+                            <td>936</td>
+                            <td>Alcohol</td>
+                        </tr>
+                        <tr>
+                            <td>Acetone</td>
+                            <td>500</td>
+                            <td>820</td>
+                            <td>Ketone</td>
+                        </tr>
+                        <tr>
+                            <td>Dichloromethane</td>
+                            <td>530</td>
+                            <td>750</td>
+                            <td>Halogenated</td>
+                        </tr>
+                        <tr>
+                            <td>Hexane</td>
+                            <td>600</td>
+                            <td>600</td>
+                            <td>Alkane</td>
+                        </tr>
+                        <tr>
+                            <td>Benzene</td>
+                            <td>657</td>
+                            <td>985</td>
+                            <td>Aromatic</td>
+                        </tr>
+                        <tr>
+                            <td>Heptane</td>
+                            <td>700</td>
+                            <td>700</td>
+                            <td>Alkane</td>
+                        </tr>
+                        <tr>
+                            <td>Toluene</td>
+                            <td>762</td>
+                            <td>1045</td>
+                            <td>Aromatic</td>
+                        </tr>
+                        <tr>
+                            <td>Octane</td>
+                            <td>800</td>
+                            <td>800</td>
+                            <td>Alkane</td>
+                        </tr>
+                        <tr>
+                            <td>Ethylbenzene</td>
+                            <td>857</td>
+                            <td>1120</td>
+                            <td>Aromatic</td>
+                        </tr>
+                        <tr>
+                            <td>m-Xylene</td>
+                            <td>864</td>
+                            <td>1135</td>
+                            <td>Aromatic</td>
+                        </tr>
+                        <tr>
+                            <td>p-Xylene</td>
+                            <td>861</td>
+                            <td>1130</td>
+                            <td>Aromatic</td>
+                        </tr>
+                        <tr>
+                            <td>o-Xylene</td>
+                            <td>887</td>
+                            <td>1175</td>
+                            <td>Aromatic</td>
+                        </tr>
+                        <tr>
+                            <td>Nonane</td>
+                            <td>900</td>
+                            <td>900</td>
+                            <td>Alkane</td>
+                        </tr>
+                        <tr>
+                            <td>Decane</td>
+                            <td>1000</td>
+                            <td>1000</td>
+                            <td>Alkane</td>
+                        </tr>
+                        <tr>
+                            <td>Undecane</td>
+                            <td>1100</td>
+                            <td>1100</td>
+                            <td>Alkane</td>
+                        </tr>
+                        <tr>
+                            <td>Naphthalene</td>
+                            <td>1181</td>
+                            <td>1720</td>
+                            <td>Aromatic</td>
+                        </tr>
+                        <tr>
+                            <td>Dodecane</td>
+                            <td>1200</td>
+                            <td>1200</td>
+                            <td>Alkane</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="print-kovats">
+                <i class="fas fa-print"></i> Print Table
+            </button>
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Van Deemter Plot Modal -->
+    <div id="vandeemter-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-chart-line"></i> Van Deemter / Golay Analysis</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="vandeemter-content">
+                <div class="vandeemter-chart-container">
+                    <canvas id="vandeemter-chart"></canvas>
+                </div>
+                <div class="vandeemter-info">
+                    <h4>Plate Height vs. Linear Velocity</h4>
+                    <p>The Van Deemter equation describes band broadening in chromatography. For capillary columns, the
+                        Golay equation (without A term) applies:</p>
+                    <div class="equation-box">
+                        <strong>H = B/u + (C<sub>g</sub> + C<sub>s</sub>)u</strong>
+                    </div>
+                    <div class="vandeemter-terms">
+                        <div class="term">
+                            <strong>B term (Longitudinal Diffusion):</strong>
+                            <p>Dominant at low flow rates. Molecules diffuse along column length.</p>
+                        </div>
+                        <div class="term">
+                            <strong>C terms (Mass Transfer):</strong>
+                            <p>Dominant at high flow rates. Resistance to equilibration between phases.</p>
+                        </div>
+                    </div>
+                    <div class="optimal-velocity">
+                        <h4>Optimal Conditions (Current Settings)</h4>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Optimal Velocity:</td>
+                                <td id="optimal-velocity">36 cm/s</td>
+                            </tr>
+                            <tr>
+                                <td>Minimum HETP:</td>
+                                <td id="min-hetp">0.25 mm</td>
+                            </tr>
+                            <tr>
+                                <td>Current Velocity:</td>
+                                <td id="current-velocity">36 cm/s</td>
+                            </tr>
+                            <tr>
+                                <td>Current HETP:</td>
+                                <td id="current-hetp">0.26 mm</td>
+                            </tr>
+                            <tr>
+                                <td>Plates (N):</td>
+                                <td id="theoretical-plates">115,385</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="optimize-flow">
+                <i class="fas fa-magic"></i> Optimize Flow Rate
+            </button>
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Autosampler Sequence Modal -->
+    <div id="sequence-modal" class="modal hidden large-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-list"></i> Sample Sequence</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="sequence-toolbar">
+                <button class="btn btn-secondary" id="add-sample-row">
+                    <i class="fas fa-plus"></i> Add Sample
+                </button>
+                <button class="btn btn-secondary" id="add-blank-row">
+                    <i class="fas fa-flask"></i> Add Blank
+                </button>
+                <button class="btn btn-secondary" id="add-standard-row">
+                    <i class="fas fa-star"></i> Add Standard
+                </button>
+                <div class="sequence-spacer"></div>
+                <button class="btn btn-secondary" id="import-sequence">
+                    <i class="fas fa-upload"></i> Import
+                </button>
+                <button class="btn btn-secondary" id="export-sequence">
+                    <i class="fas fa-download"></i> Export
+                </button>
+            </div>
+            <div class="sequence-table-container">
+                <table class="sequence-table" id="sequence-table">
+                    <thead>
+                        <tr>
+                            <th>Vial</th>
+                            <th>Sample Name</th>
+                            <th>Sample Type</th>
+                            <th>Method</th>
+                            <th>Inj. Vol (µL)</th>
+                            <th>Replicates</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sequence-table-body">
+                        <tr>
+                            <td>1</td>
+                            <td><input type="text" value="Blank" class="seq-input"></td>
+                            <td>
+                                <select class="seq-select">
+                                    <option value="blank" selected>Blank</option>
+                                    <option value="sample">Sample</option>
+                                    <option value="standard">Standard</option>
+                                    <option value="qc">QC</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="seq-select">
+                                    <option value="default">Default Method</option>
+                                </select>
+                            </td>
+                            <td><input type="number" value="1.0" class="seq-input-sm" step="0.1"></td>
+                            <td><input type="number" value="1" class="seq-input-sm" min="1" max="10"></td>
+                            <td>
+                                <button class="btn-icon-sm" title="Remove"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><input type="text" value="Sample-001" class="seq-input"></td>
+                            <td>
+                                <select class="seq-select">
+                                    <option value="blank">Blank</option>
+                                    <option value="sample" selected>Sample</option>
+                                    <option value="standard">Standard</option>
+                                    <option value="qc">QC</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="seq-select">
+                                    <option value="default">Default Method</option>
+                                </select>
+                            </td>
+                            <td><input type="number" value="1.0" class="seq-input-sm" step="0.1"></td>
+                            <td><input type="number" value="1" class="seq-input-sm" min="1" max="10"></td>
+                            <td>
+                                <button class="btn-icon-sm" title="Remove"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="sequence-summary">
+                <span>Total Samples: <strong id="total-samples">2</strong></span>
+                <span>Total Injections: <strong id="total-injections">2</strong></span>
+                <span>Est. Run Time: <strong id="est-sequence-time">44 min</strong></span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="validate-sequence">
+                <i class="fas fa-check"></i> Validate
+            </button>
+            <button class="btn btn-primary" id="start-sequence" disabled>
+                <i class="fas fa-play"></i> Start Sequence
+            </button>
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- System Suitability Modal -->
+    <div id="sst-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-clipboard-check"></i> System Suitability Test</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="sst-content">
+                <p>System Suitability Testing (SST) ensures the chromatographic system is performing adequately for the
+                    intended analysis. USP guidelines specify the following parameters:</p>
+
+                <div class="sst-parameters">
+                    <h4>SST Parameters</h4>
+                    <table class="sst-table" id="sst-results-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Specification</th>
+                                <th>Result</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Resolution (Rs)</td>
+                                <td>≥ 2.0</td>
+                                <td id="sst-resolution">--</td>
+                                <td id="sst-resolution-status">--</td>
+                            </tr>
+                            <tr>
+                                <td>Tailing Factor (T)</td>
+                                <td>≤ 2.0</td>
+                                <td id="sst-tailing">--</td>
+                                <td id="sst-tailing-status">--</td>
+                            </tr>
+                            <tr>
+                                <td>Theoretical Plates (N)</td>
+                                <td>≥ 2000</td>
+                                <td id="sst-plates">--</td>
+                                <td id="sst-plates-status">--</td>
+                            </tr>
+                            <tr>
+                                <td>Capacity Factor (k')</td>
+                                <td>≥ 2.0</td>
+                                <td id="sst-capacity">--</td>
+                                <td id="sst-capacity-status">--</td>
+                            </tr>
+                            <tr>
+                                <td>RSD of Peak Area (n=5)</td>
+                                <td>≤ 2.0%</td>
+                                <td id="sst-rsd-area">--</td>
+                                <td id="sst-rsd-area-status">--</td>
+                            </tr>
+                            <tr>
+                                <td>RSD of RT (n=5)</td>
+                                <td>≤ 1.0%</td>
+                                <td id="sst-rsd-rt">--</td>
+                                <td id="sst-rsd-rt-status">--</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="sst-overall" id="sst-overall">
+                    <p class="no-data">Run SST to see results</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="run-sst">
+                <i class="fas fa-play"></i> Run SST
+            </button>
+            <button class="btn btn-secondary" id="export-sst" disabled>
+                <i class="fas fa-download"></i> Export Report
+            </button>
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Toast Container for notifications -->
+    <div id="toast-container"></div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorial-overlay" class="hidden">
+        <div class="tutorial-spotlight"></div>
+        <div class="tutorial-tooltip">
+            <div class="tutorial-content">
+                <h4 id="tutorial-title"></h4>
+                <p id="tutorial-text"></p>
+            </div>
+            <div class="tutorial-nav">
+                <span id="tutorial-step-indicator"></span>
+                <div class="tutorial-buttons">
+                    <button class="btn btn-secondary" id="tutorial-skip">Skip Tutorial</button>
+                    <button class="btn btn-primary" id="tutorial-next">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div id="context-menu" class="hidden">
+        <ul>
+            <li data-action="zoom-region"><i class="fas fa-search-plus"></i> Zoom to Region</li>
+            <li data-action="integrate-peak"><i class="fas fa-chart-area"></i> Integrate Peak</li>
+            <li data-action="add-annotation"><i class="fas fa-tag"></i> Add Annotation</li>
+            <li data-action="identify-peak"><i class="fas fa-search"></i> Identify Peak</li>
+            <li data-action="copy-value"><i class="fas fa-copy"></i> Copy Value</li>
+            <li class="separator"></li>
+            <li data-action="show-baseline"><i class="fas fa-minus"></i> Show Baseline</li>
+            <li data-action="reset-zoom"><i class="fas fa-expand"></i> Reset Zoom</li>
+        </ul>
+    </div>
+
+    <!-- Flame Animation Overlay (for FID ignition effect) -->
+    <div id="flame-overlay" class="hidden">
+        <div class="flame-animation">
+            <div class="flame"></div>
+            <div class="flame"></div>
+            <div class="flame"></div>
+        </div>
+        <p>Igniting FID flame...</p>
+    </div>
+
+    <!-- GC Flow Diagram Modal -->
+    <div id="flow-diagram-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-project-diagram"></i> GC Flow Path</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="flow-diagram-container">
+                <svg viewBox="0 0 800 300" class="gc-flow-svg" id="gc-flow-diagram">
+                    <!-- Carrier Gas Tank -->
+                    <g class="flow-component" id="flow-gas-tank">
+                        <rect x="20" y="100" width="60" height="100" rx="5" class="tank" />
+                        <text x="50" y="160" class="component-label">He</text>
+                        <text x="50" y="220" class="component-sublabel">Carrier Gas</text>
+                    </g>
+
+                    <!-- Flow line from tank to regulator -->
+                    <line x1="80" y1="150" x2="120" y2="150" class="flow-line" />
+
+                    <!-- Pressure Regulator -->
+                    <g class="flow-component" id="flow-regulator">
+                        <circle cx="140" cy="150" r="20" class="regulator" />
+                        <text x="140" y="155" class="component-label">PR</text>
+                        <text x="140" y="190" class="component-sublabel">Regulator</text>
+                    </g>
+
+                    <!-- Flow line to EPC -->
+                    <line x1="160" y1="150" x2="200" y2="150" class="flow-line" />
+
+                    <!-- EPC Module -->
+                    <g class="flow-component" id="flow-epc">
+                        <rect x="200" y="130" width="50" height="40" rx="3" class="epc" />
+                        <text x="225" y="155" class="component-label">EPC</text>
+                        <text x="225" y="190" class="component-sublabel">Flow Control</text>
+                    </g>
+
+                    <!-- Flow line to Inlet -->
+                    <line x1="250" y1="150" x2="300" y2="150" class="flow-line" />
+
+                    <!-- Inlet (Injector) -->
+                    <g class="flow-component" id="flow-inlet">
+                        <polygon points="325,100 350,130 350,170 325,200 300,170 300,130" class="inlet" />
+                        <text x="325" y="155" class="component-label">INJ</text>
+                        <text x="325" y="220" class="component-sublabel">Inlet 250°C</text>
+                        <!-- Syringe representation -->
+                        <line x1="325" y1="60" x2="325" y2="100" class="syringe-line" />
+                        <rect x="315" y="40" width="20" height="25" class="syringe" />
+                    </g>
+
+                    <!-- Flow line to Column (enters oven) -->
+                    <line x1="350" y1="150" x2="400" y2="150" class="flow-line" />
+
+                    <!-- Oven Box -->
+                    <g class="flow-component" id="flow-oven">
+                        <rect x="400" y="80" width="200" height="140" rx="5" class="oven-box" />
+                        <text x="500" y="70" class="oven-label">Column Oven</text>
+
+                        <!-- Column (coiled inside oven) -->
+                        <path d="M 420 150 
+                                 C 440 120, 480 120, 500 150 
+                                 C 520 180, 560 180, 580 150" class="column-coil" fill="none" />
+                        <text x="500" y="200" class="component-sublabel">Column 50-250°C</text>
+                    </g>
+
+                    <!-- Flow line from Column to Detector -->
+                    <line x1="600" y1="150" x2="650" y2="150" class="flow-line" />
+
+                    <!-- Detector (FID) -->
+                    <g class="flow-component" id="flow-detector">
+                        <rect x="650" y="120" width="60" height="60" rx="5" class="detector" />
+                        <!-- Flame icon -->
+                        <path d="M 680 155 Q 680 140 690 135 Q 680 145 680 155 Q 680 145 670 135 Q 680 140 680 155"
+                            class="flame-icon" />
+                        <text x="680" y="200" class="component-sublabel">FID 300°C</text>
+                    </g>
+
+                    <!-- Signal line to Data System -->
+                    <line x1="710" y1="150" x2="750" y2="150" class="signal-line" />
+
+                    <!-- Data System -->
+                    <g class="flow-component" id="flow-data">
+                        <rect x="750" y="130" width="40" height="40" rx="3" class="data-system" />
+                        <text x="770" y="155" class="component-label">PC</text>
+                        <text x="770" y="190" class="component-sublabel">Data</text>
+                    </g>
+
+                    <!-- Gas labels and flow arrows -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#0056b3" />
+                        </marker>
+                    </defs>
+
+                    <!-- FID Gas inputs -->
+                    <g class="fid-gases">
+                        <line x1="680" y1="250" x2="680" y2="180" class="gas-line h2-line" />
+                        <text x="680" y="265" class="gas-label">H₂</text>
+                        <line x1="660" y1="240" x2="660" y2="180" class="gas-line air-line" />
+                        <text x="660" y="255" class="gas-label">Air</text>
+                    </g>
+                </svg>
+            </div>
+            <div class="flow-legend">
+                <div class="legend-item">
+                    <span class="legend-color carrier"></span>
+                    <span>Carrier Gas Flow</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color sample"></span>
+                    <span>Sample Path</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color signal"></span>
+                    <span>Electrical Signal</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color heated"></span>
+                    <span>Heated Zones</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Calibration Curve Modal -->
+    <div id="calibration-modal" class="modal hidden large-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-chart-line"></i> Calibration Curve</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="calibration-content">
+                <div class="calibration-chart-container">
+                    <canvas id="calibration-chart"></canvas>
+                </div>
+                <div class="calibration-panel">
+                    <h4>Calibration Standards</h4>
+                    <div class="calibration-table-container">
+                        <table class="calibration-table" id="calibration-table">
+                            <thead>
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Conc. (ppm)</th>
+                                    <th>Area</th>
+                                    <th>RF</th>
+                                </tr>
+                            </thead>
+                            <tbody id="calibration-table-body">
+                                <tr class="empty-row">
+                                    <td colspan="4">No calibration data</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="calibration-stats">
+                        <h4>Regression Statistics</h4>
+                        <div class="stat-row">
+                            <span>Slope:</span>
+                            <span id="cal-slope">--</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Intercept:</span>
+                            <span id="cal-intercept">--</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>R²:</span>
+                            <span id="cal-r2">--</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>LOD:</span>
+                            <span id="cal-lod">--</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>LOQ:</span>
+                            <span id="cal-loq">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="add-cal-point">
+                <i class="fas fa-plus"></i> Add Point
+            </button>
+            <button class="btn btn-secondary" id="recalculate-cal">
+                <i class="fas fa-calculator"></i> Recalculate
+            </button>
+            <button class="btn btn-secondary" id="export-calibration">
+                <i class="fas fa-download"></i> Export
+            </button>
+            <button class="btn modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Method Save/Load Modal -->
+    <div id="method-modal" class="modal hidden">
+        <div class="modal-header">
+            <h3><i class="fas fa-file-alt"></i> Method Manager</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="method-tabs">
+                <button class="method-tab active" data-tab="save">Save Method</button>
+                <button class="method-tab" data-tab="load">Load Method</button>
+            </div>
+            <div class="method-content">
+                <div class="method-panel active" data-tab="save">
+                    <div class="control-group">
+                        <label for="method-name">Method Name</label>
+                        <input type="text" id="method-name" placeholder="Enter method name...">
+                    </div>
+                    <div class="control-group">
+                        <label for="method-description">Description</label>
+                        <textarea id="method-description" rows="3" placeholder="Method description..."></textarea>
+                    </div>
+                    <div class="method-summary">
+                        <h4>Current Parameters</h4>
+                        <div class="param-preview" id="method-param-preview">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+                <div class="method-panel" data-tab="load">
+                    <div class="saved-methods-list" id="saved-methods-list">
+                        <div class="method-item">
+                            <div class="method-item-info">
+                                <strong>Default Method</strong>
+                                <span>General purpose analysis</span>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Load</button>
+                        </div>
+                        <div class="method-item">
+                            <div class="method-item-info">
+                                <strong>Volatile Organics</strong>
+                                <span>EPA 624 based method</span>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Load</button>
+                        </div>
+                        <div class="method-item">
+                            <div class="method-item-info">
+                                <strong>Residual Solvents USP</strong>
+                                <span>USP <467> Class 2 solvents</span>
+                            </div>
+                            <button class="btn btn-secondary btn-sm">Load</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancel-method">Cancel</button>
+            <button class="btn btn-primary" id="save-method-btn">
+                <i class="fas fa-save"></i> Save Method
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div id="confirm-dialog" class="modal hidden small-modal">
+        <div class="modal-header">
+            <h3 id="confirm-title"><i class="fas fa-question-circle"></i> Confirm</h3>
+            <button class="modal-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <p id="confirm-message">Are you sure you want to proceed?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="confirm-cancel">Cancel</button>
+            <button class="btn btn-primary" id="confirm-ok">OK</button>
+        </div>
+    </div>
+
+    <!-- Injection Animation Overlay -->
+    <div id="injection-overlay" class="hidden">
+        <div class="injection-animation">
+            <div class="syringe-anim">
+                <div class="syringe-barrel"></div>
+                <div class="syringe-plunger"></div>
+                <div class="syringe-needle"></div>
+            </div>
+            <div class="septum-anim"></div>
+        </div>
+        <p id="injection-status">Injecting sample...</p>
+    </div>
+
+    <!-- Print Styles Container (for report printing) -->
+    <div id="print-container" class="hidden"></div>
+
+    <script src="gc_script.js"></script>
+    <script>
+        // Hotspot Position Adjuster
+        function adjustHotspots() {
+            const image = document.querySelector('.instrument-bg-image');
+            const container = document.querySelector('.instrument-display-area');
+
+            if (!image || !container) return;
+
+            function doAdjust() {
+                const imgRect = image.getBoundingClientRect();
+                const contRect = container.getBoundingClientRect();
+
+                // Calculate where image actually is inside container
+                const offsetX = imgRect.left - contRect.left;
+                const offsetY = imgRect.top - contRect.top;
+                const imgW = imgRect.width;
+                const imgH = imgRect.height;
+
+                // Hotspot positions (% of image) - ADJUST THESE IF NEEDED
+                const positions = {
+                    'hotspot-screen': { top: 25, left: 72 },
+                    'hotspot-injector': { top: 22, left: 25 },
+                    'hotspot-oven': { top: 58, left: 48 },
+                    'hotspot-detector': { top: 22, left: 52 },
+                    'hotspot-gas': { top: 55, left: 10 }
+                };
+
+                // Apply calculated positions
+                for (let id in positions) {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        const p = positions[id];
+                        el.style.top = (offsetY + (imgH * p.top / 100)) + 'px';
+                        el.style.left = (offsetX + (imgW * p.left / 100)) + 'px';
+                    }
+                }
+            }
+
+            if (image.complete) {
+                doAdjust();
+            } else {
+                image.onload = doAdjust;
+            }
+        }
+
+        // Run when page loads and when window resizes
+        window.addEventListener('load', function () {
+            setTimeout(adjustHotspots, 300);
+        });
+        window.addEventListener('resize', adjustHotspots);
+    </script>
+    <link rel="stylesheet" href="guided_teacher.css?v=2">
+    <script src="voice_engine.js?v=2"></script>
+    <script src="guided_teacher.js?v=2"></script>
+    <script src="gc_guided_steps.js?v=2"></script>
+</body>
+
+</html>
